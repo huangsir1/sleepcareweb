@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="taiyi.web.dao.FeedbackMapper" >
+  <resultMap id="BaseResultMap" type="taiyi.web.model.Feedback" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="account_id" property="accountId" jdbcType="CHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="contact" property="contact" jdbcType="VARCHAR" />
+    <result column="upload_date" property="uploadDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, account_id, content, contact, upload_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from feedback
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from feedback
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="taiyi.web.model.Feedback" >
+    insert into feedback (id, account_id, content, 
+      contact, upload_date)
+    values (#{id,jdbcType=INTEGER}, #{accountId,jdbcType=CHAR}, #{content,jdbcType=VARCHAR}, 
+      #{contact,jdbcType=VARCHAR}, #{uploadDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="taiyi.web.model.Feedback" >
+    insert into feedback
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="accountId != null" >
+        account_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="contact != null" >
+        contact,
+      </if>
+      <if test="uploadDate != null" >
+        upload_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="accountId != null" >
+        #{accountId,jdbcType=CHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadDate != null" >
+        #{uploadDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="taiyi.web.model.Feedback" >
+    update feedback
+    <set >
+      <if test="accountId != null" >
+        account_id = #{accountId,jdbcType=CHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadDate != null" >
+        upload_date = #{uploadDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="taiyi.web.model.Feedback" >
+    update feedback
+    set account_id = #{accountId,jdbcType=CHAR},
+      content = #{content,jdbcType=VARCHAR},
+      contact = #{contact,jdbcType=VARCHAR},
+      upload_date = #{uploadDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

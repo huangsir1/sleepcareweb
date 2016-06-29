@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="taiyi.web.dao.BreatheReportMapper" >
+  <resultMap id="BaseResultMap" type="taiyi.web.model.BreatheReport" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="user_id" property="userId" jdbcType="CHAR" />
+    <result column="apnea_hypopnea_index" property="apneaHypopneaIndex" jdbcType="DOUBLE" />
+    <result column="apnea_times" property="apneaTimes" jdbcType="INTEGER" />
+    <result column="hypopnea_times" property="hypopneaTimes" jdbcType="INTEGER" />
+    <result column="max_hyponea_seconds" property="maxHyponeaSeconds" jdbcType="INTEGER" />
+    <result column="total_hyponea_seconds" property="totalHyponeaSeconds" jdbcType="INTEGER" />
+    <result column="hyponea_happen_date" property="hyponeaHappenDate" jdbcType="TIMESTAMP" />
+    <result column="reduced_oxygen_times" property="reducedOxygenTimes" jdbcType="INTEGER" />
+    <result column="average_oxygen_saturation" property="averageOxygenSaturation" jdbcType="DOUBLE" />
+    <result column="max_oxygen_saturation" property="maxOxygenSaturation" jdbcType="DOUBLE" />
+    <result column="min_oxygen_saturation" property="minOxygenSaturation" jdbcType="DOUBLE" />
+    <result column="odi" property="odi" jdbcType="DOUBLE" />
+    <result column="awake_seconds" property="awakeSeconds" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_ninety_to_hundred_percent_times" property="oxygenSaturationNinetyToHundredPercentTimes" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_ninety_to_hundred_percent_hyponea" property="oxygenSaturationNinetyToHundredPercentHyponea" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_eighty_to_eighty_nine_percent_times" property="oxygenSaturationEightyToEightyNinePercentTimes" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_eighty_to_eighty_nine_percent_hyponea" property="oxygenSaturationEightyToEightyNinePercentHyponea" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_seventy_to_seventy_nine_percent_times" property="oxygenSaturationSeventyToSeventyNinePercentTimes" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_seventy_to_seventy_nine_percent_hyponea" property="oxygenSaturationSeventyToSeventyNinePercentHyponea" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_sixty_to_sixty_nine_percent_times" property="oxygenSaturationSixtyToSixtyNinePercentTimes" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_sixty_to_sixty_nine_percent_hyponea" property="oxygenSaturationSixtyToSixtyNinePercentHyponea" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_fifty_to_fifty_nine_percent_times" property="oxygenSaturationFiftyToFiftyNinePercentTimes" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_fifty_to_fifty_nine_percent_hyponea" property="oxygenSaturationFiftyToFiftyNinePercentHyponea" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_lessthan_fifty_percent_times" property="oxygenSaturationLessthanFiftyPercentTimes" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_lessthan_fifty_percent_hyponea" property="oxygenSaturationLessthanFiftyPercentHyponea" jdbcType="INTEGER" />
+    <result column="oxygen_saturation_lessthan_ninety_percent" property="oxygenSaturationLessthanNinetyPercent" jdbcType="DOUBLE" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="upload_date" property="uploadDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, apnea_hypopnea_index, apnea_times, hypopnea_times, max_hyponea_seconds, 
+    total_hyponea_seconds, hyponea_happen_date, reduced_oxygen_times, average_oxygen_saturation, 
+    max_oxygen_saturation, min_oxygen_saturation, odi, awake_seconds, oxygen_saturation_ninety_to_hundred_percent_times, 
+    oxygen_saturation_ninety_to_hundred_percent_hyponea, oxygen_saturation_eighty_to_eighty_nine_percent_times, 
+    oxygen_saturation_eighty_to_eighty_nine_percent_hyponea, oxygen_saturation_seventy_to_seventy_nine_percent_times, 
+    oxygen_saturation_seventy_to_seventy_nine_percent_hyponea, oxygen_saturation_sixty_to_sixty_nine_percent_times, 
+    oxygen_saturation_sixty_to_sixty_nine_percent_hyponea, oxygen_saturation_fifty_to_fifty_nine_percent_times, 
+    oxygen_saturation_fifty_to_fifty_nine_percent_hyponea, oxygen_saturation_lessthan_fifty_percent_times, 
+    oxygen_saturation_lessthan_fifty_percent_hyponea, oxygen_saturation_lessthan_ninety_percent, 
+    score, upload_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from breathe_report
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from breathe_report
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="taiyi.web.model.BreatheReport" >
+    insert into breathe_report (id, user_id, apnea_hypopnea_index, 
+      apnea_times, hypopnea_times, max_hyponea_seconds, 
+      total_hyponea_seconds, hyponea_happen_date, 
+      reduced_oxygen_times, average_oxygen_saturation, 
+      max_oxygen_saturation, min_oxygen_saturation, 
+      odi, awake_seconds, oxygen_saturation_ninety_to_hundred_percent_times, 
+      oxygen_saturation_ninety_to_hundred_percent_hyponea, oxygen_saturation_eighty_to_eighty_nine_percent_times, 
+      oxygen_saturation_eighty_to_eighty_nine_percent_hyponea, oxygen_saturation_seventy_to_seventy_nine_percent_times, 
+      oxygen_saturation_seventy_to_seventy_nine_percent_hyponea, oxygen_saturation_sixty_to_sixty_nine_percent_times, 
+      oxygen_saturation_sixty_to_sixty_nine_percent_hyponea, oxygen_saturation_fifty_to_fifty_nine_percent_times, 
+      oxygen_saturation_fifty_to_fifty_nine_percent_hyponea, oxygen_saturation_lessthan_fifty_percent_times, 
+      oxygen_saturation_lessthan_fifty_percent_hyponea, oxygen_saturation_lessthan_ninety_percent, 
+      score, upload_date)
+    values (#{id,jdbcType=CHAR}, #{userId,jdbcType=CHAR}, #{apneaHypopneaIndex,jdbcType=DOUBLE}, 
+      #{apneaTimes,jdbcType=INTEGER}, #{hypopneaTimes,jdbcType=INTEGER}, #{maxHyponeaSeconds,jdbcType=INTEGER}, 
+      #{totalHyponeaSeconds,jdbcType=INTEGER}, #{hyponeaHappenDate,jdbcType=TIMESTAMP}, 
+      #{reducedOxygenTimes,jdbcType=INTEGER}, #{averageOxygenSaturation,jdbcType=DOUBLE}, 
+      #{maxOxygenSaturation,jdbcType=DOUBLE}, #{minOxygenSaturation,jdbcType=DOUBLE}, 
+      #{odi,jdbcType=DOUBLE}, #{awakeSeconds,jdbcType=INTEGER}, #{oxygenSaturationNinetyToHundredPercentTimes,jdbcType=INTEGER}, 
+      #{oxygenSaturationNinetyToHundredPercentHyponea,jdbcType=INTEGER}, #{oxygenSaturationEightyToEightyNinePercentTimes,jdbcType=INTEGER}, 
+      #{oxygenSaturationEightyToEightyNinePercentHyponea,jdbcType=INTEGER}, #{oxygenSaturationSeventyToSeventyNinePercentTimes,jdbcType=INTEGER}, 
+      #{oxygenSaturationSeventyToSeventyNinePercentHyponea,jdbcType=INTEGER}, #{oxygenSaturationSixtyToSixtyNinePercentTimes,jdbcType=INTEGER}, 
+      #{oxygenSaturationSixtyToSixtyNinePercentHyponea,jdbcType=INTEGER}, #{oxygenSaturationFiftyToFiftyNinePercentTimes,jdbcType=INTEGER}, 
+      #{oxygenSaturationFiftyToFiftyNinePercentHyponea,jdbcType=INTEGER}, #{oxygenSaturationLessthanFiftyPercentTimes,jdbcType=INTEGER}, 
+      #{oxygenSaturationLessthanFiftyPercentHyponea,jdbcType=INTEGER}, #{oxygenSaturationLessthanNinetyPercent,jdbcType=DOUBLE}, 
+      #{score,jdbcType=INTEGER}, #{uploadDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="taiyi.web.model.BreatheReport" >
+    insert into breathe_report
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="apneaHypopneaIndex != null" >
+        apnea_hypopnea_index,
+      </if>
+      <if test="apneaTimes != null" >
+        apnea_times,
+      </if>
+      <if test="hypopneaTimes != null" >
+        hypopnea_times,
+      </if>
+      <if test="maxHyponeaSeconds != null" >
+        max_hyponea_seconds,
+      </if>
+      <if test="totalHyponeaSeconds != null" >
+        total_hyponea_seconds,
+      </if>
+      <if test="hyponeaHappenDate != null" >
+        hyponea_happen_date,
+      </if>
+      <if test="reducedOxygenTimes != null" >
+        reduced_oxygen_times,
+      </if>
+      <if test="averageOxygenSaturation != null" >
+        average_oxygen_saturation,
+      </if>
+      <if test="maxOxygenSaturation != null" >
+        max_oxygen_saturation,
+      </if>
+      <if test="minOxygenSaturation != null" >
+        min_oxygen_saturation,
+      </if>
+      <if test="odi != null" >
+        odi,
+      </if>
+      <if test="awakeSeconds != null" >
+        awake_seconds,
+      </if>
+      <if test="oxygenSaturationNinetyToHundredPercentTimes != null" >
+        oxygen_saturation_ninety_to_hundred_percent_times,
+      </if>
+      <if test="oxygenSaturationNinetyToHundredPercentHyponea != null" >
+        oxygen_saturation_ninety_to_hundred_percent_hyponea,
+      </if>
+      <if test="oxygenSaturationEightyToEightyNinePercentTimes != null" >
+        oxygen_saturation_eighty_to_eighty_nine_percent_times,
+      </if>
+      <if test="oxygenSaturationEightyToEightyNinePercentHyponea != null" >
+        oxygen_saturation_eighty_to_eighty_nine_percent_hyponea,
+      </if>
+      <if test="oxygenSaturationSeventyToSeventyNinePercentTimes != null" >
+        oxygen_saturation_seventy_to_seventy_nine_percent_times,
+      </if>
+      <if test="oxygenSaturationSeventyToSeventyNinePercentHyponea != null" >
+        oxygen_saturation_seventy_to_seventy_nine_percent_hyponea,
+      </if>
+      <if test="oxygenSaturationSixtyToSixtyNinePercentTimes != null" >
+        oxygen_saturation_sixty_to_sixty_nine_percent_times,
+      </if>
+      <if test="oxygenSaturationSixtyToSixtyNinePercentHyponea != null" >
+        oxygen_saturation_sixty_to_sixty_nine_percent_hyponea,
+      </if>
+      <if test="oxygenSaturationFiftyToFiftyNinePercentTimes != null" >
+        oxygen_saturation_fifty_to_fifty_nine_percent_times,
+      </if>
+      <if test="oxygenSaturationFiftyToFiftyNinePercentHyponea != null" >
+        oxygen_saturation_fifty_to_fifty_nine_percent_hyponea,
+      </if>
+      <if test="oxygenSaturationLessthanFiftyPercentTimes != null" >
+        oxygen_saturation_lessthan_fifty_percent_times,
+      </if>
+      <if test="oxygenSaturationLessthanFiftyPercentHyponea != null" >
+        oxygen_saturation_lessthan_fifty_percent_hyponea,
+      </if>
+      <if test="oxygenSaturationLessthanNinetyPercent != null" >
+        oxygen_saturation_lessthan_ninety_percent,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="uploadDate != null" >
+        upload_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=CHAR},
+      </if>
+      <if test="apneaHypopneaIndex != null" >
+        #{apneaHypopneaIndex,jdbcType=DOUBLE},
+      </if>
+      <if test="apneaTimes != null" >
+        #{apneaTimes,jdbcType=INTEGER},
+      </if>
+      <if test="hypopneaTimes != null" >
+        #{hypopneaTimes,jdbcType=INTEGER},
+      </if>
+      <if test="maxHyponeaSeconds != null" >
+        #{maxHyponeaSeconds,jdbcType=INTEGER},
+      </if>
+      <if test="totalHyponeaSeconds != null" >
+        #{totalHyponeaSeconds,jdbcType=INTEGER},
+      </if>
+      <if test="hyponeaHappenDate != null" >
+        #{hyponeaHappenDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reducedOxygenTimes != null" >
+        #{reducedOxygenTimes,jdbcType=INTEGER},
+      </if>
+      <if test="averageOxygenSaturation != null" >
+        #{averageOxygenSaturation,jdbcType=DOUBLE},
+      </if>
+      <if test="maxOxygenSaturation != null" >
+        #{maxOxygenSaturation,jdbcType=DOUBLE},
+      </if>
+      <if test="minOxygenSaturation != null" >
+        #{minOxygenSaturation,jdbcType=DOUBLE},
+      </if>
+      <if test="odi != null" >
+        #{odi,jdbcType=DOUBLE},
+      </if>
+      <if test="awakeSeconds != null" >
+        #{awakeSeconds,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationNinetyToHundredPercentTimes != null" >
+        #{oxygenSaturationNinetyToHundredPercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationNinetyToHundredPercentHyponea != null" >
+        #{oxygenSaturationNinetyToHundredPercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationEightyToEightyNinePercentTimes != null" >
+        #{oxygenSaturationEightyToEightyNinePercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationEightyToEightyNinePercentHyponea != null" >
+        #{oxygenSaturationEightyToEightyNinePercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationSeventyToSeventyNinePercentTimes != null" >
+        #{oxygenSaturationSeventyToSeventyNinePercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationSeventyToSeventyNinePercentHyponea != null" >
+        #{oxygenSaturationSeventyToSeventyNinePercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationSixtyToSixtyNinePercentTimes != null" >
+        #{oxygenSaturationSixtyToSixtyNinePercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationSixtyToSixtyNinePercentHyponea != null" >
+        #{oxygenSaturationSixtyToSixtyNinePercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationFiftyToFiftyNinePercentTimes != null" >
+        #{oxygenSaturationFiftyToFiftyNinePercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationFiftyToFiftyNinePercentHyponea != null" >
+        #{oxygenSaturationFiftyToFiftyNinePercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationLessthanFiftyPercentTimes != null" >
+        #{oxygenSaturationLessthanFiftyPercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationLessthanFiftyPercentHyponea != null" >
+        #{oxygenSaturationLessthanFiftyPercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationLessthanNinetyPercent != null" >
+        #{oxygenSaturationLessthanNinetyPercent,jdbcType=DOUBLE},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="uploadDate != null" >
+        #{uploadDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="taiyi.web.model.BreatheReport" >
+    update breathe_report
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=CHAR},
+      </if>
+      <if test="apneaHypopneaIndex != null" >
+        apnea_hypopnea_index = #{apneaHypopneaIndex,jdbcType=DOUBLE},
+      </if>
+      <if test="apneaTimes != null" >
+        apnea_times = #{apneaTimes,jdbcType=INTEGER},
+      </if>
+      <if test="hypopneaTimes != null" >
+        hypopnea_times = #{hypopneaTimes,jdbcType=INTEGER},
+      </if>
+      <if test="maxHyponeaSeconds != null" >
+        max_hyponea_seconds = #{maxHyponeaSeconds,jdbcType=INTEGER},
+      </if>
+      <if test="totalHyponeaSeconds != null" >
+        total_hyponea_seconds = #{totalHyponeaSeconds,jdbcType=INTEGER},
+      </if>
+      <if test="hyponeaHappenDate != null" >
+        hyponea_happen_date = #{hyponeaHappenDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reducedOxygenTimes != null" >
+        reduced_oxygen_times = #{reducedOxygenTimes,jdbcType=INTEGER},
+      </if>
+      <if test="averageOxygenSaturation != null" >
+        average_oxygen_saturation = #{averageOxygenSaturation,jdbcType=DOUBLE},
+      </if>
+      <if test="maxOxygenSaturation != null" >
+        max_oxygen_saturation = #{maxOxygenSaturation,jdbcType=DOUBLE},
+      </if>
+      <if test="minOxygenSaturation != null" >
+        min_oxygen_saturation = #{minOxygenSaturation,jdbcType=DOUBLE},
+      </if>
+      <if test="odi != null" >
+        odi = #{odi,jdbcType=DOUBLE},
+      </if>
+      <if test="awakeSeconds != null" >
+        awake_seconds = #{awakeSeconds,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationNinetyToHundredPercentTimes != null" >
+        oxygen_saturation_ninety_to_hundred_percent_times = #{oxygenSaturationNinetyToHundredPercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationNinetyToHundredPercentHyponea != null" >
+        oxygen_saturation_ninety_to_hundred_percent_hyponea = #{oxygenSaturationNinetyToHundredPercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationEightyToEightyNinePercentTimes != null" >
+        oxygen_saturation_eighty_to_eighty_nine_percent_times = #{oxygenSaturationEightyToEightyNinePercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationEightyToEightyNinePercentHyponea != null" >
+        oxygen_saturation_eighty_to_eighty_nine_percent_hyponea = #{oxygenSaturationEightyToEightyNinePercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationSeventyToSeventyNinePercentTimes != null" >
+        oxygen_saturation_seventy_to_seventy_nine_percent_times = #{oxygenSaturationSeventyToSeventyNinePercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationSeventyToSeventyNinePercentHyponea != null" >
+        oxygen_saturation_seventy_to_seventy_nine_percent_hyponea = #{oxygenSaturationSeventyToSeventyNinePercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationSixtyToSixtyNinePercentTimes != null" >
+        oxygen_saturation_sixty_to_sixty_nine_percent_times = #{oxygenSaturationSixtyToSixtyNinePercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationSixtyToSixtyNinePercentHyponea != null" >
+        oxygen_saturation_sixty_to_sixty_nine_percent_hyponea = #{oxygenSaturationSixtyToSixtyNinePercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationFiftyToFiftyNinePercentTimes != null" >
+        oxygen_saturation_fifty_to_fifty_nine_percent_times = #{oxygenSaturationFiftyToFiftyNinePercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationFiftyToFiftyNinePercentHyponea != null" >
+        oxygen_saturation_fifty_to_fifty_nine_percent_hyponea = #{oxygenSaturationFiftyToFiftyNinePercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationLessthanFiftyPercentTimes != null" >
+        oxygen_saturation_lessthan_fifty_percent_times = #{oxygenSaturationLessthanFiftyPercentTimes,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationLessthanFiftyPercentHyponea != null" >
+        oxygen_saturation_lessthan_fifty_percent_hyponea = #{oxygenSaturationLessthanFiftyPercentHyponea,jdbcType=INTEGER},
+      </if>
+      <if test="oxygenSaturationLessthanNinetyPercent != null" >
+        oxygen_saturation_lessthan_ninety_percent = #{oxygenSaturationLessthanNinetyPercent,jdbcType=DOUBLE},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="uploadDate != null" >
+        upload_date = #{uploadDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="taiyi.web.model.BreatheReport" >
+    update breathe_report
+    set user_id = #{userId,jdbcType=CHAR},
+      apnea_hypopnea_index = #{apneaHypopneaIndex,jdbcType=DOUBLE},
+      apnea_times = #{apneaTimes,jdbcType=INTEGER},
+      hypopnea_times = #{hypopneaTimes,jdbcType=INTEGER},
+      max_hyponea_seconds = #{maxHyponeaSeconds,jdbcType=INTEGER},
+      total_hyponea_seconds = #{totalHyponeaSeconds,jdbcType=INTEGER},
+      hyponea_happen_date = #{hyponeaHappenDate,jdbcType=TIMESTAMP},
+      reduced_oxygen_times = #{reducedOxygenTimes,jdbcType=INTEGER},
+      average_oxygen_saturation = #{averageOxygenSaturation,jdbcType=DOUBLE},
+      max_oxygen_saturation = #{maxOxygenSaturation,jdbcType=DOUBLE},
+      min_oxygen_saturation = #{minOxygenSaturation,jdbcType=DOUBLE},
+      odi = #{odi,jdbcType=DOUBLE},
+      awake_seconds = #{awakeSeconds,jdbcType=INTEGER},
+      oxygen_saturation_ninety_to_hundred_percent_times = #{oxygenSaturationNinetyToHundredPercentTimes,jdbcType=INTEGER},
+      oxygen_saturation_ninety_to_hundred_percent_hyponea = #{oxygenSaturationNinetyToHundredPercentHyponea,jdbcType=INTEGER},
+      oxygen_saturation_eighty_to_eighty_nine_percent_times = #{oxygenSaturationEightyToEightyNinePercentTimes,jdbcType=INTEGER},
+      oxygen_saturation_eighty_to_eighty_nine_percent_hyponea = #{oxygenSaturationEightyToEightyNinePercentHyponea,jdbcType=INTEGER},
+      oxygen_saturation_seventy_to_seventy_nine_percent_times = #{oxygenSaturationSeventyToSeventyNinePercentTimes,jdbcType=INTEGER},
+      oxygen_saturation_seventy_to_seventy_nine_percent_hyponea = #{oxygenSaturationSeventyToSeventyNinePercentHyponea,jdbcType=INTEGER},
+      oxygen_saturation_sixty_to_sixty_nine_percent_times = #{oxygenSaturationSixtyToSixtyNinePercentTimes,jdbcType=INTEGER},
+      oxygen_saturation_sixty_to_sixty_nine_percent_hyponea = #{oxygenSaturationSixtyToSixtyNinePercentHyponea,jdbcType=INTEGER},
+      oxygen_saturation_fifty_to_fifty_nine_percent_times = #{oxygenSaturationFiftyToFiftyNinePercentTimes,jdbcType=INTEGER},
+      oxygen_saturation_fifty_to_fifty_nine_percent_hyponea = #{oxygenSaturationFiftyToFiftyNinePercentHyponea,jdbcType=INTEGER},
+      oxygen_saturation_lessthan_fifty_percent_times = #{oxygenSaturationLessthanFiftyPercentTimes,jdbcType=INTEGER},
+      oxygen_saturation_lessthan_fifty_percent_hyponea = #{oxygenSaturationLessthanFiftyPercentHyponea,jdbcType=INTEGER},
+      oxygen_saturation_lessthan_ninety_percent = #{oxygenSaturationLessthanNinetyPercent,jdbcType=DOUBLE},
+      score = #{score,jdbcType=INTEGER},
+      upload_date = #{uploadDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

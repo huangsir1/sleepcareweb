@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="taiyi.web.dao.DiseaseHistoryUserMapper" >
+  <resultMap id="BaseResultMap" type="taiyi.web.model.DiseaseHistoryUser" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="disease_history_id" property="diseaseHistoryId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, disease_history_id, user_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from disease_history_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from disease_history_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByUserId" parameterType="java.lang.String" >
+    delete from disease_history_user
+    where user_id = #{userId,jdbcType=CHAR}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="taiyi.web.model.DiseaseHistoryUser" >
+    insert into disease_history_user (id, disease_history_id, user_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{diseaseHistoryId,jdbcType=INTEGER}, #{userId,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="taiyi.web.model.DiseaseHistoryUser" >
+    insert into disease_history_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="diseaseHistoryId != null" >
+        disease_history_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseHistoryId != null" >
+        #{diseaseHistoryId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="taiyi.web.model.DiseaseHistoryUser" >
+    update disease_history_user
+    <set >
+      <if test="diseaseHistoryId != null" >
+        disease_history_id = #{diseaseHistoryId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="taiyi.web.model.DiseaseHistoryUser" >
+    update disease_history_user
+    set disease_history_id = #{diseaseHistoryId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
