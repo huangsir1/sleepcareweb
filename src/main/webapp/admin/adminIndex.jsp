@@ -278,8 +278,8 @@ a:hover {
     	        background: url(<%=basePath%>css/images/layout-browser-hd-bg.gif) #00BCD4 repeat-x center 50%;
     	        line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
 		<span style="padding-left: 10px; font-size: 16px; float: left;"><img
-			src="<%=basePath%>css/images/blocks.gif" width="20" height="20"
-			align="absmiddle" /> backend admin</span>
+			src="<%=basePath%>css/images/icon.png" width="20" height="20"
+			align="absmiddle" />钛铱Taiir睡眠检测系统</span>
 		<ul id="css3menu" 
 			style="padding: 0px; margin: 0px; list-type: none; float: left; margin-left: 40px;">
 			<li><a class="active" name="basic" href="javascript:;"
@@ -305,7 +305,7 @@ a:hover {
 		<div id="tabs" class="easyui-tabs" fit="true" border="false">
 			<div title="欢迎使用" style="padding: 20px; overflow: hidden;" id="home">
 
-				<h1>Welcome </h1>
+				<h1>欢迎 ${trueName }</h1> 
 
 			</div>
 		</div>

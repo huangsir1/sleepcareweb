@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>管理员登陆</title>
+<title>钛铱Taiir睡眠检测系统 管理员登陆</title>
 
 <link rel="stylesheet" href="css/normalize.css">
 
@@ -170,12 +170,12 @@ body {
 	top: 50%;
 	left: 50%;
 	margin: -150px 0 0 -150px;
-	width: 300px;
-	height: 300px;
+	width: 350px;
+	height: 350px;
 }
 
 .login h1 {
-	color: #fff;
+	color: #fff; 
 	text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 	letter-spacing: 1px;
 	text-align: center;
@@ -184,9 +184,9 @@ body {
 input {
 	width: 100%;
 	margin-bottom: 10px;
-	background: rgba(0, 0, 0, 0.3);
+	background: rgba(0, 0, 0, 0.3); 
 	border: none;
-	outline: none;
+	outline: none; 
 	padding: 10px;
 	font-size: 13px;
 	color: #fff;
@@ -236,10 +236,11 @@ window.onload=function(){
 </script> 
 </head>  
 
-<body>
+<body> 
 
   
-	<div class="login"> 
+	<div class="login">  
+		<h1>钛铱Taiir睡眠检测系统</h1> 
 		<h1>管理员登陆</h1> 
 		<form method="post" action="<%=basePath%>login">
 			<input type="text" name="username" placeholder="用户名"

@@ -95,8 +95,8 @@
 	<div id="toolbar">
 		<a href="#" class="easyui-linkbutton" plain="true"
 			onclick="jump()">查看报告</a>  
-		<a href="#" class="easyui-linkbutton" iconCls="icon-remove"  plain="true"
-			onclick="del()">删除报告</a>   
+		<!--  <a href="#" class="easyui-linkbutton" iconCls="icon-remove"  plain="true"
+			onclick="del()">删除报告</a>   -->
 		<a href="#" class="easyui-linkbutton"
 			iconCls="icon-back" plain="true" onclick="history.go(-1)">返回</a>
 	</div>

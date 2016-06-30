@@ -175,7 +175,7 @@ public class AdminController extends ExceptionHandlerController {
 		return "admin/addReport";
 	}
 
-	@RequiresPermissions(logical = Logical.OR, value = { "user:delete", "doctor:delete" })
+	@RequiresPermissions(logical = Logical.OR, value = { "user:delete"})//, "doctor:delete" })
 	@RequestMapping("/deleteReport")
 	@ResponseBody
 	public Status deleteReport(String id) {

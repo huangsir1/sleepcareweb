@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import taiyi.web.controller.ExceptionHandlerController;
+import taiyi.web.model.SystemUser;
 import taiyi.web.service.SystemUserService;
 
 /**
@@ -98,7 +99,9 @@ public class AdminLoginController extends ExceptionHandlerController{
 			return "forward:admin/login";
 		}
 		Session session = subject.getSession();
-		session.setAttribute("user", systemUserService.selectByUsername(username));
+		SystemUser systemUser = systemUserService.selectByUsername(username);
+		session.setAttribute("user", systemUser);
+		request.getSession().setAttribute("trueName", systemUser.getName());
 		if (subject.hasRole("admin")) {
 			return "redirect:/admin";
 		} else if (subject.hasRole("doctor")) {

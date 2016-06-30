@@ -128,8 +128,8 @@
 	</table>
 	<div id="toolbar">
 		<a href="#" class="easyui-linkbutton" plain="true" onclick="jump()">查看详情</a>
-		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-			onclick="newUser()">增加用户</a> 
+		<!--  <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+			onclick="newUser()">增加用户</a> -->
 		<a href="#" class="easyui-linkbutton"
 			iconCls="icon-remove" plain="true" onclick="destroyUser()">删除</a>
 		<a href="#" class="easyui-linkbutton"
