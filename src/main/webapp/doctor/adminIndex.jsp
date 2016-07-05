@@ -10,7 +10,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>医生后端管理</title>
+<title>钛铱Taiir睡眠监测系统</title>
 <!--  link href="<%=basePath%>css/default.css" rel="stylesheet"
 	type="text/css" />-->
 <link rel="stylesheet" type="text/css"
@@ -271,7 +271,7 @@ a:hover {
     	        line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
 		<span style="padding-left: 10px; font-size: 16px; float: left;"><img
 			src="<%=basePath%>css/images/icon.png" width="20" height="20"
-			align="absmiddle" />钛铱Taiir睡眠检测系统</span>
+			align="absmiddle" />钛铱Taiir睡眠监测系统</span>
 		<ul id="css3menu" 
 			style="padding: 0px; margin: 0px; list-type: none; float: left; margin-left: 40px;">
 			<li><a class="active" name="basic" href="javascript:;"

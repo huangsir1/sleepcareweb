@@ -63,6 +63,11 @@ public class AdminLoginController extends ExceptionHandlerController{
 	public String c() {
 		return "doctor/adminIndex";
 	}
+	
+	@RequestMapping("/hostipal")
+	public String hostipal() {
+		return "hostipal/adminIndex";
+	}
 
 	@RequestMapping("/login")
 	public String login(String username, String password, HttpServletRequest request) {

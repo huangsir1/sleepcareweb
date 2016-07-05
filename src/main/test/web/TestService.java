@@ -15,6 +15,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 
+import taiyi.web.dao.DeviceMapper;
 import taiyi.web.dao.SystemPermissionMapper;
 import taiyi.web.dao.SystemRoleMapper;
 import taiyi.web.dao.UserMapper;
@@ -51,6 +52,7 @@ public class TestService {
 	private static SystemRoleMapper sysmapper;
 	private static SystemPermissionMapper systemPermissionMapper;
 	private static PermissionService permissionService;
+	private static DeviceMapper deviceMapper;
 	
 	
 	@BeforeClass
@@ -64,10 +66,13 @@ public class TestService {
 		sysmapper = context.getBean(SystemRoleMapper.class);
 		systemPermissionMapper = context.getBean(SystemPermissionMapper.class);
 		permissionService = context.getBean(PermissionServiceImpl.class);
+		deviceMapper = context.getBean(DeviceMapper.class);
 	}
 	
 	@Test
 	public void testttt() {
+		System.out.println(deviceMapper.selectAll());;
+		System.out.println(deviceMapper.selectByHostipalId(1));
 		
 	}
 	

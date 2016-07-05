@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,10 +32,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Lists;
 import com.itextpdf.text.DocumentException;
 
 import taiyi.web.controller.ExceptionHandlerController;
@@ -52,12 +49,12 @@ import taiyi.web.model.dto.Status;
 import taiyi.web.service.BreatheReportService;
 import taiyi.web.service.DiseaseHistoryUserService;
 import taiyi.web.service.EssUserService;
+import taiyi.web.service.HostipalService;
 import taiyi.web.service.SleepReportService;
 import taiyi.web.service.SubReportService;
 import taiyi.web.service.SystemUserService;
 import taiyi.web.service.UserService;
 import taiyi.web.service.WebService;
-import taiyi.web.utils.BeanUtilsForAndroid;
 import taiyi.web.utils.EncryptUtils;
 import taiyi.web.utils.WebProperties;
 
@@ -88,6 +85,7 @@ public class AdminController extends ExceptionHandlerController {
 	private EssUserService essUesrService;
 	@Autowired
 	private SystemUserService systemUserService;
+	
 
 	@RequiresPermissions(logical = Logical.OR, value = { "user:insert", "doctor:insert" })
 	@RequestMapping("/saveUser")
@@ -129,6 +127,9 @@ public class AdminController extends ExceptionHandlerController {
 		PageModel pageModel = new PageModel(pageinfo.getTotal(), users);
 		return pageModel.get();
 	}
+	
+
+	
 
 	@RequiresPermissions(value = { "user:delete", "doctor:delete" }, logical = Logical.OR)
 	@RequestMapping("/deleteUser")
@@ -388,7 +389,8 @@ public class AdminController extends ExceptionHandlerController {
 	public String addUser() {
 		return "admin/addUser";
 	}
-
+	
+	
 //	@RequestMapping("login") 
 //	public String login() {
 //		return "adminLogin";

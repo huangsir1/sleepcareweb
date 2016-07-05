@@ -2,8 +2,10 @@
  * 
  */
 package taiyi.web.utils;
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.UUID;
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
@@ -14,13 +16,14 @@ import java.util.UUID;
  */
 
 
-public class EncryptUtils {
+public class EncryptUtils{
 	
 	public static void main(String[] args) {
-		System.err.println(encryptOriginalTaiirPassword("taiir1010"));
+		System.err.println(encryptOriginalTaiirPassword("guest"));
 		//CBD5516C394B4BAC0176A7BFFE1FCBBC:2F361F1B
 
 		System.out.println(checkOriginalTaiirPassword("admin","CBD5516C394B4BAC0176A7BFFE1FCBBC:2F361F1B"));
+		
 	}
 	
 	

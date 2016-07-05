@@ -3,6 +3,8 @@
  */
 package taiyi.web.service.Impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +77,14 @@ public class SystemUserServiceImpl implements taiyi.web.service.SystemUserServic
 	@Override
 	public int updateByPrimaryKey(SystemUser record) {
 		return systemUserMapper.updateByPrimaryKey(record);
+	}
+
+	/* 
+	 * @see taiyi.web.service.SystemUserService#selectByHostipal(java.lang.Integer)
+	 */
+	@Override
+	public List<SystemUser> selectByHostipal(Integer HostipalId) {
+		return systemUserMapper.selectByHostipal(HostipalId);
 	}
 
 }

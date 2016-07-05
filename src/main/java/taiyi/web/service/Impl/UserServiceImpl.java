@@ -3,9 +3,7 @@
  */
 package taiyi.web.service.Impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -119,8 +117,8 @@ public class UserServiceImpl implements UserService{
 		} else {
 //			Map<String,Object> maps = new HashMap<String,Object>();
 			List<User> users = userMapper.searchUsersByPage(user,(page - 1) * pagesize,pagesize);
-			long count = userMapper.searchUsersByPageCount(user);
-			pageModel.setTotal(count);
+//			long count = userMapper.searchUsersByPageCount(user);
+			pageModel.setTotal(users.size());
 			pageModel.setRows(users);
 		}
 		return pageModel;

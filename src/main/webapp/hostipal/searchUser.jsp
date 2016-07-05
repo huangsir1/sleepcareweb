@@ -41,12 +41,11 @@
 	}
     $(function(){
         $('#dg').datagrid({
-            url: '<%=basePath%>admin/searchUsers?'+Math.random(),
+            url: "<%=basePath%>admin/searchDoctorUsers?"+Math.random(),
             onDblClickRow: function (rowIndex, rowData) {
 				window.location.href = "<%=basePath%>admin/userDetail.jsp?id=" + rowData.id
 			}
         });
-        
     });
     
     function destroyUser(){
@@ -76,7 +75,7 @@
 
 	function doSearch() {
        $('#dg').datagrid({
-    	   url: '<%=basePath%>admin/searchUsers?q=' + Math.random(),
+    	   url: '<%=basePath%>admin/searchDoctorUsers?q=' + Math.random(),
 			queryParams : {
 				name : $('#name').val(),
 				weight : $('#weight').val(),
@@ -90,7 +89,7 @@
 		});
 		/*
 		$.ajax({
-		    url:'<%=basePath%>admin/searchUsers',
+		    url:'<%=basePath%>admin/searchDoctorUsers',
 		    type : "post",
 		    data : {
 		        name : $('#name').val(),

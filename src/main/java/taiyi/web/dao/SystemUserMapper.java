@@ -1,5 +1,7 @@
 package taiyi.web.dao;
 
+import java.util.List;
+
 import taiyi.web.model.SystemUser;
 
 public interface SystemUserMapper {
@@ -49,6 +51,12 @@ public interface SystemUserMapper {
      * This method corresponds to the database table sys_user
      *
      * @mbggenerated Thu Jun 02 15:23:31 CST 2016
-     */
-    int updateByPrimaryKey(SystemUser record);
+     */ 
+    int updateByPrimaryKey(SystemUser record); 
+
+	/**
+	 * @param hostipalId
+	 * @return
+	 */
+	List<SystemUser> selectByHostipal(Integer hostipalId);
 }

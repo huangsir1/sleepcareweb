@@ -212,36 +212,22 @@ a:hover {
 				"menuid" : "111",
 				"menuname" : "查看报告",
 				"icon" : "icon-nav",
-				"url" : "<%=basePath%>admin/showUser." 
+				"url" : "<%=basePath%>admin/showHostipalUser" 
 			}, {
 				"menuid" : "113",
 				"menuname" : "搜索用户",
 				"icon" : "icon-nav",
-				"url" : "<%=basePath%>admin/searchUser"
-			}, {
-				"menuid" : "115",
-				"menuname" : "增加用户",
+				"url" : "<%=basePath%>admin/searchHostipalUser"
+			}, 
+			{
+				"menuid" : "116",
+				"menuname" : "修改密码", 
 				"icon" : "icon-nav",
-				"url" : "<%=basePath%>admin/addUser"
+				"url" : "<%=basePath%>admin/changePasswordUI"
 			}]  
-		}, {
-			"menuid" : "20",
-			"icon" : "icon-sys",
-			"menuname" : "其他管理",
-			"menus" : [ {
-				"menuid" : "211",
-				"menuname" : "医院🏥管理",
-				"icon" : "icon-nav",
-				"url" : "<%=basePath%>admin/hostipal"
-			}, {
-				"menuid" : "213",
-				"menuname" : "测试",
-				"icon" : "icon-nav",
-				"url" : "#"
-			} ]
-		} ]
+		}]
 	};
-
+ 
 	//关闭登录窗口
 	function closePwd() {
 		$('#w').window('close');
@@ -275,7 +261,7 @@ a:hover {
 	</noscript>
 	<div region="north" split="true" border="false"
 		style="overflow: hidden; height: 30px;
-    	        background: url(<%=basePath%>css/images/layout-browser-hd-bg.gif) #00BCD4 repeat-x center 50%;
+    	        background: url(<%=basePath%>css/images/layout-browser-hd-bg.gif) #3fb4e7 repeat-x center 50%;
     	        line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
 		<span style="padding-left: 10px; font-size: 16px; float: left;"><img
 			src="<%=basePath%>css/images/icon.png" width="20" height="20"
@@ -286,11 +272,12 @@ a:hover {
 				title=""></a></li>
 
 		</ul>
-	</div>
+	</div>  
 	<div region="south" split="true"
-		style="height: 30px; background:#00BCD4;s">
-	<span><a style="padding-left: 10px;font-size: 16px;float: left;color: white;" href="<%=basePath%>logout">注销</a></span>
-		<div class="footer"></div>
+		style="height: 30px; background: #3fb4e7;s">
+		<span><a style="padding-left: 10px;font-size: 16px;float: left;color: white;" href="<%=basePath%>logout">注销</a></span>
+		<div class="footer"></div> 
+		
 	</div>
 	<div region="west" hide="true" split="true" title="菜单"
 		style="width: 180px;" id="west">
@@ -300,12 +287,12 @@ a:hover {
 		</div>
 
 	</div>
-	<div id="mainPanle" region="center"
+	<div id="mainPanle" region="center" 
 		style="background: #eee; overflow-y: hidden">
-		<div id="tabs" class="easyui-tabs" fit="true" border="false">
+		<div id="tabs" class="easyui-tabs" fit="true" border="false"> 
 			<div title="欢迎使用" style="padding: 20px; overflow: hidden;" id="home">
 
-				<h1>欢迎 ${trueName }</h1> 
+				<h1>欢迎 ${trueName }</h1>
 
 			</div>
 		</div>

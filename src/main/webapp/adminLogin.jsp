@@ -240,7 +240,7 @@ window.onload=function(){
 
   
 	<div class="login">  
-		<h1>钛铱Taiir睡眠检测系统</h1> 
+		<h1>钛铱Taiir睡眠监测系统</h1> 
 		<h1>管理员登陆</h1> 
 		<form method="post" action="<%=basePath%>login">
 			<input type="text" name="username" placeholder="用户名"

@@ -77,7 +77,7 @@ public class DoctorController extends ExceptionHandlerController{
 	@RequiresPermissions("doctor:view")
 	@RequestMapping("searchDoctorUser")
 	public String searchUser() {
-		return "admin/searchUser";
+		return "doctor/searchUser";
 	}
 	@RequiresPermissions("user:insert")//doctor:insert")
 	@RequestMapping("addDoctorUser")

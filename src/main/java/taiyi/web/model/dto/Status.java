@@ -25,6 +25,7 @@ public class Status {
 	public final static int USER_EXIST_CODE = 5002;
 	public final static int PARAM_ERROR_CODE = 5003;
 	public final static int CANNOT_DELETE_USER_CODE = 5004;
+	public final static int CANNOT_DELETE_WITHOUT_DELETE_ALL_SUBITEM_CODE = 5005;
 	public final static int VALIDATECODE_ERROR_CODE = 5100;
 	public final static int USER_REGISTER_SUCCESS_CODE = 5200;
 	
@@ -67,7 +68,9 @@ public class Status {
 	
 	public static final Status PASSWORD_NOT_MATCH = new Status(PASSWORD_NOT_MATCH_CODE,"密码不匹配");
 
-	public static final Status PASSWORD_SAME =  new Status(PASSWORD_SAME_CODE,"新密码与原密码相同");;
+	public static final Status PASSWORD_SAME =  new Status(PASSWORD_SAME_CODE,"新密码与原密码相同");
+	public static final Status CANNOT_DELETE_WITHOUT_DELETE_ALL_SUBITEM =  new Status(CANNOT_DELETE_WITHOUT_DELETE_ALL_SUBITEM_CODE,"在该条目的所有子条目删除之前，无法删除该条目。");
+	
 	
 	private int code = FAILED_CODE;
 	private String message = "no info";
