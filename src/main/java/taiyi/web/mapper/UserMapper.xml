@@ -32,30 +32,45 @@
 		u.account_id,u.gender,u.phone, u.address, u.doctor_id,
 		u.register_date, u.lastest_date
 	</sql>
+
 	<sql id="Base_Column_List">
 		id, name, birthday, weight, height, ess_rank, account_id,
 		gender, phone, address,
 		doctor_id, register_date, lastest_date
 	</sql>
-		<select id="selectBySysUsername" resultMap="BaseResultMap" parameterType="java.lang.String">
+	<select id="selectUserByHostipalId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base" />
+		from user u
+		left join sleep_report slr on slr.user_id = u.id
+		left join sub_report sr on sr.`id` = slr.`id`
+		left join device d on sr.mac_address = d.mac_address
+		where d.hostipal_id = #{hostipalId}
+		order by u.lastest_date desc
+	</select>
+	<select id="selectBySysUsername" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
 		select
 		<include refid="Base" />
 		from user u left join sys_user su on u.doctor_id = su.id
-		where su.username = #{username}
+		where
+		su.username = #{username}
 		order by lastest_date desc
 	</select>
-	
-	<select id="selectBySysUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
+
+	<select id="selectBySysUserId" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
 		from user where doctor_id = #{userId}
 		order by lastest_date desc
 	</select>
-	
+
 	<select id="getAllUsers" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from user  order by lastest_date desc
+		from user order by lastest_date desc
 	</select>
 	<select id="selectWithDH" parameterType="java.lang.String"
 		resultMap="userWithDH">
@@ -220,10 +235,12 @@
 		lastest_date)
 		values (#{id,jdbcType=CHAR}, #{name,jdbcType=VARCHAR},
 		#{birthday,jdbcType=DATE},
-		#{weight,jdbcType=DOUBLE}, #{height,jdbcType=INTEGER}, #{essRank,jdbcType=INTEGER},
+		#{weight,jdbcType=DOUBLE},
+		#{height,jdbcType=INTEGER}, #{essRank,jdbcType=INTEGER},
 		#{accountId,jdbcType=CHAR}, #{gender,jdbcType=CHAR},
 		#{phone,jdbcType=VARCHAR},
-		#{address,jdbcType=VARCHAR}, #{doctorId,jdbcType=CHAR}, #{registerDate,jdbcType=TIMESTAMP},
+		#{address,jdbcType=VARCHAR},
+		#{doctorId,jdbcType=CHAR}, #{registerDate,jdbcType=TIMESTAMP},
 		#{lastestDate,jdbcType=TIMESTAMP})
 	</insert>
 	<insert id="insertSelective" parameterType="taiyi.web.model.User">
@@ -365,17 +382,22 @@
 			15:08:20 CST 2016. -->
 		update user
 		set name = #{name,jdbcType=VARCHAR},
-		birthday = #{birthday,jdbcType=DATE},
+		birthday =
+		#{birthday,jdbcType=DATE},
 		weight = #{weight,jdbcType=DOUBLE},
-		height = #{height,jdbcType=INTEGER},
+		height =
+		#{height,jdbcType=INTEGER},
 		ess_rank = #{essRank,jdbcType=INTEGER},
 		account_id = #{accountId,jdbcType=CHAR},
-		gender = #{gender,jdbcType=CHAR},
+		gender =
+		#{gender,jdbcType=CHAR},
 		phone = #{phone,jdbcType=VARCHAR},
-		address = #{address,jdbcType=VARCHAR},
+		address =
+		#{address,jdbcType=VARCHAR},
 		doctor_id = #{doctorId,jdbcType=CHAR},
 		register_date = #{registerDate,jdbcType=TIMESTAMP},
-		lastest_date = #{lastestDate,jdbcType=TIMESTAMP}
+		lastest_date =
+		#{lastestDate,jdbcType=TIMESTAMP}
 		where id = #{id,jdbcType=CHAR}
 	</update>
 </mapper>

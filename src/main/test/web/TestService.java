@@ -5,6 +5,7 @@ package web;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -16,6 +17,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 
 import taiyi.web.dao.DeviceMapper;
+import taiyi.web.dao.SleepReportMapper;
 import taiyi.web.dao.SystemPermissionMapper;
 import taiyi.web.dao.SystemRoleMapper;
 import taiyi.web.dao.UserMapper;
@@ -53,6 +55,8 @@ public class TestService {
 	private static SystemPermissionMapper systemPermissionMapper;
 	private static PermissionService permissionService;
 	private static DeviceMapper deviceMapper;
+	private static SleepReportMapper sleepReportMapper;
+	
 	
 	
 	@BeforeClass
@@ -67,12 +71,16 @@ public class TestService {
 		systemPermissionMapper = context.getBean(SystemPermissionMapper.class);
 		permissionService = context.getBean(PermissionServiceImpl.class);
 		deviceMapper = context.getBean(DeviceMapper.class);
+		sleepReportMapper = context.getBean(SleepReportMapper.class);
 	}
 	
 	@Test
 	public void testttt() {
-		System.out.println(deviceMapper.selectAll());;
-		System.out.println(deviceMapper.selectByHostipalId(1));
+//		System.out.println(userMapper.selectUserByHostipalId(1));
+		HashMap<String, String> hashMap = new HashMap<>();
+		hashMap.put("hostipalId", "1");
+		hashMap.put("userId", "b6d24c67-e121-4405-b53a-eaa4119c9656");
+		System.out.println(sleepReportMapper.selectByHostipalIdAndUserId(hashMap));
 		
 	}
 	

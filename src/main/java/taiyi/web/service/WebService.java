@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.deser.Deserializers.Base;
 
+import taiyi.web.model.SleepReport;
 import taiyi.web.model.dto.BaseReport;
 import taiyi.web.model.dto.ReportPreviewDto;
 
@@ -42,4 +43,6 @@ public interface WebService {
 	boolean isReportPdfExist(String reportId);
 
 	List<ReportPreviewDto> packagePerviewReportDtoByUserId(String userId);
+	
+	List<ReportPreviewDto> packagePerviewReportDto(List<SleepReport> sleepReports);
 }

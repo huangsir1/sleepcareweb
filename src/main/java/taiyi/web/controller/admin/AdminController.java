@@ -49,7 +49,6 @@ import taiyi.web.model.dto.Status;
 import taiyi.web.service.BreatheReportService;
 import taiyi.web.service.DiseaseHistoryUserService;
 import taiyi.web.service.EssUserService;
-import taiyi.web.service.HostipalService;
 import taiyi.web.service.SleepReportService;
 import taiyi.web.service.SubReportService;
 import taiyi.web.service.SystemUserService;

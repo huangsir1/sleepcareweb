@@ -306,4 +306,17 @@ public class SleepReport {
     public void setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate;
     }
+
+	/* 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "SleepReport [id=" + id + ", userId=" + userId + ", startTime=" + startTime + ", endTime=" + endTime
+				+ ", lightSleepSeconds=" + lightSleepSeconds + ", deepSleepSeconds=" + deepSleepSeconds
+				+ ", awakeSeconds=" + awakeSeconds + ", totalSeconds=" + totalSeconds + ", score=" + score
+				+ ", uploadDate=" + uploadDate + "]";
+	}
+    
+    
 }

@@ -396,6 +396,9 @@ public class WebServiceImpl implements WebService {
 	@Override
 	public List<ReportPreviewDto> packagePerviewReportDtoByUserId(String userId) {
 		List<SleepReport> sleepReports = sleepReportService.selectByUserId(userId);
+		return packagePerviewReportDto(sleepReports);
+	}
+	public List<ReportPreviewDto> packagePerviewReportDto(List<SleepReport> sleepReports) {
 		List<ReportPreviewDto> reportPreviewDtos = Lists.newArrayListWithCapacity(sleepReports.size());
 		for(SleepReport s : sleepReports) {
 		
@@ -407,4 +410,5 @@ public class WebServiceImpl implements WebService {
 		
 		return reportPreviewDtos;
 	}
+	
 }

@@ -66,4 +66,6 @@ public interface UserMapper {
 	 * @return
 	 */
 	List<User> selectBySysUsername(String username);
+	
+	List<User> selectUserByHostipalId(Integer hostipalId);
 }

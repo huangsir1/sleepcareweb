@@ -3,6 +3,7 @@
  */
 package taiyi.web.service.Impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,17 @@ public class SleepReportServiceImpl implements SleepReportService{
 	@Override
 	public List<SleepReport> selectByUserId(String userId) {
 		return sleepReportMapper.selectByUserId(userId);
+	}
+
+	/* 
+	 * @see taiyi.web.service.SleepReportService#selectByHostipalIdAndUserId(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<SleepReport> selectByHostipalIdAndUserId(String userId, String hostipalId) {
+		HashMap<String, String> map = new HashMap<String,String>();
+		map.put("userId", userId);
+		map.put("hostipalId", hostipalId);
+		return selectByHostipalIdAndUserId(userId, hostipalId);
 	}
 	
 	

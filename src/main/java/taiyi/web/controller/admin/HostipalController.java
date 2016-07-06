@@ -45,11 +45,7 @@ import taiyi.web.service.SystemUserService;
 @Controller
 public class HostipalController extends APIExceptionHandlerController{
 	/*
-	select u.id,u.name,u.birthday,u.weight,u.ess_rank,u.gender,u.phone,u.address from user u 
-	left join sleep_report slr on slr.user_id = u.id
-	left join sub_report sr on sr.`id` = slr.`id` 
-	left join device d on sr.mac_address =  d.mac_address 
-	where d.hostipal_id = 1
+	
 	 */
 	@Autowired
 	private HostipalService hostipalService;
