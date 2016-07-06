@@ -197,10 +197,14 @@ public class FileOperateUtils {
 			try {
 				try {
 					fc.close();
-				} catch (Exception e2) {
+				} catch (NullPointerException e2) {
 					e2.printStackTrace();
 				}
-				fos.close();
+				try {
+					fos.close();
+				} catch (NullPointerException e2) {
+					e2.printStackTrace();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -140,4 +140,12 @@ public class SystemPermission {
     	SystemPermission systemPermission  = (SystemPermission) obj;
     	return systemPermission.getId().equals(id) && systemPermission.getPermission().equals(permission);
     }
+    
+    /* 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+    	return super.hashCode();
+    }
 }

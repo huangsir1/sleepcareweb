@@ -90,7 +90,7 @@ public class AccountAPIController extends APIExceptionHandlerController {
 	@ResponseBody
 	public Status login(String phone, String code) {
 		// TODO
-		if (code.equals(code)) {
+		if (code.equals(phone)) {
 
 		}
 		String token = UUID.randomUUID().toString();
