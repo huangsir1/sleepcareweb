@@ -175,11 +175,9 @@ public class FileOperateUtils {
 	 * @param file
 	 */
 	public static void writeFileByNIO(String file, String content) {
-		FileOutputStream fos = null;
 		FileChannel fc = null;
 		ByteBuffer buffer = null;
-		try {
-			fos = new FileOutputStream(file);
+		try (FileOutputStream fos = new FileOutputStream(file)){
 			// 第一步 获取一个通道
 			fc = fos.getChannel();
 			// buffer=ByteBuffer.allocate(1024);
@@ -195,15 +193,8 @@ public class FileOperateUtils {
 			e.printStackTrace();
 		} finally {
 			try {
-				try {
+				if (fc != null) {
 					fc.close();
-				} catch (NullPointerException e2) {
-					e2.printStackTrace();
-				}
-				try {
-					fos.close();
-				} catch (NullPointerException e2) {
-					e2.printStackTrace();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
