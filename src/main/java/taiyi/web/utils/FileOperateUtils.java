@@ -195,10 +195,13 @@ public class FileOperateUtils {
 			e.printStackTrace();
 		} finally {
 			try {
-				fc.close();
+				try {
+					fc.close();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
 				fos.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

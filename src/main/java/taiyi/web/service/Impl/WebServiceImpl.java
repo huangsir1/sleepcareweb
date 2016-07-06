@@ -370,9 +370,11 @@ public class WebServiceImpl implements WebService {
 		OutputStream out = response.getOutputStream();
 		fis = new FileInputStream(file);
 		byte[] b = new byte[fis.available()];
-		fis.read(b);
+		int read = fis.read(b);
+		logger.debug("read of pdf" + read);
 		out.write(b);
 		out.flush();
+		fis.close();
 	}
 
 	/* 

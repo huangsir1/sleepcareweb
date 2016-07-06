@@ -140,4 +140,9 @@ public class SystemRole {
     	SystemRole systemPermission  = (SystemRole) obj;
     	return systemPermission.getId().equals(id) && systemPermission.getRole().equals(role);
     }
+    
+    @Override
+    public int hashCode() {
+    	return super.hashCode();
+    }
 }
