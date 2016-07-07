@@ -82,4 +82,6 @@ public interface UserMapper {
 	 * @return
 	 */
 	List<User> searchHospitalUsers(@Param("user") User user,@Param("hospitalId") Integer hospitalId);
+	
+	long countHospitalUsers(@Param("user") User user,@Param("hospitalId") Integer hospitalId);
 }

@@ -64,9 +64,9 @@ public class AdminLoginController extends ExceptionHandlerController {
 		return "doctor/adminIndex";
 	}
 
-	@RequestMapping("/hostipal")
+	@RequestMapping("/hospital")
 	public String hostipal() {
-		return "hostipal/adminIndex";
+		return "hospital/adminIndex";
 	}
 
 	@RequestMapping("/login")
@@ -109,8 +109,8 @@ public class AdminLoginController extends ExceptionHandlerController {
 		request.getSession().setAttribute("trueName", systemUser.getName());
 		if (subject.hasRole("admin")) {
 			return "redirect:/admin";
-		} else if (subject.hasRole("hostipal")) {
-			return "redirect:/hostipal";
+		} else if (subject.hasRole("hospital")) {
+			return "redirect:/hospital";
 		} else if (subject.hasRole("doctor")) {
 			return "redirect:/doctor";
 		}

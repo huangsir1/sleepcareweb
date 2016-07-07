@@ -212,12 +212,12 @@ a:hover {
 				"menuid" : "111",
 				"menuname" : "查看报告",
 				"icon" : "icon-nav",
-				"url" : "<%=basePath%>admin/showHostipalUser" 
+				"url" : "<%=basePath%>admin/showHospitalUser" 
 			}, {
 				"menuid" : "113",
 				"menuname" : "搜索用户",
 				"icon" : "icon-nav",
-				"url" : "<%=basePath%>admin/searchHostipalUser"
+				"url" : "<%=basePath%>admin/searchHospitalUser"
 			}, 
 			{
 				"menuid" : "116",

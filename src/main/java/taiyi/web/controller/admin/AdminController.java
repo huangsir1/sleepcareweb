@@ -307,7 +307,7 @@ public class AdminController extends ExceptionHandlerController {
 		}
 	}
 	
-	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view","hospital:view" })
 	@RequestMapping("/showPdf/{reportId}")
 	public void showPdf(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, DocumentException {

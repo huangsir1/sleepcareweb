@@ -33,17 +33,17 @@
 	function jump() {
 		var row = $('#dg').datagrid('getSelected');
 		if (row) {
-			window.location.href = "<%=basePath%>hostipal/userDetail.jsp?id=" + row.id;
+			window.location.href = "<%=basePath%>hospital/userDetail.jsp?id=" + row.id;
 		}
  
 	}
 	 
 	$(function(){
 		$('#dg').datagrid({
-			url: '<%=basePath%>admin/getHostipalUsers',
+			url: '<%=basePath%>admin/getHospitalUsers',
 			pageSize:20,
 			onDblClickRow: function (rowIndex, rowData) {
-				window.location.href = "<%=basePath%>hostipal/userDetail.jsp?id=" + rowData.id
+				window.location.href = "<%=basePath%>hospital/userDetail.jsp?id=" + rowData.id
 			}
 		})
 	});

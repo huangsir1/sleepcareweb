@@ -123,8 +123,8 @@ public class UserServiceImpl implements UserService{
 		} else {
 //			Map<String,Object> maps = new HashMap<String,Object>();
 			List<User> users = userMapper.searchUsersByPage(user,(page - 1) * pagesize,pagesize);
-//			long count = userMapper.searchUsersByPageCount(user);
-			pageModel.setTotal(users.size());
+			long count = userMapper.searchUsersByPageCount(user);
+			pageModel.setTotal(count);
 			pageModel.setRows(users);
 		}
 		return pageModel;
@@ -140,8 +140,8 @@ public class UserServiceImpl implements UserService{
 		} else {
 //			Map<String,Object> maps = new HashMap<String,Object>();
 			List<User> users = userMapper.searchHospitalUsersByPage(user,hospitalId,(page - 1) * pagesize,pagesize);
-//			long count = userMapper.searchUsersByPageCount(user);
-			pageModel.setTotal(users.size());
+			long count = userMapper.countHospitalUsers(user, hospitalId);
+			pageModel.setTotal(count);
 			pageModel.setRows(users);
 		}
 		return pageModel;

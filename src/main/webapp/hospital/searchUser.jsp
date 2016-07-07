@@ -35,15 +35,15 @@
 	function jump() {
 		var row = $('#dg').datagrid('getSelected');
 		if (row) {
-			window.location.href = "<%=basePath%>hostipal/userDetail.jsp?id=" + row.id;
+			window.location.href = "<%=basePath%>hospital/userDetail.jsp?id=" + row.id;
 		}
 
 	}
     $(function(){
         $('#dg').datagrid({
-            url: "<%=basePath%>admin/searchHostipalUsers?"+Math.random(),
+            url: "<%=basePath%>admin/searchHospitalUsers?"+Math.random(),
             onDblClickRow: function (rowIndex, rowData) {
-				window.location.href = "<%=basePath%>hostipal/userDetail.jsp?id=" + rowData.id
+				window.location.href = "<%=basePath%>hospital/userDetail.jsp?id=" + rowData.id
 			}
         });
     });
@@ -53,7 +53,7 @@
 		if (row){
 			$.messager.confirm('确认','真的要删除该用户嘛?',function(r){
 				if (r){
-					$.post('<%=basePath%>hostipal/deleteUser', {
+					$.post('<%=basePath%>hospital/deleteUser', {
 						userId : row.id
 					}, function(result) {
 						$('#dg').datagrid('reload'); // reload the user data
@@ -75,7 +75,7 @@
 
 	function doSearch() {
        $('#dg').datagrid({
-    	   url: '<%=basePath%>admin/searchHostipalUsers?q=' + Math.random(),
+    	   url: '<%=basePath%>admin/searchHospitalUsers?q=' + Math.random(),
 			queryParams : {
 				name : $('#name').val(),
 				weight : $('#weight').val(),
@@ -89,7 +89,7 @@
 		});
 		/*
 		$.ajax({
-		    url:'<%=basePath%>admin/searchHostipalUsers',
+		    url:'<%=basePath%>admin/searchHospitalUsers',
 		    type : "post",
 		    data : {
 		        name : $('#name').val(),

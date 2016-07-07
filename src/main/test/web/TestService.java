@@ -77,8 +77,8 @@ public class TestService {
 	@Test
 	public void testttt() {
 		User user = new User();
-		user.setName("王2%");
-		System.out.println(userMapper.searchHospitalUsers(user, 1));
+		user.setName("王%");
+		System.out.println(userMapper.countHospitalUsers(user, 1));
 		;
 		
 	}

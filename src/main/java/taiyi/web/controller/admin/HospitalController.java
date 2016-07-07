@@ -48,12 +48,12 @@ import taiyi.web.service.WebService;
  *         2016年7月5日
  */
 @Controller
-public class HostipalController extends APIExceptionHandlerController {
+public class HospitalController extends APIExceptionHandlerController {
 	/*
 	
 	 */
 	@Autowired
-	private HostipalService hostipalService;
+	private HostipalService hospitalService;
 	@Autowired
 	private DeviceService deviceService;
 	@Autowired
@@ -66,45 +66,45 @@ public class HostipalController extends APIExceptionHandlerController {
 	private SleepReportService sleepReportService;
 
 	@RequiresPermissions("system:view")
-	@RequestMapping("admin/hostipal")
-	public String hostipal() {
-		return "admin/showHostipal";
+	@RequestMapping("admin/hospital")
+	public String hospital() {
+		return "admin/showHospital";
 	}
 
 	@RequiresPermissions("system:view")
-	@RequestMapping("admin/getAllHostipal")
+	@RequestMapping("admin/getAllHospital")
 	@ResponseBody
-	public Map<String, Object> getAllHostipal(@RequestParam(required = false) Integer page,
+	public Map<String, Object> getAllHospital(@RequestParam(required = false) Integer page,
 			@RequestParam(required = false) Integer rows) {
 		if (page != null && rows != null) {
 			PageHelper.startPage(page, rows);
 		}
-		List<Hostipal> hostipals = hostipalService.selectAll();
-		PageInfo<Hostipal> pageinfo = new PageInfo<Hostipal>(hostipals);
-		PageModel pageModel = new PageModel(pageinfo.getTotal(), hostipals);
+		List<Hostipal> hospitals = hospitalService.selectAll();
+		PageInfo<Hostipal> pageinfo = new PageInfo<Hostipal>(hospitals);
+		PageModel pageModel = new PageModel(pageinfo.getTotal(), hospitals);
 		return pageModel.get();
 	}
 
 	@RequiresPermissions("system:insert")
-	@RequestMapping("admin/saveHostipal")
+	@RequestMapping("admin/saveHospital")
 	@ResponseBody
-	public Status addHostipal(Hostipal hostipal) {
-		hostipal.setId(null);
-		hostipal.setRegDate(new Date());
-		hostipalService.insert(hostipal);
+	public Status addHospital(Hostipal hospital) {
+		hospital.setId(null);
+		hospital.setRegDate(new Date());
+		hospitalService.insert(hospital);
 		return Status.SUCCESSED;
 	}
 
 	@RequiresPermissions("system:delete")
-	@RequestMapping("/admin/deleteHostipal")
+	@RequestMapping("/admin/deleteHospital")
 	@ResponseBody
-	public Status deleteHostipal(Integer hostipalId) {
+	public Status deleteHospital(Integer hospitalId) {
 		try {
-			if (!deviceService.selectByHostipalId(hostipalId).isEmpty()
-					|| !systemUserService.selectByHostipal(hostipalId).isEmpty()) {
+			if (!deviceService.selectByHostipalId(hospitalId).isEmpty()
+					|| !systemUserService.selectByHostipal(hospitalId).isEmpty()) {
 				return Status.CANNOT_DELETE_WITHOUT_DELETE_ALL_SUBITEM;
 			}
-			hostipalService.deleteByPrimaryKey(hostipalId);
+			hospitalService.deleteByPrimaryKey(hospitalId);
 			return Status.SUCCESSED;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,29 +113,35 @@ public class HostipalController extends APIExceptionHandlerController {
 
 	}
 
-	@RequiresPermissions("hostipal:view")
-	@RequestMapping("/admin/getHostipalUsers")
+	@RequiresPermissions("hospital:view")
+	@RequestMapping("/admin/getHospitalUsers")
 	@ResponseBody
-	public List<User> getHostipalUsers() {
+	public HashMap<String, Object> getHospitalUsers(@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer rows) {
+		if (page != null && rows != null) {
+			PageHelper.startPage(page, rows);
+		}
 		Subject subject = SecurityUtils.getSubject();
 		Session session = subject.getSession();
 		SystemUser user = (SystemUser) session.getAttribute("user");
 		List<User> users = userService.selectUserByHostipalId(user.getHostipalId());
-		return users;
+		PageInfo<User> pageinfo = new PageInfo<User>(users);
+		PageModel pageModel = new PageModel(pageinfo.getTotal(), users);
+		return pageModel.get();
 	}
 
-	@RequiresPermissions("hostipal:view")
-	@RequestMapping("/admin/getHostipalReport/{userId}")
+	@RequiresPermissions("hospital:view")
+	@RequestMapping("/admin/getHospitalReport/{userId}")
 	@ResponseBody
-	public List<ReportPreviewDto> getHostipalReport(@PathVariable String userId) {
+	public List<ReportPreviewDto> getHospitalReport(@PathVariable String userId) {
 		SystemUser user = (SystemUser) SecurityUtils.getSubject().getSession().getAttribute("user");
 		List<SleepReport> sleepReports = sleepReportService.selectByHostipalIdAndUserId(userId, user.getHostipalId());
 		List<ReportPreviewDto> packagePerviewReportDto = webService.packagePerviewReportDto(sleepReports);
 		return packagePerviewReportDto;
 	}
 
-	@RequiresPermissions("hostipal:view")
-	@RequestMapping("/admin/searchHostipalUsers")
+	@RequiresPermissions("hospital:view")
+	@RequestMapping("/admin/searchHospitalUsers")
 	@ResponseBody
 	public HashMap<String, Object> searchUsers(User user, @RequestParam(required = false) String birthdays,
 			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer rows) {
@@ -167,10 +173,10 @@ public class HostipalController extends APIExceptionHandlerController {
 	}
 
 	@RequiresPermissions("system:view")
-	@RequestMapping("/admin/getDeviceByHostapilId/{hostipalId}")
+	@RequestMapping("/admin/getDeviceByHostapilId/{hospitalId}")
 	@ResponseBody
-	public List<Device> getDeviceByHostapilId(@PathVariable Integer hostipalId) {
-		return deviceService.selectByHostipalId(hostipalId);
+	public List<Device> getDeviceByHostapilId(@PathVariable Integer hospitalId) {
+		return deviceService.selectByHostipalId(hospitalId);
 	}
 
 	@RequiresPermissions("system:delete")
@@ -190,16 +196,16 @@ public class HostipalController extends APIExceptionHandlerController {
 		return Status.SUCCESSED;
 	}
 
-	@RequiresPermissions("hostipal:view")
-	@RequestMapping("/admin/showHostipalUser")
+	@RequiresPermissions("hospital:view")
+	@RequestMapping("/admin/showHospitalUser")
 	public String showUser() {
-		return "hostipal/showUser";
+		return "hospital/showUser";
 	}
 
-	@RequiresPermissions("hostipal:view")
-	@RequestMapping("/admin/searchHostipalUser")
+	@RequiresPermissions("hospital:view")
+	@RequestMapping("/admin/searchHospitalUser")
 	public String searchUser() {
-		return "hostipal/searchUser";
+		return "hospital/searchUser";
 	}
 
 }

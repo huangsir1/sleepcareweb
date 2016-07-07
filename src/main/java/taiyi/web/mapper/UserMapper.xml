@@ -260,6 +260,44 @@
 		and d.hostipal_id = #{hospitalId}
 		order by u.lastest_date desc
 	</select>
+	
+	<select id="countHospitalUsers" resultType="long">
+		select
+		count(*)
+		from user u
+		left join sleep_report slr on slr.user_id = u.id
+		left join sub_report sr on sr.`id` = slr.`id`
+		left join device d on sr.mac_address = d.mac_address
+		where 
+		<if test="user.name != null and user.name != '' ">
+			name like #{user.name,jdbcType=VARCHAR} and
+		</if>
+		<if test="user.birthday != null">
+			birthday like #{user.birthday,jdbcType=DATE} and
+		</if>
+		<if test="user.weight != null">
+			weight = #{user.weight,jdbcType=DOUBLE} and
+		</if>
+		<if test="user.height != null">
+			height like #{user.height,jdbcType=INTEGER} and
+		</if>
+		<if test="user.essRank != null">
+			ess_rank like #{user.essRank,jdbcType=INTEGER} and
+		</if>
+		<if test="user.gender != null and user.gender != '' ">
+			gender like #{user.gender,jdbcType=CHAR} and
+		</if>
+		<if test="user.phone != null and user.phone  != '' ">
+			phone like #{user.phone,jdbcType=VARCHAR} and
+		</if>
+		<if test="user.address != null and user.address != '' ">
+			address like #{user.address,jdbcType=VARCHAR}
+		</if>
+		<if test="user.address == null or user.address  == '' ">
+			1 = 1
+		</if>
+		and d.hostipal_id = #{hospitalId}
+	</select>
 
 	<select id="searchUsersByPageCount" resultType="long">
 		select

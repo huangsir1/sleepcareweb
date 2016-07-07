@@ -86,7 +86,7 @@ public class DoctorController extends ExceptionHandlerController{
 		return "doctor/addUser";
 	}
 	
-	@RequiresPermissions(logical=Logical.OR, value={"doctor:update","hostipal:update"})
+	@RequiresPermissions(logical=Logical.OR, value={"doctor:update","hospital:update"})
 	@RequestMapping("changePasswordUI")
 	public String changePassword() {
 		return "doctor/changePassword";
