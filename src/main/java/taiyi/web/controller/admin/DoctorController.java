@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -85,7 +86,7 @@ public class DoctorController extends ExceptionHandlerController{
 		return "doctor/addUser";
 	}
 	
-	@RequiresPermissions("doctor:update")
+	@RequiresPermissions(logical=Logical.OR, value={"doctor:update","hostipal:update"})
 	@RequestMapping("changePasswordUI")
 	public String changePassword() {
 		return "doctor/changePassword";

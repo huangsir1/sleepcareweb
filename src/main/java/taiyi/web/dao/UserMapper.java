@@ -68,4 +68,18 @@ public interface UserMapper {
 	List<User> selectBySysUsername(String username);
 	
 	List<User> selectUserByHostipalId(Integer hostipalId);
+	/**
+	 * @param user
+	 * @param hospitalId
+	 * @param i
+	 * @param pagesize
+	 * @return
+	 */
+	List<User> searchHospitalUsersByPage(@Param("user") User user, @Param("hospitalId") Integer hospitalId, @Param("current") int current, @Param("pagesize") int pagesize);
+	/**
+	 * @param user
+	 * @param hospitalId
+	 * @return
+	 */
+	List<User> searchHospitalUsers(@Param("user") User user,@Param("hospitalId") Integer hospitalId);
 }

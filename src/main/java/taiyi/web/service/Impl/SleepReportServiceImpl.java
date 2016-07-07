@@ -88,11 +88,11 @@ public class SleepReportServiceImpl implements SleepReportService{
 	 * @see taiyi.web.service.SleepReportService#selectByHostipalIdAndUserId(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<SleepReport> selectByHostipalIdAndUserId(String userId, String hostipalId) {
+	public List<SleepReport> selectByHostipalIdAndUserId(String userId, Integer hostipalId) {
 		HashMap<String, String> map = new HashMap<String,String>();
 		map.put("userId", userId);
-		map.put("hostipalId", hostipalId);
-		return selectByHostipalIdAndUserId(userId, hostipalId);
+		map.put("hostipalId", ""+hostipalId);
+		return sleepReportMapper.selectByHostipalIdAndUserId(map);
 	}
 	
 	

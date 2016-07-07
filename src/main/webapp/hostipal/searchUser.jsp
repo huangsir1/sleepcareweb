@@ -35,15 +35,15 @@
 	function jump() {
 		var row = $('#dg').datagrid('getSelected');
 		if (row) {
-			window.location.href = "<%=basePath%>admin/userDetail.jsp?id=" + row.id;
+			window.location.href = "<%=basePath%>hostipal/userDetail.jsp?id=" + row.id;
 		}
 
 	}
     $(function(){
         $('#dg').datagrid({
-            url: "<%=basePath%>admin/searchDoctorUsers?"+Math.random(),
+            url: "<%=basePath%>admin/searchHostipalUsers?"+Math.random(),
             onDblClickRow: function (rowIndex, rowData) {
-				window.location.href = "<%=basePath%>admin/userDetail.jsp?id=" + rowData.id
+				window.location.href = "<%=basePath%>hostipal/userDetail.jsp?id=" + rowData.id
 			}
         });
     });
@@ -53,7 +53,7 @@
 		if (row){
 			$.messager.confirm('确认','真的要删除该用户嘛?',function(r){
 				if (r){
-					$.post('<%=basePath%>admin/deleteUser', {
+					$.post('<%=basePath%>hostipal/deleteUser', {
 						userId : row.id
 					}, function(result) {
 						$('#dg').datagrid('reload'); // reload the user data
@@ -75,7 +75,7 @@
 
 	function doSearch() {
        $('#dg').datagrid({
-    	   url: '<%=basePath%>admin/searchDoctorUsers?q=' + Math.random(),
+    	   url: '<%=basePath%>admin/searchHostipalUsers?q=' + Math.random(),
 			queryParams : {
 				name : $('#name').val(),
 				weight : $('#weight').val(),
@@ -89,7 +89,7 @@
 		});
 		/*
 		$.ajax({
-		    url:'<%=basePath%>admin/searchDoctorUsers',
+		    url:'<%=basePath%>admin/searchHostipalUsers',
 		    type : "post",
 		    data : {
 		        name : $('#name').val(),
@@ -131,8 +131,8 @@
 	</table>
 	<div id="toolbar">
 		<a href="#" class="easyui-linkbutton" plain="true" onclick="jump()">查看详情</a>
-		<a href="#" class="easyui-linkbutton"
-			iconCls="icon-remove" plain="true" onclick="destroyUser()">删除</a>
+		<!--  ]]<a href="#" class="easyui-linkbutton"
+			iconCls="icon-remove" plain="true" onclick="destroyUser()">删除</a>-->
 		<a href="#" class="easyui-linkbutton" iconCls="icon-back" plain="true"
 			onclick="history.go(-1)">返回</a> <br /> <span>姓名:</span> <input
 			id="name" style="width: 50px; border: 1px solid #ccc"> <span>生日:</span>

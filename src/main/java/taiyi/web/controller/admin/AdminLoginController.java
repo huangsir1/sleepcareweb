@@ -33,37 +33,37 @@ import taiyi.web.service.SystemUserService;
  */
 @Controller
 @RequestMapping("/")
-public class AdminLoginController extends ExceptionHandlerController{
+public class AdminLoginController extends ExceptionHandlerController {
 	Logger logger = Logger.getLogger(AdminLoginController.class);
 	@Autowired
 	private SystemUserService systemUserService;
 
 	@RequestMapping("/")
-	public String login() { 
+	public String login() {
 		return "adminLogin";
 	}
-	
+
 	@RequestMapping("admin/login")
 	public String login2() {
 		return "adminLogin";
 	}
-	
+
 	@RequiresPermissions("user:view")
 	@RequestMapping("/admin")
 	public String a() {
 		return "admin/adminIndex";
 	}
 
-//	@RequestMapping("/admin2")
-//	public String b() {
-//		return "admin/adminIndex2";
-//	}
+	// @RequestMapping("/admin2")
+	// public String b() {
+	// return "admin/adminIndex2";
+	// }
 
 	@RequestMapping("/doctor")
 	public String c() {
 		return "doctor/adminIndex";
 	}
-	
+
 	@RequestMapping("/hostipal")
 	public String hostipal() {
 		return "hostipal/adminIndex";
@@ -109,6 +109,8 @@ public class AdminLoginController extends ExceptionHandlerController{
 		request.getSession().setAttribute("trueName", systemUser.getName());
 		if (subject.hasRole("admin")) {
 			return "redirect:/admin";
+		} else if (subject.hasRole("hostipal")) {
+			return "redirect:/hostipal";
 		} else if (subject.hasRole("doctor")) {
 			return "redirect:/doctor";
 		}
@@ -140,7 +142,7 @@ public class AdminLoginController extends ExceptionHandlerController{
 		request.setAttribute("msg", "已经登出");
 		return "forward:/admin";
 	}
-	
+
 	@RequestMapping("/err")
 	public String err() {
 		return "exception";

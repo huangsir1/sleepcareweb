@@ -41,7 +41,7 @@
 	}
 	$(function(){
 		$('#dg').datagrid({
-			url: '<%=basePath%>admin/getReportByUserId/'+ getQueryString("id"),
+			url: '<%=basePath%>admin/getHostipalReport/'+ getQueryString("id"),
 			onDblClickRow: function (rowIndex, rowData) {
 				window.location.href="<%=basePath%>admin/showPdf/" + rowData.id; 
 			}

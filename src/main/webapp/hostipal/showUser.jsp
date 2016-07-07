@@ -33,17 +33,17 @@
 	function jump() {
 		var row = $('#dg').datagrid('getSelected');
 		if (row) {
-			window.location.href = "<%=basePath%>doctor/userDetail.jsp?id=" + row.id;
+			window.location.href = "<%=basePath%>hostipal/userDetail.jsp?id=" + row.id;
 		}
  
 	}
 	 
 	$(function(){
 		$('#dg').datagrid({
-			url: '<%=basePath%>admin/getDoctorUsers',
+			url: '<%=basePath%>admin/getHostipalUsers',
 			pageSize:20,
 			onDblClickRow: function (rowIndex, rowData) {
-				window.location.href = "<%=basePath%>doctor/userDetail.jsp?id=" + rowData.id
+				window.location.href = "<%=basePath%>hostipal/userDetail.jsp?id=" + rowData.id
 			}
 		})
 	});
@@ -130,8 +130,8 @@
 		<a href="#" class="easyui-linkbutton" plain="true" onclick="jump()">查看详情</a>
 		<!--  <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
 			onclick="newUser()">增加用户</a> -->
-		<a href="#" class="easyui-linkbutton"
-			iconCls="icon-remove" plain="true" onclick="destroyUser()">删除</a>
+			<!--  <a href="#" class="easyui-linkbutton"
+			iconCls="icon-remove" plain="true" onclick="destroyUser()">删除</a>-->
 		<a href="#" class="easyui-linkbutton"
 			iconCls="icon-back" plain="true" onclick="history.go(-1)">返回</a>
 		<!--   <br /> <span>姓名:</span>
@@ -146,57 +146,6 @@
 			onclick="doSearch()">搜索</a>-->
 	</div>
 
-	<div id="dlg" class="easyui-dialog"
-		style="width: 400px; height: 280px; padding: 10px 20px" closed="true"
-		buttons="#dlg-buttons">
-		<div class="ftitle">个人信息</div>
-		<form id="fm" method="post">
-			<div class="fitem">
-				<label>姓名:</label> <input name="name">
-			</div>
-			<div class="fitem">
-				<label>生日yyyy-MM-DD:</label> <input name="birth">
-			</div>
-			<div class="fitem">
-				<label>身高:</label> <input name="height">
-			</div>
-			<div class="fitem">
-				<label>体重:</label> <input name="weight">
-			</div>
-			<div class="fitem">
-				<label>性别:</label> <input name="gender">
-			</div>
-			<div class="fitem">
-				<label>电话:</label> <input name="phone">
-			</div>
-			<div class="fitem">
-				<label>地址:</label> <input name="address">
-			</div>
-			<div class="fitem">
-				<label>ess:</label> <input name="essRank">
-			</div>
-			<div>
-				<input type="checkbox" name="qx" value="1" />失眠 <input
-					type="checkbox" name="qx" value="2" />糖尿病 <input type="checkbox"
-					name="qx" value="3" />高血压 <input type="checkbox" name="qx"
-					value="4" />冠心病 <input type="checkbox" name="qx" value="5" />心力衰竭
-				<input type="checkbox" name="qx" value="6" />心律失常 <input
-					type="checkbox" name="qx" value="7" />鼻腔阻塞 <input type="checkbox"
-					name="qx" value="8" />长期吸烟 <input type="checkbox" name="qx"
-					value="9" />悬雍垂粗大 <input type="checkbox" name="qx" value="10" />OSAHS的家族史
-				<input type="checkbox" name="qx" value="11" />脑血管疾病 <input
-					type="checkbox" name="qx" value="12" />肾功能损害 <input
-					type="checkbox" name="qx" value="13" />用镇静剂／药物 <input
-					type="checkbox" name="qx" value="14" />长期大量饮酒
-
-			</div>
-		</form>
-	</div>
-	<div id="dlg-buttons">
-		<a href="#" class="easyui-linkbutton" iconCls="icon-ok"
-			onclick="saveUser()">保存</a> <a href="#" class="easyui-linkbutton"
-			iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
-	</div>
 
 
 

@@ -106,6 +106,12 @@ public class UserServiceImpl implements UserService{
 	public List<User> searchUsers(User user) {
 		return userMapper.searchUsers(user);
 	}
+	
+	@Override
+	public List<User> searchUsers(User user,Integer hospitalId) {
+		return userMapper.searchHospitalUsers(user,hospitalId);
+	}
+
 
 	@Override
 	public PageModel searchUsersByPage(User user,Integer page,Integer pagesize) {
@@ -124,6 +130,22 @@ public class UserServiceImpl implements UserService{
 		return pageModel;
 	}
 
+	@Override
+	public PageModel searchUsersByPage(User user,Integer hospitalId,Integer page,Integer pagesize) {
+		PageModel pageModel = new PageModel();
+		if (page == null || pagesize == null) {
+			List<User> searchUsers = searchUsers(user,hospitalId);
+			pageModel.setTotal(searchUsers.size());
+			pageModel.setRows(searchUsers);
+		} else {
+//			Map<String,Object> maps = new HashMap<String,Object>();
+			List<User> users = userMapper.searchHospitalUsersByPage(user,hospitalId,(page - 1) * pagesize,pagesize);
+//			long count = userMapper.searchUsersByPageCount(user);
+			pageModel.setTotal(users.size());
+			pageModel.setRows(users);
+		}
+		return pageModel;
+	}
 	/* 
 	 * @see taiyi.web.service.UserService#selectBySysUserId(java.lang.String)
 	 */
@@ -138,6 +160,14 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<User> selectBySysUsername(String username) {
 		return userMapper.selectBySysUsername(username);
+	}
+
+	/* 
+	 * @see taiyi.web.service.UserService#selectUserByHostipalId(java.lang.Integer)
+	 */
+	@Override
+	public List<User> selectUserByHostipalId(Integer hostipalId) {
+		return userMapper.selectUserByHostipalId(hostipalId);
 	}
 
 

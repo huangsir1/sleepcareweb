@@ -8,6 +8,7 @@ import taiyi.web.model.dto.PageModel;
 public interface UserService {
 	List<User> selectAllWIthDH();
 	List<User> getAllUsers();
+	List<User> searchUsers(User user,Integer hospitalId);
 	
 	User selectWithDH(String userId);
     /**
@@ -68,4 +69,14 @@ public interface UserService {
     List<User> selectBySysUserId(String userId);
     
     List<User> selectBySysUsername(String username);
+    
+    List<User> selectUserByHostipalId(Integer hostipalId);
+	/**
+	 * @param user
+	 * @param hospitalId
+	 * @param page
+	 * @param pagesize
+	 * @return
+	 */
+	PageModel searchUsersByPage(User user, Integer hospitalId, Integer page, Integer pagesize);
 }

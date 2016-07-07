@@ -152,7 +152,7 @@ public class AdminController extends ExceptionHandlerController {
 		return webService.packagePerviewReportDtoByUserId(userId);
 	}
 
-	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view","hostipal:view" })
 	@RequestMapping("/showReport/{id}")
 	public String showReport(@PathVariable String id, HttpServletRequest request) {
 		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(id);
@@ -282,12 +282,14 @@ public class AdminController extends ExceptionHandlerController {
 		}
 	}
 
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
 	@RequestMapping("/getHyponeaData/{id}")
 	@ResponseBody
 	public Map<String, Integer[]> getData(@PathVariable String id) {
 		return webService.getReportNumber(id);
 	}
 
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
 	@RequestMapping("/generatePdf/{reportId}")
 	@ResponseBody
 	public Status generatePdf(@PathVariable String reportId, HttpServletRequest request)
@@ -304,14 +306,15 @@ public class AdminController extends ExceptionHandlerController {
 			return new Status(Status.FAILED_CODE, "生成失败");
 		}
 	}
-
+	
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
 	@RequestMapping("/showPdf/{reportId}")
 	public void showPdf(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, DocumentException {
 		webService.flushPdf(request, response, reportId);
 
 	}
-
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
 	@RequestMapping("searchUsers")
 	@ResponseBody
 	public HashMap<String, Object> searchUsers(User user, @RequestParam(required = false) String birthdays,

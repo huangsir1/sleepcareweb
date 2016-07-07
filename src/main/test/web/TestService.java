@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.Feature;
 import com.github.pagehelper.PageHelper;
 
 import taiyi.web.dao.DeviceMapper;
@@ -40,9 +41,9 @@ import taiyi.web.service.Impl.UserServiceImpl;
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *
- * web
+ *         web
  *
- * 2016年3月10日
+ *         2016年3月10日
  */
 public class TestService {
 	private static ApplicationContext context;
@@ -56,12 +57,11 @@ public class TestService {
 	private static PermissionService permissionService;
 	private static DeviceMapper deviceMapper;
 	private static SleepReportMapper sleepReportMapper;
-	
-	
-	
+
 	@BeforeClass
 	public static void a() {
-		context = new ClassPathXmlApplicationContext(new String[]{ "classpath:spring-base.xml","classpath:spring-mvc.xml", "classpath:spring-mybatis.xml"});
+		context = new ClassPathXmlApplicationContext(new String[] { "classpath:spring-base.xml",
+				"classpath:spring-mvc.xml", "classpath:spring-mybatis.xml" });
 		userMapper = context.getBean(UserMapper.class);
 		userService = context.getBean(UserServiceImpl.class);
 		sleepReportService = context.getBean(SleepReportServiceImpl.class);
@@ -73,30 +73,27 @@ public class TestService {
 		deviceMapper = context.getBean(DeviceMapper.class);
 		sleepReportMapper = context.getBean(SleepReportMapper.class);
 	}
-	
+
 	@Test
 	public void testttt() {
-//		System.out.println(userMapper.selectUserByHostipalId(1));
-		HashMap<String, String> hashMap = new HashMap<>();
-		hashMap.put("hostipalId", "1");
-		hashMap.put("userId", "b6d24c67-e121-4405-b53a-eaa4119c9656");
-		System.out.println(sleepReportMapper.selectByHostipalIdAndUserId(hashMap));
+		User user = new User();
+		user.setName("王2%");
+		System.out.println(userMapper.searchHospitalUsers(user, 1));
+		;
 		
 	}
-	
+
 	@Test
 	public void testMapper() {
 		String id = "00000000-0000-0000-0000-000000000000";
 		String username = "admin";
 		System.out.println(permissionService.selectRoleStringsByUserId(id));
 		System.out.println(permissionService.selectPermissionsByUserId(id));
-		
 		System.err.println(sysmapper.selectRoleStringsByUsername(username));
 		System.err.println(systemPermissionMapper.selectPermissionsByUsername(username));
-		
+
 	}
-	
-	
+
 	@Test
 	public void testReport() throws IllegalAccessException, InvocationTargetException {
 		String id = "2e87291b-2394-4ea5-ae68-79c487e8690b";
@@ -106,15 +103,14 @@ public class TestService {
 		BaseReport baseReport = new BaseReport(sleepReport, breatheReport, subReport);
 		System.out.println(JSON.toJSON(baseReport));
 	}
-	
-	
+
 	@Test
 	public void test3() {
-		PageHelper.startPage(1,1);
+		PageHelper.startPage(1, 1);
 		List<User> user = userService.selectAllWIthDH();
 		System.out.println(user.get(0));
-	}	
-	
+	}
+
 	@Test
 	public void test() {
 		List<User> users = userMapper.selectAllWithDH();
@@ -122,12 +118,12 @@ public class TestService {
 			System.out.println(u);
 		}
 	}
-	
+
 	@Test
 	public void test2() {
 		System.out.println(userMapper.getAllUsers());
 	}
-	
+
 	@Test
 	public void test4() {
 		SleepReport sr = new SleepReport();
@@ -136,8 +132,9 @@ public class TestService {
 		sr.setStartTime(new Date(10000));
 		sleepReportService.insert(sr);
 	}
-	
+
 	public static void main(String[] args) {
-		System.out.println(new Date(1));;
+		User user2 = JSON.parseObject("{\"id\":\"1231231\"}", User.class,Feature.InitStringFieldAsEmpty);
+		System.out.println(user2);
 	}
 }
