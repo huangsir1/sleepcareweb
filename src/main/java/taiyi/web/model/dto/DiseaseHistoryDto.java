@@ -96,7 +96,7 @@ public class DiseaseHistoryDto {
 		
 	}
 	
-	public DiseaseHistoryDto(String userId,Integer[] diseaseHistoryIds) {
+	public DiseaseHistoryDto(String userId,Integer... diseaseHistoryIds) {
 		this.diseaseHistoryIds = diseaseHistoryIds;
 		this.userId = userId;
 	}

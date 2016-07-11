@@ -40,18 +40,18 @@
 	
 	$(function(){
 		$('#dg').datagrid({
-			url: '<%=basePath%>admin/getAllHostipal',
+			url: '<%=basePath%>admin/getAllHospital',
 			pageSize:20
 		})
 	});
 	
-	function destroyHostipal(){
+	function destroyHospital(){
 		var row = $('#dg').datagrid('getSelected');
 		if (row){
 			$.messager.confirm('确认','真的要删除该医院嘛?',function(r){
 				if (r){
-					$.post('<%=basePath%>admin/deleteHostipal', {
-						hostipalId : row.id
+					$.post('<%=basePath%>admin/deleteHospital', {
+						hospitalId : row.id
 					}, function(result) {
 						$('#dg').datagrid('reload'); // reload the user data
 						var title = "";
@@ -70,14 +70,14 @@
 		}
 	}
 
-	function addHostipal(){
+	function addHospital(){
 		$('#dlg').dialog('open').dialog('setTitle','增加医院');
 		$('#fm').form('clear');
 	}
 	
-	function saveHostipal(){
+	function saveHospital(){
 		$('#fm').form('submit',{
-			url: '<%=basePath%>admin/saveHostipal?' + Math.random(),
+			url: '<%=basePath%>admin/saveHospital?' + Math.random(),
 			onSubmit : function() {
 				return $(this).form('validate');
 			},
@@ -122,9 +122,9 @@
 	<div id="toolbar">
 		<a href="#" class="easyui-linkbutton" iconcls="icon-tip" plain="true" onclick="showDoctor()">查看医生</a>
 		<a href="#" class="easyui-linkbutton" iconCls="icon-tip" plain="true" onclick="showDevice()">查看设备</a> 
-		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addHostipal()">增加医院</a> 
+		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addHospital()">增加医院</a> 
 		<a href="#" class="easyui-linkbutton"
-			iconCls="icon-remove" plain="true" onclick="destroyHostipal()">删除</a>
+			iconCls="icon-remove" plain="true" onclick="destroyHospital()">删除</a>
 		<a href="#" class="easyui-linkbutton"
 			iconCls="icon-back" plain="true" onclick="history.go(-1)">返回</a>
 		<!--   <br /> <span>姓名:</span>
@@ -160,7 +160,7 @@
 	</div>
 	<div id="dlg-buttons">
 		<a href="#" class="easyui-linkbutton" iconCls="icon-ok"
-			onclick="saveHostipal()">保存</a> <a href="#" class="easyui-linkbutton"
+			onclick="saveHospital()">保存</a> <a href="#" class="easyui-linkbutton"
 			iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
 	</div>
 

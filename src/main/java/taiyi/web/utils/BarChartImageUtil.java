@@ -17,6 +17,7 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.axis.StandardTickUnitSource;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
@@ -39,12 +40,12 @@ import org.jfree.ui.TextAnchor;
  */
 public class BarChartImageUtil {
 	public static void main(String[] args) throws IOException {
-		// generateSecondsOfReducedOxygenImage(new Integer[] { 600, 220, 5130,
-		// 1231, 123, 11},"分","results/fonts/bar2.png");
-		// generateTimesOfReducedOxygenImage(new
-		// Integer[]{66,20,4,55,2,6},"results/fonts/bar1.png");
-		generateLineChartImage(new Integer[] { 600, 220, 5130, 1231, 123, 11 }, "次数", "氧减总次数", "百分比", "次数",
-				"/Users/jason/Desktop/bar3.png");
+		 generateSecondsOfReducedOxygenImage(new Integer[] { 9, 9, 9,
+		 9, 9, 9},"分","/Users/jason/Desktop/bar2.png");
+		 generateTimesOfReducedOxygenImage(new
+		 Integer[]{0,0,0,0,0,0},"/Users/jason/Desktop/bar1.png");
+//		generateLineChartImage(new Integer[] { 600, 220, 5130, 1231, 123, 11 }, "次数", "氧减总次数", "百分比", "次数",
+//				"/Users/jason/Desktop/bar3.png");
 	}
 
 	public static void generateBarChartToImage(Integer[] yValue, String xRowKey, String title, String xLabel,
@@ -79,7 +80,6 @@ public class BarChartImageUtil {
 		textTitle.setFont(baseBigFont);
 
 		customBarRenderer.setBasePositiveItemLabelPosition(itemLabelPosition);
-
 		customBarRenderer.setItemLabelAnchorOffset(10D);
 		customBarRenderer.setShadowVisible(false);
 		customBarRenderer.setSeriesPaint(0, new Color(194, 53, 49));
@@ -100,6 +100,16 @@ public class BarChartImageUtil {
 		rangeAxis.setUpperMargin(0.4);
 		// 设置最低的一个 Item 与图片底端的距离
 		rangeAxis.setLowerMargin(0.1);
+		rangeAxis.setAutoRange(true);
+		boolean isZero = true;
+		for (int i = 0; i < yValue.length; i++) {
+			if (yValue[i] != 0 ) {
+				isZero = false;
+			}
+		}
+		if (isZero) {
+			rangeAxis.setRange(0,100);
+		}
 		plot.setRangeAxis(rangeAxis);
 		FileOutputStream fos = null;
 		fos = new FileOutputStream(imagePathNameAndExt);
@@ -121,7 +131,6 @@ public class BarChartImageUtil {
 
 		JFreeChart chart = ChartFactory.createLineChart(title, xLabel, yLabel, dataset, PlotOrientation.VERTICAL, false,
 				false, false);
-
 		CategoryPlot plot = chart.getCategoryPlot();
 		plot.setBackgroundPaint(Color.white);
 		// 设置网格竖线颜色
@@ -135,7 +144,7 @@ public class BarChartImageUtil {
 		rangeAxis.setUpperMargin(0.20);
 		rangeAxis.setLabelAngle(Math.PI / 2.0);
 		rangeAxis.setAutoRange(true);
-
+		
 		CategoryAxis categoryaxis = plot.getDomainAxis();
 		categoryaxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 		categoryaxis.setMaximumCategoryLabelWidthRatio(5.0f);

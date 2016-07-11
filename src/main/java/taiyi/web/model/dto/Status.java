@@ -11,7 +11,7 @@ package taiyi.web.model.dto;
  *         2016年3月9日
  */
 
-public class Status {
+public class Status implements Comparable<Status>{
 	public final static int SUCCESSED_CODE = 2000;
 	public final static int SUCCESSED_UPLOAD_REPORT_CDOE = 2001;
 	public final static int SUCCESSED_UPLOAD_REPORT_AND_GENERATE_IT_CODE = 2002;
@@ -129,6 +129,19 @@ public class Status {
 
 	public static boolean isSuccess(Status status) {
 		return isSuccess(status.getCode());
+	}
+
+	/* 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(Status o) {
+		if (code == o.getCode()) {
+			return 0;
+		} else if(code < o.getCode()){
+			return -1;
+		}
+		return 1;
 	}
 
 }

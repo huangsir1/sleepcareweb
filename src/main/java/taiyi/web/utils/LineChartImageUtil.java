@@ -68,7 +68,9 @@ public class LineChartImageUtil {
 		ValueAxis rangeAxis = plot.getRangeAxis();
 		rangeAxis.setLabelFont(baseBigFont);
 		rangeAxis.setTickLabelFont(baseBigFont);
-
+		rangeAxis.setAutoRange(true);
+		rangeAxis.setAutoRangeMinimumSize(5);  
+		
 		chart.setBackgroundPaint(Color.WHITE); 
 
 		plot.setBackgroundPaint(Color.white);

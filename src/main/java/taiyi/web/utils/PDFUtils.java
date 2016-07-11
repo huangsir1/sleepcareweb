@@ -115,14 +115,19 @@ public class PDFUtils {
 			t.setAlignment(Element.ALIGN_CENTER);
 			document.add(t);
 
-			drawPersonalInfomationPart(writer, user, sleepReport);
+			
+			if (!"noname".equals(user.getName())) {
+				drawPersonalInfomationPart(writer, user, sleepReport);
+			} else {
+				drawNonamePart(writer, user, sleepReport);
+			}
 			// drawSleepReportPart(writer, sleepReport);
 			drawBreatheReportPart(writer, breatheReport, subReport);
 			drawSpO2AnalysisPart(writer, breatheReport, subReport);
 			darwPulseRateAnalysisPart(writer, subReport);
 			drawSleepAnalysisPart(writer, sleepReport);
 			//
-			String advice = subReport.getAdvice() == null ? "结果请结合临床。 " : 	subReport.getAdvice();
+			String advice = subReport.getAdvice() == null ? "结果请结合临床。 " : subReport.getAdvice();
 			drawAnalysisResultPart(writer, result, advice);
 
 			// Rectangle rectangle = drawAndSetRetangle(750, 600, writer);
@@ -388,6 +393,91 @@ public class PDFUtils {
 			addNormalText(paragraph, "无数据");
 		}
 
+		ct.addElement(paragraph);
+		ct.go();
+	}
+
+	public void drawNonamePart(PdfWriter writer, User user, SleepReport sleepReport) throws DocumentException {
+		Rectangle rectangle = drawAndSetRetangle(700, 760, writer);
+		ColumnText ct = new ColumnText(writer.getDirectContent());
+		ct.setSimpleColumn(rectangle);
+		Paragraph paragraph = new Paragraph();
+		paragraph.setLeading(12f);
+		paragraph.setFont(fontSmallTitle);
+		paragraph.add("用户信息 \n");
+		addBoldText(paragraph, "姓名 : ");
+		addTextAndSpaceWithUnderLine(paragraph, "", 20);
+		addDefaultSpace(paragraph);
+		addBoldText(paragraph, "年龄 : ");
+		addTextAndSpaceWithUnderLine(paragraph, "", 10);
+		addDefaultSpace(paragraph);
+		addBoldText(paragraph, "性别 : ");
+		addTextAndSpaceWithUnderLine(paragraph, "", 5);
+		addDefaultSpace(paragraph);
+		// addBoldText(paragraph, "生日 : ");
+		// SimpleDateFormat simpleDateFormat = new
+		// SimpleDateFormat("yyyy-MM-DD");
+		// try {
+		// addTextAndSpaceWithUnderLine(paragraph,
+		// simpleDateFormat.format(user.getBirthday()), 40);
+		// } catch (Exception e) {
+		// addTextAndSpaceWithUnderLine(paragraph, "无数据", 40);
+		// }
+		// addDefaultSpace(paragraph);
+		addBoldText(paragraph, "身高 : ");
+		addTextAndSpaceWithUnderLine(paragraph, "", 12);
+		addDefaultSpace(paragraph);
+		addBoldText(paragraph, "体重 : ");
+		addTextAndSpaceWithUnderLine(paragraph, "", 20);
+		addDefaultSpace(paragraph);
+		addBoldText(paragraph, "电话 : ");
+		addTextAndSpaceWithUnderLine(paragraph, "", 30);
+		addDefaultSpace(paragraph);
+		addBoldText(paragraph, "ESS评分 : ");
+		addTextAndSpaceWithUnderLine(paragraph, "", 50);
+		addDefaultSpace(paragraph);
+		addNormalText(paragraph, "\n");
+		addBoldText(paragraph, "BMI指数 : ");
+		addTextAndSpaceWithUnderLine(paragraph, "", 10);
+
+		addDefaultSpace(paragraph);
+		addBoldText(paragraph, "病史 : ");
+
+		addSpaceWithUnderLine(paragraph, 200);
+
+		addNormalText(paragraph, "\n");
+		// 监测日期、开始时间、结束时间、监测时长
+		addBoldText(paragraph, "监测日期 : ");
+		try {
+			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDFormat.format(sleepReport.getStartTime()), 30);
+		} catch (Exception e) {
+			addTextAndSpaceWithUnderLine(paragraph, "", 30);
+		}
+		addDefaultSpace(paragraph);
+		addBoldText(paragraph, "开始时间 : ");
+		try {
+			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDHHmmssFormat.format(sleepReport.getStartTime()), 30);
+		} catch (Exception e) {
+			addTextAndSpaceWithUnderLine(paragraph, " 无数据", 30);
+		}
+		addDefaultSpace(paragraph);
+		addBoldText(paragraph, "结束时间 : ");
+		try {
+			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDHHmmssFormat.format(sleepReport.getEndTime()), 30);
+		} catch (Exception e) {
+			addTextAndSpaceWithUnderLine(paragraph, " 无数据", 30);
+		}
+		addDefaultSpace(paragraph);
+		addBoldText(paragraph, "监测时长 : ");
+		try {
+			addTextAndSpaceWithUnderLine(paragraph,
+					secondsToHHmmss(
+							sleepReport.getEndTime().getTime() / 1000 - sleepReport.getStartTime().getTime() / 1000),
+					30);
+		} catch (Exception e) {
+			addTextAndSpaceWithUnderLine(paragraph, " 无数据", 30);
+		}
+		addDefaultSpace(paragraph);
 		ct.addElement(paragraph);
 		ct.go();
 	}

@@ -232,7 +232,7 @@ a:hover {
 				"menuid" : "211",
 				"menuname" : "医院🏥管理",
 				"icon" : "icon-nav",
-				"url" : "<%=basePath%>admin/hostipal"
+				"url" : "<%=basePath%>admin/hospital"
 			}, {
 				"menuid" : "213",
 				"menuname" : "测试",

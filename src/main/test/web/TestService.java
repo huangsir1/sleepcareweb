@@ -76,10 +76,8 @@ public class TestService {
 
 	@Test
 	public void testttt() {
-		User user = new User();
-		user.setName("王%");
-		System.out.println(userMapper.countHospitalUsers(user, 1));
-		;
+		User user = userService.selectByPrimaryKey("e57d5c12-2341-4c6f-8a64-3c2e99e0ff96");
+		System.out.println(JSON.toJSON(user));
 		
 	}
 

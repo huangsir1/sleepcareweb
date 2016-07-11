@@ -105,6 +105,10 @@ public class AdminLoginController extends ExceptionHandlerController {
 		}
 		Session session = subject.getSession();
 		SystemUser systemUser = systemUserService.selectByUsername(username);
+		if (!systemUser.getIsValid()) {
+			request.setAttribute("msg", "用户被锁定");
+			return "forward:admin/login";
+		}
 		session.setAttribute("user", systemUser);
 		request.getSession().setAttribute("trueName", systemUser.getName());
 		if (subject.hasRole("admin")) {

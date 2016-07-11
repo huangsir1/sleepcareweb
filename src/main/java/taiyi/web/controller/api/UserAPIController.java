@@ -3,7 +3,6 @@
  */
 package taiyi.web.controller.api;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.alibaba.fastjson.JSON;
 
-import taiyi.web.controller.ExceptionHandlerController;
-import taiyi.web.model.DiseaseHistoryUser;
+import taiyi.web.model.SubReport;
 import taiyi.web.model.User;
 import taiyi.web.model.dto.DiseaseHistoryDto;
 import taiyi.web.model.dto.ESSAndDisEaseHistoryDto;
@@ -66,6 +64,13 @@ public class UserAPIController extends APIExceptionHandlerController {
 		return Status.FAILED;
 	}
 	
+	public static void main(String[] args) {
+		SubReport subReport = new SubReport();
+		subReport.setId("id");
+		subReport.setAdvice("advice");
+		System.out.println(JSON.toJSON(subReport));
+	}
+	
 	@RequestMapping(value="/update",consumes = "application/json")
 	@ResponseBody
 	public Status update(@RequestBody User user) {
@@ -113,7 +118,6 @@ public class UserAPIController extends APIExceptionHandlerController {
 		diseaseHistoryUserService.insertDHUs(essAndDisEaseHistoryDto.getDiseaseHistoryDto().getDiseaseHistoryIds(),essAndDisEaseHistoryDto.getDiseaseHistoryDto().getUserId());
 		return Status.SUCCESSED;
 	}
-	
 	
 	
 }
