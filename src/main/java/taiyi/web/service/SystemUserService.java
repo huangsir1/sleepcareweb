@@ -53,4 +53,6 @@ public interface SystemUserService {
      * @mbggenerated Thu Jun 02 15:23:31 CST 2016
      */
     int updateByPrimaryKey(SystemUser record);
+    
+  
 }

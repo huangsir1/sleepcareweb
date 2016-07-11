@@ -688,7 +688,8 @@
 - 上传报告文件（无需上传报告自动分析文件）
 
 **请求URL：** 
-- ` http://taiir.com/web/api/report/fileOnly/upload
+- for iOS:  ` http://taiir.com/web/api/report/fileOnly/upload
+- for third part ` http://taiir.com/web/api/third/report/file/upload
   
 **请求方式：**
 - POST 
@@ -737,6 +738,62 @@
 - 更多返回错误代码请看错误代码描述
 
 ------------
+
+#### 上传报告文件到dawn特殊的空用户下（无需上传报告自动分析文件）
+**简要描述：** 
+
+- 上传报告文件dawn特殊的空用户下（无需上传报告自动分析文件）
+
+**请求URL：** 
+- for third part ` http://taiir.com/web/api/third/reportForDawn/file/upload
+  
+**请求方式：**
+- POST 
+
+**请求头 **
+- Content-Type: application/x-www-form-urlencoded
+
+**普通post请求**
+
+
+**参数：** 
+
+|参数名|必选|类型|说明|
+|:-------|:-------|:-------|:-------|
+| file | 是|file| 文件 |
+|macAddress|是|string|mac地址|
+
+
+ **返回示例**
+成功:
+``` 
+{  
+   "code":2000,
+   "message":"成功"
+}
+```
+失败
+``` 
+{  
+   "code":5000,
+   "message":"未知错误"
+}
+```
+
+ **返回参数说明** 
+
+|参数名|类型|说明|
+|:-------|:-------|:-------|
+| code | number| 状态码，2000，2003，2004为成功，5000为失败，6003报告不存在， |
+| message | string| 返回提示信息 |
+
+
+ **备注** 
+
+- 更多返回错误代码请看错误代码描述
+
+------------
+
 
 
 #### 上传报告意见

@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import taiyi.web.AndroidToWebAdapter.DataOfAndroidToWebAdapter;
 import taiyi.web.model.dto.BaseReport;
 import taiyi.web.model.dto.Status;
+import taiyi.web.service.UserService;
 import taiyi.web.service.WebService;
 import taiyi.web.thread.GenerateReportThread;
 import taiyi.web.utils.GZipUtils;
@@ -40,6 +41,8 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 	private WebService webService;
 	@Autowired
 	private DataOfAndroidToWebAdapter dataOfAndroidToWebAdapter;
+	@Autowired
+	private UserService userService;
 	
 	@RequestMapping(value="/report/fileOnly/upload")
 	@ResponseBody
@@ -88,7 +91,7 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 			baseReport.setUserId(userId);
 			baseReport.setUploadDate(new Date());
 			webService.insertReport(baseReport);
-
+			userService.updateLatestDateToNow(userId);
 			System.out.println(fileName + " 保存成功");
 			if (webService.isReportAllReady(reportId)) {
 				new GenerateReportThread(webService, reportId, basePath, servletRailPath).start();
@@ -104,7 +107,7 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 
 	@RequestMapping(value = "/third/reportForDawn/file/upload")
 	@ResponseBody
-	public Status uploadReportForDawnFile(@RequestParam(value = "file") MultipartFile file, String macAddress,
+	public Status uploadReportForDawnFile(@RequestParam(value = "file") MultipartFile file,@RequestParam(required = false) String macAddress,
 			HttpServletRequest request) {
 		return uploadReportFile(file, macAddress, "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF", request);
 	}

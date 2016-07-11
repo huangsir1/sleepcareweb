@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import taiyi.web.dao.SystemUserMapper;
 import taiyi.web.model.SystemUser;
@@ -19,6 +20,7 @@ import taiyi.web.model.SystemUser;
  * 2016年6月2日
  */
 @Service
+@Transactional
 public class SystemUserServiceImpl implements taiyi.web.service.SystemUserService {
 	@Autowired
 	private SystemUserMapper systemUserMapper;
@@ -86,5 +88,6 @@ public class SystemUserServiceImpl implements taiyi.web.service.SystemUserServic
 	public List<SystemUser> selectByHostipal(Integer HostipalId) {
 		return systemUserMapper.selectByHostipal(HostipalId);
 	}
+
 
 }

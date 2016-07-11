@@ -71,6 +71,8 @@ public interface UserService {
     List<User> selectBySysUsername(String username);
     
     List<User> selectUserByHostipalId(Integer hostipalId);
+    
+    void updateLatestDateToNow(String userId);
 	/**
 	 * @param user
 	 * @param hospitalId

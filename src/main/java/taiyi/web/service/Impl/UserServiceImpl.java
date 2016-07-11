@@ -3,6 +3,7 @@
  */
 package taiyi.web.service.Impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,6 +169,17 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<User> selectUserByHostipalId(Integer hostipalId) {
 		return userMapper.selectUserByHostipalId(hostipalId);
+	}
+
+	/* 
+	 * @see taiyi.web.service.UserService#updateLatestDateToNow(java.lang.String)
+	 */
+	@Override
+	public void updateLatestDateToNow(String userId) {
+		User user = new User();
+		user.setId(userId);
+		user.setLastestDate(new Date());
+		updateByPrimaryKeySelective(user);
 	}
 
 
