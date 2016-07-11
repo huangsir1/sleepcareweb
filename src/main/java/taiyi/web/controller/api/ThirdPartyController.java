@@ -34,16 +34,23 @@ import taiyi.web.utils.WebProperties;
  *         2016年7月8日
  */
 @Controller
-@RequestMapping("/api/third")
+@RequestMapping("/api")
 public class ThirdPartyController extends APIExceptionHandlerController {
 	@Autowired
 	private WebService webService;
 	@Autowired
 	private DataOfAndroidToWebAdapter dataOfAndroidToWebAdapter;
-
-	@RequestMapping(value = "/report/file/upload")
+	
+	@RequestMapping(value="/report/fileOnly/upload")
 	@ResponseBody
-	public Status uploadReportFile(@RequestParam(value = "file") MultipartFile file, String macAddress, String userId,
+	public Status uploadReportOnlyFile(@RequestParam(value = "file") MultipartFile file,@RequestParam(required = false) String macAddress, String userId,
+			HttpServletRequest request)  {
+		return uploadReportFile(file, macAddress, userId, request);
+	}
+	
+	@RequestMapping(value = "/third/report/file/upload")
+	@ResponseBody
+	public Status uploadReportFile(@RequestParam(value = "file") MultipartFile file,@RequestParam(required = false) String macAddress, String userId,
 			HttpServletRequest request) {
 		String servletRailPath = request.getServletContext().getRealPath("/");
 		String path = request.getContextPath();
@@ -95,7 +102,7 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 
 	}
 
-	@RequestMapping(value = "/reportForDawn/file/upload")
+	@RequestMapping(value = "/third/reportForDawn/file/upload")
 	@ResponseBody
 	public Status uploadReportForDawnFile(@RequestParam(value = "file") MultipartFile file, String macAddress,
 			HttpServletRequest request) {
