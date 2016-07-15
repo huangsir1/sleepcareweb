@@ -83,4 +83,12 @@ public class HostipalServiceImpl implements HostipalService{
 		return hostipalMapper.selectAll();
 	}
 
+	/* 
+	 * @see taiyi.web.service.HostipalService#selectByName(java.lang.String)
+	 */
+	@Override
+	public Hostipal selectByName(String name) {
+		return hostipalMapper.selectByName(name);
+	}
+
 }

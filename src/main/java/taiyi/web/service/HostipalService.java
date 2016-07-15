@@ -64,4 +64,6 @@ public interface HostipalService {
      * @mbggenerated Tue Jul 05 11:19:57 CST 2016
      */
     int updateByPrimaryKey(Hostipal record);
+    
+    Hostipal selectByName(String name);
 }

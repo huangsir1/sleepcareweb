@@ -89,5 +89,13 @@ public class SystemUserServiceImpl implements taiyi.web.service.SystemUserServic
 		return systemUserMapper.selectByHostipal(HostipalId);
 	}
 
+	/* 
+	 * @see taiyi.web.service.SystemUserService#selectByTrueName(java.lang.String)
+	 */
+	@Override
+	public SystemUser selectByTrueName(String name) {
+		return systemUserMapper.selectByTrueName(name);
+	}
+
 
 }

@@ -25,12 +25,4 @@ public class IndexController extends ExceptionHandlerController {
 		return "adminLogin";
 	}
 
-	public static void main(String[] args) {
-		double a = 0.4;
-		System.out.println(66.0 / 210);
-		System.out.println(57.0 / 201);
-		System.out.println(84.0 / 210);
-	}
-	
-	
 }

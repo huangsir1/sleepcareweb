@@ -19,10 +19,9 @@ import java.util.UUID;
 public class EncryptUtils{
 	
 	public static void main(String[] args) {
-		System.err.println(encryptOriginalTaiirPassword("guest"));
-		//CBD5516C394B4BAC0176A7BFFE1FCBBC:2F361F1B
+		System.err.println(encryptOriginalTaiirPassword("1234"));
 
-		System.out.println(checkOriginalTaiirPassword("admin","CBD5516C394B4BAC0176A7BFFE1FCBBC:2F361F1B"));
+//		System.out.println(checkOriginalTaiirPassword("admin","CBD5516C394B4BAC0176A7BFFE1FCBBC:2F361F1B"));
 		
 	}
 	
