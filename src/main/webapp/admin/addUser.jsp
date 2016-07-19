@@ -22,6 +22,24 @@
 	href="<%=basePath%>css/easyui.css">
 <!--引入CSS样式-->
 <link rel="stylesheet" type="text/css" href="<%=basePath%>css/icon.css">
+<style>
+.fitem {
+	float: left;
+    margin-right: 40px;
+    margin-bottom: 12px;
+    height:28px;
+}
+.text_input, .textbox  {
+	margin-left: 16px;
+}
+.bingshi {
+    float: left;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    width: 107px;
+    height: 20px;
+}
+</style>
 <!--Icon引入-->
 <script>
 $(function(){
@@ -59,48 +77,68 @@ function saveUser(){
 </head>
 <body>
 	<div id="dlg" class="easyui-dialog"
-		style="width: 400px; height: 350px; padding: 10px 20px" closed="true"
+		style="width: 735px; height: 450px; padding: 10px 20px" closed="true"
 		buttons="#dlg-buttons">
-		<div class="ftitle">个人信息</div>
 		<form id="fm" method="post">
-			<div class="fitem">
-				<label>姓名:</label> <input name="name">
+		<div style="
+			    float: left;
+			    margin-left: 45%;
+			    margin-top: 20px;
+			    margin-bottom: 20px;
+			    margin-right: 50%;
+			    width: 48px;
+				">
+			个人信息
 			</div>
 			<div class="fitem">
-				<label>生日yyyy-MM-DD:</label> <input name="birth">
+				<label>姓名</label> <input name="name" class="text_input">
 			</div>
 			<div class="fitem">
-				<label>身高:</label> <input name="height">
+				<label>生日<!--yyyy-MM-DD  --></label> <input style="margin-left: 16px;" class="easyui-datebox" name="birth" >  
 			</div>
 			<div class="fitem">
-				<label>体重:</label> <input name="weight">
+				<label>身高</label> <input name="height" class="text_input">
+			</div> 
+			<div class="fitem">
+				<label>体重</label> <input name="weight" class="text_input">
 			</div>
 			<div class="fitem">
-				<label>性别:</label> <input name="gender">
+				<label>性别</label> <input name="gender" class="text_input">
 			</div>
 			<div class="fitem">
-				<label>电话:</label> <input name="phone">
+				<label>电话</label> <input name="phone" class="text_input">
 			</div>
 			<div class="fitem">
-				<label>地址:</label> <input name="address">
+				<label>ess&nbsp;&nbsp;</label> <input name="essRank" class="text_input">
 			</div>
 			<div class="fitem">
-				<label>ess:</label> <input name="essRank">
+				<label>地址</label> <input name="address" class="text_input" style="width: 345px;">
 			</div>
-			<div>
-				<input type="checkbox" name="qx" value="1" />失眠 <input
-					type="checkbox" name="qx" value="2" />糖尿病 <input type="checkbox"
-					name="qx" value="3" />高血压 <input type="checkbox" name="qx"
-					value="4" />冠心病 <input type="checkbox" name="qx" value="5" />心力衰竭
-				<input type="checkbox" name="qx" value="6" />心律失常 <input
-					type="checkbox" name="qx" value="7" />鼻腔阻塞 <input type="checkbox"
-					name="qx" value="8" />长期吸烟 <input type="checkbox" name="qx"
-					value="9" />悬雍垂粗大 <input type="checkbox" name="qx" value="10" />OSAHS的家族史
-				<input type="checkbox" name="qx" value="11" />脑血管疾病 <input
-					type="checkbox" name="qx" value="12" />肾功能损害 <input
-					type="checkbox" name="qx" value="13" />用镇静剂／药物 <input
-					type="checkbox" name="qx" value="14" />长期大量饮酒
-
+			<div style="
+			    float: left;
+			    margin-left: 45%;
+			    margin-top: 20px;
+			    margin-bottom: 20px;
+			    margin-right: 50%;
+			    width: 48px;
+				">
+			疾病症状
+			</div>
+			<div class="fitem">
+				       <div class="bingshi">  <input type="checkbox" name="qx" value="1"   />失眠    </div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="2"   />糖尿病 </div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="3"   />高血压 </div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="4"   />冠心病 </div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="5"   />心力衰竭</div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="6"   />心律失常 </div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="7"   />鼻腔阻塞 </div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="8"   />长期吸烟 </div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="9"   />悬雍垂粗大 </div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="10" />OSAHS的家族史</div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="11" />脑血管疾病 </div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="12" />肾功能损害 </div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="13" />用镇静剂／药物 </div>
+				       <div class="bingshi"> <input type="checkbox" name="qx" value="14" />长期大量饮酒</div>
 			</div>
 		</form>
 	</div>

@@ -5,17 +5,17 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	pageContext.setAttribute("basePath", basePath);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>钛铱Taiir睡眠监测系统</title>
-<!--  link href="<%=basePath%>css/default.css" rel="stylesheet"
+<!--  link href="${basePath}css/default.css" rel="stylesheet"
 	type="text/css" />-->
-<link rel="stylesheet" type="text/css"
-	href="<%=basePath%>css/easyui.css" />
-<link rel="stylesheet" type="text/css" href="<%=basePath%>css/icon.css" />
+<link rel="stylesheet" type="text/css" href="${basePath}css/easyui.css" />
+<link rel="stylesheet" type="text/css" href="${basePath}css/icon.css" />
 <style>
 * {
 	font-size: 12px;
@@ -122,7 +122,7 @@ a:hover {
 }
 
 .icon {
-	background: url(<%=basePath%>css/images/tabicons.png) no-repeat;
+	background: url(${basePath}css/images/tabicons.png) no-repeat;
 	width: 18px;
 	line-height: 18px;
 	display: inline-block;
@@ -141,7 +141,7 @@ a:hover {
 }
 
 .icon-add1 {
-	background: url('<%=basePath%>css/icons/edit_add.png') no-repeat;
+	background: url('${basePath}css/icons/edit_add.png') no-repeat;
 }
 
 .icon-nav {
@@ -188,42 +188,41 @@ a:hover {
 }
 
 .icon-expand {
-	background: url('<%=basePath%>css/images/coll2.gif') no-repeat;
+	background: url('${basePath}css/images/coll2.gif') no-repeat;
 }
 
 .icon-collapse {
-	background: url('<%=basePath%>css/images/coll3.gif') no-repeat;
+	background: url('${basePath}css/images/coll3.gif') no-repeat;
 }
 </style>
-<script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script>
-<script type="text/javascript"
-	src="<%=basePath%>js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src='<%=basePath%>js/outlook.js'>
+<script type="text/javascript" src="${basePath}js/jquery.min.js"></script>
+<script type="text/javascript" src="${basePath}js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src='${basePath}js/outlook.js'>
 	
 </script>
 
 <script type="text/javascript">
 	var _menus = {
 		basic : [ {
-			"menuid" : "10", 
+			"menuid" : "10",
 			"icon" : "icon-sys",
 			"menuname" : "管理",
 			"menus" : [ {
 				"menuid" : "111",
 				"menuname" : "查看报告",
 				"icon" : "icon-nav",
-				"url" : "<%=basePath%>admin/showUser." 
+				"url" : "${basePath}admin/showUser."
 			}, {
 				"menuid" : "113",
 				"menuname" : "搜索用户",
 				"icon" : "icon-nav",
-				"url" : "<%=basePath%>admin/searchUser"
+				"url" : "${basePath}admin/searchUser"
 			}, {
 				"menuid" : "115",
 				"menuname" : "增加用户",
 				"icon" : "icon-nav",
-				"url" : "<%=basePath%>admin/addUser"
-			}]  
+				"url" : "${basePath}admin/addUser"
+			} ]
 		}, {
 			"menuid" : "20",
 			"icon" : "icon-sys",
@@ -232,7 +231,7 @@ a:hover {
 				"menuid" : "211",
 				"menuname" : "医院🏥管理",
 				"icon" : "icon-nav",
-				"url" : "<%=basePath%>admin/hospital"
+				"url" : "${basePath}admin/hospital"
 			}, {
 				"menuid" : "213",
 				"menuname" : "测试",
@@ -246,9 +245,6 @@ a:hover {
 	function closePwd() {
 		$('#w').window('close');
 	}
-
-	
-
 </script>
 <style>
 #css3menu li {
@@ -271,30 +267,33 @@ a:hover {
 		<div
 			style="position: absolute; z-index: 100000; height: 2046px; top: 0px; left: 0px; width: 100%; background: white; text-align: center;">
 			<img src="images/noscript.gif" alt='抱歉，请开启javascript！' />
-		</div> 
+		</div>
 	</noscript>
-	<div region="north" split="true" border="false"
-		style="overflow: hidden; height: 30px;
-    	        background: url(<%=basePath%>css/images/layout-browser-hd-bg.gif) #00BCD4 repeat-x center 50%;
+	<div region="north" split="true" border="false" 
+		style="overflow: hidden; height: 50px;
+    	        background: url(${basePath}css/images/layout-browser-hd-bg.gif) #3fb5e9 repeat-x center 50%;
     	        line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
-		<span style="padding-left: 10px; font-size: 16px; float: left;"><img
-			src="<%=basePath%>css/images/icon.png" width="20" height="20"
-			align="absmiddle" />钛铱Taiir睡眠监测系统</span>
-		<ul id="css3menu" 
+		<span style="padding-left: 10px;font-size: 16px;float: left;font-size: 25px;margin-top: 12px;margin-left: 20px;"><img
+			src="${basePath}images/taiir-logo.png" width="97" height="25"
+			align="absmiddle" /> 钛铱Taiir睡眠监测系统</span>
+			<div><a style="padding-left: 10px;font-size: 16px;float: right;color: white;margin-right: 50px;margin-top: 12px;" href="${basePath}logout"><img src="${basePath}images/home-exit01.png"></img></a></div> 
+		<ul id="css3menu"
 			style="padding: 0px; margin: 0px; list-type: none; float: left; margin-left: 40px;">
-			<li><a class="active" name="basic" href="javascript:;"
-				title=""></a></li>
+			<li><a class="active" name="basic" href="javascript:;" title=""></a></li>
 
 		</ul>
 	</div>
-	<div region="south" split="true"
-		style="height: 30px; background:#00BCD4;s">
-	<span><a style="padding-left: 10px;font-size: 16px;float: left;color: white;" href="<%=basePath%>logout">注销</a></span>
+	<!-- <div region="south" split="true"
+		style="height: 30px; background: #00BCD4;">
+		<span><a
+			style="padding-left: 10px; font-size: 16px; float: left; color: white;"
+			href="${basePath}logout">注销</a></span>
 		<div class="footer"></div>
-	</div>
+	</div> -->
 	<div region="west" hide="true" split="true" title="菜单"
 		style="width: 180px;" id="west">
-		<div id='wnav' class="easyui-accordion" fit="true" border="false">
+		<div id='wnav' class="easyui-accordion" border="false" fit="true">
+			<!--  style="width: 173px; height: 180px;"> -->
 			<!--  导航内容 -->
 
 		</div>
@@ -305,14 +304,14 @@ a:hover {
 		<div id="tabs" class="easyui-tabs" fit="true" border="false">
 			<div title="欢迎使用" style="padding: 20px; overflow: hidden;" id="home">
 
-				<h1>欢迎 ${trueName }</h1> 
+				<h1>欢迎 ${trueName }</h1>
 
 			</div>
 		</div>
-	</div>
+	</div> 
 
 
-	
+
 	<div id="mm" class="easyui-menu" style="width: 150px;">
 		<div id="mm-tabupdate">刷新</div>
 		<div class="menu-sep"></div>

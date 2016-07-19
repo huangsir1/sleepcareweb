@@ -1,213 +1,19 @@
-<%@ page language="java" pageEncoding="utf-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	pageContext.setAttribute("basePath", basePath);
 %>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
+
 <head>
-<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>钛铱Taiir睡眠检测系统 管理员登陆</title>
-
-<link rel="stylesheet" href="css/normalize.css">
-
-<style type="text/css">
-.btn {
-	display: inline-block;
-	*display: inline;
-	*zoom: 1;
-	padding: 4px 10px 4px;
-	margin-bottom: 0;
-	font-size: 13px;
-	line-height: 18px;
-	color: #333333;
-	text-align: center;
-	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-	vertical-align: middle;
-	background-color: #f5f5f5;
-	background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
-	background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff),
-		to(#e6e6e6));
-	background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
-	background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
-	background-image: linear-gradient(top, #ffffff, #e6e6e6);
-	background-repeat: repeat-x;
-	filter: progid:dximagetransform.microsoft.gradient(startColorstr=#ffffff,
-		endColorstr=#e6e6e6, GradientType=0);
-	border-color: #e6e6e6 #e6e6e6 #e6e6e6;
-	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	border: 1px solid #e6e6e6;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px
-		rgba(0, 0, 0, 0.05);
-	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px
-		rgba(0, 0, 0, 0.05);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px
-		rgba(0, 0, 0, 0.05);
-	cursor: pointer;
-	*margin-left: .3em;
-}
-
-.btn:hover, .btn:active, .btn.active, .btn.disabled, .btn[disabled] {
-	background-color: #e6e6e6;
-}
-
-.btn-large {
-	padding: 9px 14px;
-	font-size: 15px;
-	line-height: normal;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-}
-
-.btn:hover {
-	color: #333333;
-	text-decoration: none;
-	background-color: #e6e6e6;
-	background-position: 0 -15px;
-	-webkit-transition: background-position 0.1s linear;
-	-moz-transition: background-position 0.1s linear;
-	-ms-transition: background-position 0.1s linear;
-	-o-transition: background-position 0.1s linear;
-	transition: background-position 0.1s linear;
-}
-
-.btn-primary, .btn-primary:hover {
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	color: #ffffff;
-}
-
-.btn-primary.active {
-	color: rgba(255, 255, 255, 0.75);
-}
-
-.btn-primary {
-	background-color: #4a77d4;
-	background-image: -moz-linear-gradient(top, #6eb6de, #4a77d4);
-	background-image: -ms-linear-gradient(top, #6eb6de, #4a77d4);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#6eb6de),
-		to(#4a77d4));
-	background-image: -webkit-linear-gradient(top, #6eb6de, #4a77d4);
-	background-image: -o-linear-gradient(top, #6eb6de, #4a77d4);
-	background-image: linear-gradient(top, #6eb6de, #4a77d4);
-	background-repeat: repeat-x;
-	filter: progid:dximagetransform.microsoft.gradient(startColorstr=#6eb6de,
-		endColorstr=#4a77d4, GradientType=0);
-	border: 1px solid #3762bc;
-	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px
-		rgba(0, 0, 0, 0.5);
-}
-
-.btn-primary:hover, .btn-primary:active, .btn-primary.active,
-	.btn-primary.disabled, .btn-primary[disabled] {
-	filter: none;
-	background-color: #4a77d4;
-}
-
-.btn-block {
-	width: 100%;
-	display: block;
-}
-
-* {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	-o-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
-html {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-}
-
-body {
-	width: 100%;
-	height: 100%;
-	font-family: 'Open Sans', sans-serif;
-	background: #092756;
-	background: -moz-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4)
-		10%, rgba(138, 114, 76, 0) 40%),
-		-moz-linear-gradient(top, rgba(57, 173, 219, .25) 0%,
-		rgba(42, 60, 87, .4) 100%),
-		-moz-linear-gradient(-45deg, #670d10 0%, #092756 100%);
-	background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4)
-		10%, rgba(138, 114, 76, 0) 40%),
-		-webkit-linear-gradient(top, rgba(57, 173, 219, .25) 0%,
-		rgba(42, 60, 87, .4) 100%),
-		-webkit-linear-gradient(-45deg, #670d10 0%, #092756 100%);
-	background: -o-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4)
-		10%, rgba(138, 114, 76, 0) 40%),
-		-o-linear-gradient(top, rgba(57, 173, 219, .25) 0%,
-		rgba(42, 60, 87, .4) 100%),
-		-o-linear-gradient(-45deg, #670d10 0%, #092756 100%);
-	background: -ms-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4)
-		10%, rgba(138, 114, 76, 0) 40%),
-		-ms-linear-gradient(top, rgba(57, 173, 219, .25) 0%,
-		rgba(42, 60, 87, .4) 100%),
-		-ms-linear-gradient(-45deg, #670d10 0%, #092756 100%);
-	background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4)
-		10%, rgba(138, 114, 76, 0) 40%),
-		linear-gradient(to bottom, rgba(57, 173, 219, .25) 0%,
-		rgba(42, 60, 87, .4) 100%),
-		linear-gradient(135deg, #670d10 0%, #092756 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3E1D6D',
-		endColorstr='#092756', GradientType=1);
-}
-
-.login {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin: -150px 0 0 -150px;
-	width: 350px;
-	height: 350px;
-}
-
-.login h1 {
-	color: #fff; 
-	text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-	letter-spacing: 1px;
-	text-align: center;
-}
-
-input {
-	width: 100%;
-	margin-bottom: 10px;
-	background: rgba(0, 0, 0, 0.3); 
-	border: none;
-	outline: none; 
-	padding: 10px;
-	font-size: 13px;
-	color: #fff;
-	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-	border: 1px solid rgba(0, 0, 0, 0.3);
-	border-radius: 4px;
-	box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.2), 0 1px 1px
-		rgba(255, 255, 255, 0.2);
-	-webkit-transition: box-shadow .5s ease;
-	-moz-transition: box-shadow .5s ease;
-	-o-transition: box-shadow .5s ease;
-	-ms-transition: box-shadow .5s ease;
-	transition: box-shadow .5s ease;
-}
-
-input:focus {
-	box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.4), 0 1px 1px
-		rgba(255, 255, 255, 0.2);
-}
-</style>
-
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
 <script>
 function getTopWinow(){  
    var p = window;    
@@ -226,7 +32,7 @@ function reload(){
 	console.info(top == window)
 	var top = getTopWinow(); //获取当前页面的顶层窗口对象
 	if(top != window) {
-		 top.location.href = '<%=basePath%>admin/login'; //跳转到登陆页面 
+		 top.location.href = '${basePath}admin/login'; //跳转到登陆页面 
 	}
 }
 
@@ -234,23 +40,150 @@ window.onload=function(){
 	reload();
 }
 </script> 
-</head>  
+<style type="text/css">
+body {
+	margin: 0;
+	padding: 0;
+	background: #38b4ea
+}
 
-<body> 
+.bottom {
+	width: 1400px;
+	height: 138px;
+	background: url(${basePath}images/login-background.png);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -69px 0 0 -700px
+}
 
+.taiir {
+	position: absolute;
+	width: 380px;
+	height: 317px;
+	top: 50%;
+	left: 50%;
+	margin: -159px 0 0 -190px
+}
+
+.logo {
+	position: relative;
+	width: 120;
+	height: 30;
+	left: 250;
+	top: 0;
+	z-index: 10;
+}
+
+.title {
+	color: ffffff;
+	position: absolute;
+	left: 110;
+	top: 15;
+	z-index: 5;
+	position: absolute;
+}
+
+.main {
+	position: relative;
+	width: 380;
+	height: 287;
+	z-index: 8;
+}
+
+.form {
+	position: absolute;
+	left: 40;
+	top: 120;
+	z-index: 10;
+	position: absolute;
+}
+
+.div-username {
+	position: relative;
+}
+
+.div-password {
+	position: relative;
+}
+
+.icon-user {
+	position: absolute;
+	left: 14;
+	z-index: 10;
+	top: 10;
+	background-image: url(${basePath}images/login-user01.png);
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
+	width: 20px;
+	height: 20px;
+}
+
+.icon-pass {
+	position: absolute;
+	left: 14;
+	z-index: 10;
+	top: 10;
+	background-image: url(${basePath}images/login-key01.png);
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
+	width: 20px;
+	height: 20px;
+}
+
+.user, .pass  {
+	padding-left: 34px;
+	width: 300px;
+	height: 40px
+}
   
-	<div class="login">  
-		<h1>钛铱Taiir睡眠监测系统</h1> 
-		<h1>管理员登陆</h1> 
-		<form method="post" action="<%=basePath%>login">
-			<input type="text" name="username" placeholder="用户名"
-				required="required" value="" /> <input type="password"
-				name="password" placeholder="密码" required="required" value="" />
-			<button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
+  
+.submit:hover {
+	background-color: #1ea8e4;
+	cursor:pointer;
+}
+.submit:active {
+	background-color:#0f98d3;
+}  
+
+.submit {
+	background-color: 0b9cdb;
+	border-radius: 8px;
+	border: 0px;
+	padding: 0px;
+	color: ffffff;
+	width: 300px;
+	height: 40px;
+}
+</style>
+</head>
+
+<body>
+	<div class="bottom"></div>
+	<div class="taiir">
+		<img class="logo" src="${basePath}images/taiir-logo.png"
+			style="right: 0px; left: 0px; float: right;"> <img calss="main"
+			src="${basePath}images/login-input.png">
+		<h1 class="title"
+			style="text-align: right; float: inherit; right: 0px; left: 0px;">钛铱睡眠监测系统</h1>
+		<form class="form"
+			action="${basePath}login"
+			align="center">
+			<div class="div-username">
+				<i class="icon-user"></i> <input class="user" name="username"
+					required="required" type="text" placeholder="请输入用户名">
+			</div>
+			<p></p>
+			<div class="div-password">
+				<i class="icon-pass"></i> <input class="pass" name="password"
+					required="required" type="password" placeholder="请输入密码"> 
+			</div>
+			<p>
+				<input type="submit" value="登      录" class="submit" >
+			</p>
 		</form>
 		<h4 style="color: red;text-align: center;">${msg}</h4>
 	</div>
-
-
 </body>
+
 </html>

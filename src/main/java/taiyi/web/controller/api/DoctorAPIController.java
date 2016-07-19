@@ -13,13 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
-
 import taiyi.web.model.Hostipal;
 import taiyi.web.model.SystemUser;
 import taiyi.web.model.User;
 import taiyi.web.model.dto.Status;
-import taiyi.web.model.dto.UserDoctorAndHosptial;
 import taiyi.web.model.dto.UserDoctorHospitalDto;
 import taiyi.web.service.DoctorAndHosptialService;
 import taiyi.web.service.HostipalService;
@@ -37,28 +34,15 @@ import taiyi.web.service.UserService;
 @RequestMapping("/api")
 public class DoctorAPIController extends APIExceptionHandlerController{
 	Logger logger = Logger.getLogger(getClass());
-	@Autowired
-	private DoctorAndHosptialService doctorAndHosptialService;
+//	@Autowired
+//	private DoctorAndHosptialService doctorAndHosptialService;
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private HostipalService hostipalService;
 	@Autowired
 	private SystemUserService doctorService;
-	
-	@RequestMapping(value = "/uploadUserAndDoctor", consumes = "application/json")
-	@ResponseBody
-	public Status uploadUserAndDoctor(@RequestBody  UserDoctorAndHosptial userDoctorAndHosptial) {
-		SystemUser doctor = userDoctorAndHosptial.getDoctor();
-		User user = userDoctorAndHosptial.getUser();
-		Hostipal hostipal = userDoctorAndHosptial.getHostipal();
-		boolean success = doctorAndHosptialService.register(user,doctor,hostipal);
-		if (success) {
-			return Status.SUCCESSED;
-		}
-		return Status.FAILED;
-		
-	}
+
 	
 	@RequestMapping(value="user/registerUserWithDoctor",consumes = "application/json")
 	@ResponseBody

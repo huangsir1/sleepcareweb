@@ -19,11 +19,7 @@ import taiyi.web.model.SubReport;
 import taiyi.web.model.dto.BaseReport;
 
 /**
- * @author <a href="mailto:jason19659@163.com">jason19659</a>
- *
- * taiyi.web.service
- *
- * 2016年7月8日
+ * Implement by 
  */
 public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter {
 

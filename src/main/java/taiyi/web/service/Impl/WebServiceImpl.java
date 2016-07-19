@@ -400,10 +400,10 @@ public class WebServiceImpl implements WebService {
 		List<SleepReport> sleepReports = sleepReportService.selectByUserId(userId);
 		return packagePerviewReportDto(sleepReports);
 	}
+	
 	public List<ReportPreviewDto> packagePerviewReportDto(List<SleepReport> sleepReports) {
 		List<ReportPreviewDto> reportPreviewDtos = Lists.newArrayListWithCapacity(sleepReports.size());
 		for(SleepReport s : sleepReports) {
-		
 			ReportPreviewDto reportPreviewDto = new ReportPreviewDto();
 			BeanUtilsForAndroid.copy(s, reportPreviewDto);
 			reportPreviewDto.setMacAddress(	subReportService.selectByPrimaryKey(s.getId()).getMacAddress());
