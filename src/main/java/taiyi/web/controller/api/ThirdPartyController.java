@@ -61,6 +61,9 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 				+ "/";
 		String reportId = UUID.randomUUID().toString();
 		try {
+			if (userService.selectByPrimaryKey(userId) == null) {
+				return Status.USER_UNREGISTER;
+			}
 			String fileName = WebProperties.getReportFileName(userId, reportId);
 			File targetFile = new File(fileName);
 			if (!targetFile.exists()) {

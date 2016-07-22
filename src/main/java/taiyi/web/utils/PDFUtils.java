@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.springframework.util.StringUtils;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -58,6 +59,11 @@ public class PDFUtils {
 		this(font);
 		this.logo = Image.getInstance(logo);
 	}
+	public void createPdf(String dest, String imagePathROSeconds, String imagePathROTimes, String imagePathROml,
+			String imagePathROxy, User user, SleepReport sleepReport, BreatheReport breatheReport, String result,
+			SubReport subReport) throws Exception {
+		createPdf(dest, imagePathROSeconds, imagePathROTimes, imagePathROml, imagePathROxy, user, sleepReport, breatheReport, result, subReport, ""); 
+	}
 
 	/**
 	 * @param dest
@@ -75,7 +81,7 @@ public class PDFUtils {
 	 */
 	public void createPdf(String dest, String imagePathROSeconds, String imagePathROTimes, String imagePathROml,
 			String imagePathROxy, User user, SleepReport sleepReport, BreatheReport breatheReport, String result,
-			SubReport subReport) throws Exception {
+			SubReport subReport,String header) throws Exception {
 		try {
 			Document document = new Document(PageSize.A4);
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(dest));
@@ -111,11 +117,10 @@ public class PDFUtils {
 			document.add(image4);
 
 			// drawAndSetRetangle(430, 585, writer);
-			Paragraph t = new Paragraph("钛铱睡眠呼吸报告", fontBigTitle);
+			Paragraph t = new Paragraph("睡眠监测报告", fontBigTitle);
 			t.setAlignment(Element.ALIGN_CENTER);
 			document.add(t);
-
-			
+			drawDIYHeader(writer, header);
 			if (!"noname".equals(user.getName())) {
 				drawPersonalInfomationPart(writer, user, sleepReport);
 			} else {
@@ -141,7 +146,22 @@ public class PDFUtils {
 			throw new Exception(e);
 		}
 	}
-
+	public void drawDIYHeader(PdfWriter writer,String header) throws DocumentException {
+		if (!StringUtils.isEmpty(header)) {
+			Rectangle rectangle = new Rectangle(25, 810, 575, 790);
+			ColumnText ct = new ColumnText(writer.getDirectContent());
+			ct.setSimpleColumn(rectangle);
+			Paragraph paragraph = new Paragraph();
+			paragraph.setAlignment(Element.ALIGN_CENTER);
+			paragraph.setLeading(12f);
+			paragraph.setFont(fontBigTitle);
+			paragraph.add(header);
+			ct.addElement(paragraph);
+			ct.go();
+		}
+		
+	}
+	
 	public void drawAnalysisResultPart(PdfWriter writer, String result, String advice) throws DocumentException {
 		Rectangle rectangle = drawAndSetRetangle(110, 20, writer);
 		ColumnText ct = new ColumnText(writer.getDirectContent());

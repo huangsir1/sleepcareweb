@@ -4,13 +4,12 @@
 package taiyi.web.service;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.fasterxml.jackson.databind.deser.Deserializers.Base;
 
 import taiyi.web.model.SleepReport;
 import taiyi.web.model.dto.BaseReport;
@@ -45,4 +44,6 @@ public interface WebService {
 	List<ReportPreviewDto> packagePerviewReportDtoByUserId(String userId);
 	
 	List<ReportPreviewDto> packagePerviewReportDto(List<SleepReport> sleepReports);
+
+	BaseReport selectById(String reportId) throws IllegalAccessException, InvocationTargetException;
 }

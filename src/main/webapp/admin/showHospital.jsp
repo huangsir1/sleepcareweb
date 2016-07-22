@@ -115,6 +115,7 @@
 				<th field="name">名称</th>
 				<th field="phone">电话</th>
 				<th field="address">地址</th>
+				<th field="alias">别名</th>
 				<th field="regDate">注册日期</th>
 			</tr>
 		</thead>
@@ -147,6 +148,10 @@
 		<form id="fm" method="post">
 			<div class="fitem">
 				<label>名称:</label> <input name="name">
+			</div>
+			<br />
+			<div class="fitem">
+				<label>别名:</label> <input name="alias">
 			</div>
 			<br />
 			<div class="fitem">

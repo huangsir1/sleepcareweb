@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,15 +21,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.deser.Deserializers.Base;
 import com.google.common.collect.Lists;
+import com.itextpdf.text.DocumentException;
 
 import taiyi.web.model.BreatheReport;
+import taiyi.web.model.Hostipal;
 import taiyi.web.model.SleepReport;
 import taiyi.web.model.SubReport;
 import taiyi.web.model.User;
 import taiyi.web.model.dto.BaseReport;
 import taiyi.web.model.dto.ReportPreviewDto;
 import taiyi.web.service.BreatheReportService;
+import taiyi.web.service.HostipalService;
 import taiyi.web.service.SleepReportService;
 import taiyi.web.service.SubReportService;
 import taiyi.web.service.UserService;
@@ -60,6 +65,8 @@ public class WebServiceImpl implements WebService {
 	private SleepReportService sleepReportService;
 	@Autowired
 	private SubReportService subReportService;
+	@Autowired
+	private HostipalService hostipalService;
 
 	public Map<String, Integer[]> getReportNumber(String reportId) {
 		Map<String, Integer[]> maps = new HashMap<String, Integer[]>();
@@ -85,8 +92,8 @@ public class WebServiceImpl implements WebService {
 		return maps;
 	}
 
-	@Override
-	public String generatePdfByReportId(String reportId, String basePath, String servletRailPath) throws Exception {
+	public String generatePdfByReportId_oldVersion(String reportId, String basePath, String servletRailPath)
+			throws Exception {
 
 		Map<String, Integer[]> maps = getReportNumber(reportId);
 		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(reportId);
@@ -118,8 +125,8 @@ public class WebServiceImpl implements WebService {
 			readAsMap.put("mailv", new String[0]);
 			readAsMap.put("xueyang", new String[0]);
 		}
-		String font = WebProperties.getFilePath()+"/NotoSansCJKsc-Regular.otf";
-		String logo = WebProperties.getFilePath()+"/logo.png";
+		String font = WebProperties.getFilePath() + "/NotoSansCJKsc-Regular.otf";
+		String logo = WebProperties.getFilePath() + "/logo.png";
 		BarChartImageUtil.generateSecondsOfReducedOxygenImage(maps.get("seconds"), "分", fileName + "ROSeconds.png");
 		BarChartImageUtil.generateTimesOfReducedOxygenImage(maps.get("times"), fileName + "ROTimes.png");
 		try {
@@ -130,27 +137,84 @@ public class WebServiceImpl implements WebService {
 			e.printStackTrace();
 		}
 
-		new PDFUtils(font,logo).createPdf(fileName + "report.pdf", fileName + "ROSeconds.png", fileName + "ROTimes.png",
-				fileName + "ROml.png", fileName + "ROxy.png", user, sleepReport, breatheReport, result, sub);
+		new PDFUtils(font, logo).createPdf(fileName + "report.pdf", fileName + "ROSeconds.png",
+				fileName + "ROTimes.png", fileName + "ROml.png", fileName + "ROxy.png", user, sleepReport,
+				breatheReport, result, sub);
 		System.out.println("报告生成成功 " + fileName + "report.pdf");
-		File image1 = new File(fileName + "ROSeconds.png");
+		deleteFile(fileName);
+		return basePath + "files" + File.separator + user.getId() + File.separator + sleepReport.getId()
+				+ File.separator + "report.pdf";
+	}
+
+	public String generatePdfByReportId(String reportId, String basePath, String servletRailPath) throws Exception {
+		Map<String, Integer[]> maps = getReportNumber(reportId);
+		BaseReport baseReport = this.selectById(reportId);
+
+		User user = userService.selectWithDH(baseReport.getUserId());
+		String fileName = WebProperties.getFilePath() + File.separator + user.getId() + File.separator
+				+ baseReport.getId() + File.separator;
+
+		File file = new File(fileName);
+		System.out.println(fileName);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		Map<String, String[]> readAsMap = new HashMap<String, String[]>();
+		try {
+			readAsMap = FileOperateUtils.readAsMap(WebProperties.getReportFileName(baseReport.getUserId(), reportId));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			filtration(readAsMap);
+			readAsMap = doXueyang(readAsMap);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			readAsMap.put("riqi", new String[0]);
+			readAsMap.put("mailv", new String[0]);
+			readAsMap.put("xueyang", new String[0]);
+		}
+		BarChartImageUtil.generateSecondsOfReducedOxygenImage(maps.get("seconds"), "分", fileName + "ROSeconds.png");
+		BarChartImageUtil.generateTimesOfReducedOxygenImage(maps.get("times"), fileName + "ROTimes.png");
+		try {
+			LineChartImageUtil.generateMailvImage(readAsMap.get("riqi"), readAsMap.get("mailv"), fileName + "ROml.png");
+			LineChartImageUtil.generateXueyangImage(readAsMap.get("riqi"), readAsMap.get("xueyang"),
+					fileName + "ROxy.png");
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("图片生成失败");
+		}
+		//create pdf 
+		createPdf(user, baseReport);
+
+		logger.info("报告生成成功 " + fileName + "report.pdf");
+		deleteFile(fileName);
+		return basePath + "files" + File.separator + user.getId() + File.separator + baseReport.getId()
+				+ File.separator + "report.pdf";
+
+	}
+
+	/**
+	 * @param fileName
+	 */
+	public void deleteFile(String basePath) {
+		File image1 = new File(basePath + "ROSeconds.png");
 		if (image1.exists()) {
 			image1.delete();
 		}
-		File image2 = new File(fileName + "ROTimes.png");
+		File image2 = new File(basePath + "ROTimes.png");
 		if (image2.exists()) {
 			image2.delete();
 		}
-		File image3 = new File(fileName + "ROml.png");
+		File image3 = new File(basePath + "ROml.png");
 		if (image3.exists()) {
 			image3.delete();
 		}
-		File image4 = new File(fileName + "ROxy.png");
+		File image4 = new File(basePath + "ROxy.png");
 		if (image4.exists()) {
 			image4.delete();
 		}
-		return basePath + "files" + File.separator + user.getId() + File.separator + sleepReport.getId()
-				+ File.separator + "report.pdf";
+		logger.info("图片清理成功");
 	}
 
 	/**
@@ -196,6 +260,23 @@ public class WebServiceImpl implements WebService {
 				// do nothing
 			}
 		}
+	}
+
+	public void createPdf(User user, BaseReport baseReport) throws DocumentException, IOException, Exception {
+		String filePath = WebProperties.getFilePath();
+		String font = filePath + "/NotoSansCJKsc-Regular.otf";
+		String logo = filePath + "/logo.png";
+		String fileName = filePath + File.separator + user.getId() + File.separator + baseReport.getId()
+				+ File.separator;
+		String result = "1. 睡眠呼吸暂停低通气综合症：" + getOSAHSResult(baseReport.getBreatheReport(), user) + "\n"
+				+ "            2. 睡眠低氧血症：" + getSleepHypoxiaResult(baseReport.getBreatheReport());
+		Hostipal hostipal = hostipalService.selectByMacAddress(baseReport.getSubReport().getMacAddress());
+		if (hostipal == null) {
+			hostipal = new Hostipal();
+		}
+		new PDFUtils(font, logo).createPdf(fileName + "report.pdf", fileName + "ROSeconds.png",
+				fileName + "ROTimes.png", fileName + "ROml.png", fileName + "ROxy.png", user,
+				baseReport.getSleepReport(), baseReport.getBreatheReport(), result, baseReport.getSubReport(),hostipal.getAlias());
 	}
 
 	// private Pulse generatePulse(Map<String, String[]> readAsMap) throws
@@ -304,7 +385,7 @@ public class WebServiceImpl implements WebService {
 		sleepReportService.insert(sleepReport);
 		subReportService.insert(subReport);
 		breatheReportService.insert(breatheReport);
-		
+
 		User user = userService.selectByPrimaryKey(report.getUserId());
 		user.setLastestDate(new Date());
 		userService.updateByPrimaryKeySelective(user);
@@ -330,6 +411,15 @@ public class WebServiceImpl implements WebService {
 		}
 		return false;
 
+	}
+
+	@Override
+	public BaseReport selectById(String reportId) throws IllegalAccessException, InvocationTargetException {
+		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(reportId);
+		SubReport subReport = subReportService.selectByPrimaryKey(reportId);
+		BreatheReport breatheReport = breatheReportService.selectByPrimaryKey(reportId);
+		BaseReport baseReport = new BaseReport(sleepReport, breatheReport, subReport);
+		return baseReport;
 	}
 
 	@Override
@@ -377,8 +467,9 @@ public class WebServiceImpl implements WebService {
 		fis.close();
 	}
 
-	/* 
-	 * @see taiyi.web.service.WebService#updateReport(taiyi.web.model.dto.BaseReport)
+	/*
+	 * @see
+	 * taiyi.web.service.WebService#updateReport(taiyi.web.model.dto.BaseReport)
 	 */
 	@Override
 	public void updateReport(BaseReport report) {
@@ -388,29 +479,29 @@ public class WebServiceImpl implements WebService {
 		sleepReportService.updateByPrimaryKey(sleepReport);
 		subReportService.updateByPrimaryKey(subReport);
 		breatheReportService.updateByPrimaryKey(breatheReport);
-		
+
 		User user = userService.selectByPrimaryKey(report.getUserId());
 		user.setLastestDate(new Date());
 		userService.updateByPrimaryKeySelective(user);
-		
+
 	}
-	
+
 	@Override
 	public List<ReportPreviewDto> packagePerviewReportDtoByUserId(String userId) {
 		List<SleepReport> sleepReports = sleepReportService.selectByUserId(userId);
 		return packagePerviewReportDto(sleepReports);
 	}
-	
+
 	public List<ReportPreviewDto> packagePerviewReportDto(List<SleepReport> sleepReports) {
 		List<ReportPreviewDto> reportPreviewDtos = Lists.newArrayListWithCapacity(sleepReports.size());
-		for(SleepReport s : sleepReports) {
+		for (SleepReport s : sleepReports) {
 			ReportPreviewDto reportPreviewDto = new ReportPreviewDto();
 			BeanUtilsForAndroid.copy(s, reportPreviewDto);
-			reportPreviewDto.setMacAddress(	subReportService.selectByPrimaryKey(s.getId()).getMacAddress());
+			reportPreviewDto.setMacAddress(subReportService.selectByPrimaryKey(s.getId()).getMacAddress());
 			reportPreviewDtos.add(reportPreviewDto);
 		}
-		
+
 		return reportPreviewDtos;
 	}
-	
+
 }

@@ -91,4 +91,12 @@ public class HostipalServiceImpl implements HostipalService{
 		return hostipalMapper.selectByName(name);
 	}
 
+	/* 
+	 * @see taiyi.web.service.HostipalService#selectByMacAddress(java.lang.String)
+	 */
+	@Override
+	public Hostipal selectByMacAddress(String macAddress) {
+		return hostipalMapper.selectByMacAddress(macAddress);
+	}
+
 }

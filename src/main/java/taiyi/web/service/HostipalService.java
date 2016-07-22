@@ -66,4 +66,6 @@ public interface HostipalService {
     int updateByPrimaryKey(Hostipal record);
     
     Hostipal selectByName(String name);
+    
+    Hostipal selectByMacAddress(String macAddress);
 }
