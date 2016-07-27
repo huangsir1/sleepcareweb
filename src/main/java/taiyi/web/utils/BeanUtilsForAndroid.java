@@ -25,7 +25,7 @@ public class BeanUtilsForAndroid {
 		SubReport subReport = new SubReport("12312313", 11.0, 11,new Date(),
 				12, new Date(123213123l),11.1, 12.1,
 				new Date(), 11.111, new Date(), 13,
-				new Date(), 12.1,"1230-12123213","sb");
+				new Date(), 12.1,"1230-12123213","sb",11.11);
 		SleepReport sleepReport = new SleepReport(UUID.randomUUID().toString(), "1", new Date(), new Date(), 900, 900,
 				900, 2700, 999, new Date());
 		sleepReport.setUserId("123");

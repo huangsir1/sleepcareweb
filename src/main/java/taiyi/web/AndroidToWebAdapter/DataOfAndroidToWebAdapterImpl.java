@@ -19,7 +19,7 @@ import taiyi.web.model.SubReport;
 import taiyi.web.model.dto.BaseReport;
 
 /**
- * Implement by 
+ * Implement by
  */
 public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter {
 
@@ -41,18 +41,14 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 		if (time_last / 1000 > 300 && line_count > 300) { // 设定测量最短时间，5分钟
 			if (time_last / 1000 > 600 && line_count > 600) { // 如果测量时间大于10分钟，则计算时舍去前5分钟的数据
 				mSleep_stageSeperate = new Sleep_stageSeperate();
-				mSleep_stageSeperate.calculate(filePath, true, false, DATA_SEPARATOR,
-						dataType);
+				mSleep_stageSeperate.calculate(filePath, true, false, DATA_SEPARATOR, dataType);
 				mSleep_ApneaDetection = new Sleep_ApneaDetection();
-				mSleep_ApneaDetection.calculate(filePath, true, false, DATA_SEPARATOR,
-						dataType);
+				mSleep_ApneaDetection.calculate(filePath, true, false, DATA_SEPARATOR, dataType);
 			} else {
 				mSleep_stageSeperate = new Sleep_stageSeperate();
-				mSleep_stageSeperate.calculate(filePath, false, false, DATA_SEPARATOR,
-						dataType);
+				mSleep_stageSeperate.calculate(filePath, false, false, DATA_SEPARATOR, dataType);
 				mSleep_ApneaDetection = new Sleep_ApneaDetection();
-				mSleep_ApneaDetection.calculate(filePath, false, false, DATA_SEPARATOR,
-						dataType);
+				mSleep_ApneaDetection.calculate(filePath, false, false, DATA_SEPARATOR, dataType);
 			}
 		} else {
 			System.out.println("数据太短！");
@@ -154,8 +150,14 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 			// sur.setLongestOxygenReduceTime(new Date());
 			// 氧减危害指数
 			sur.setBloodOxygenHazardIndex(Double.parseDouble(userIndex.getXywhzsIndex()));
-			//mac地址
-			 sur.setMacAddress(userIndex.getMacaddress());
+			// mac地址
+			sur.setMacAddress(userIndex.getMacaddress());
+			try {
+				sur.setPerfusionIndex(Double.parseDouble(userIndex.getAvgxlgzd()));
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
 		}
 
 		return sur;
@@ -285,7 +287,7 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 		return br;
 	}
 
-	private UserSleep convertToUserSleep(Sleep_stageSeperate mSleep_stageSeperate){
+	private UserSleep convertToUserSleep(Sleep_stageSeperate mSleep_stageSeperate) {
 		UserSleep us = new UserSleep();
 		/**
 		 * 睡眠
@@ -368,7 +370,7 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 		return us;
 	}
 
-	private UserIndex convertToUserIndex(Sleep_ApneaDetection mSleep_ApneaDetection){
+	private UserIndex convertToUserIndex(Sleep_ApneaDetection mSleep_ApneaDetection) {
 		UserIndex ui = new UserIndex();
 		/**
 		 * 指标
@@ -574,7 +576,7 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 	public int lineCountTotal(String filepath, int dataType) {
 		int count = 0; // 用于统计行数，从0开始
 
-		if(dataType == DATATYPE_ASCII){
+		if (dataType == DATATYPE_ASCII) {
 			String strbuff = null;
 			try {
 				BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath)));
@@ -587,13 +589,13 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}else if(dataType == DATATYPE_BINARY){
+		} else if (dataType == DATATYPE_BINARY) {
 			// binary
-			final int data_length = 21; //1+1+1+1+4+1+1+1+1+8+1 = 21
+			final int data_length = 21; // 1+1+1+1+4+1+1+1+1+8+1 = 21
 			RandomAccessFile raf = null;
 			try {
-				raf = new RandomAccessFile(filepath,"r");
-				count = (int)(raf.length()/data_length);
+				raf = new RandomAccessFile(filepath, "r");
+				count = (int) (raf.length() / data_length);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -615,7 +617,7 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 	public long timeCountTotal(String filepath, int dataType) {
 		long timeCount = 0; // 测量总时间
 
-		if(dataType == DATATYPE_ASCII){
+		if (dataType == DATATYPE_ASCII) {
 			String strbuff_new = null; // 最新读取到的数据
 			String strbuff_start = null; // 开始时间
 			String strbuff_end = null; // 结束时间
@@ -633,13 +635,14 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 						System.out.println("*********************strbuff_new == DATA_SEPARATOR*************");
 					}
 				}
-				if(strbuff_start != null && strbuff_end != null)
-//					try {
-//						timeCount = in.parse(strbuff_end.split(",")[3]).getTime() - in.parse(strbuff_start.split(",")[3]).getTime();
-//					} catch (ParseException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
+				if (strbuff_start != null && strbuff_end != null)
+					// try {
+					// timeCount = in.parse(strbuff_end.split(",")[3]).getTime()
+					// - in.parse(strbuff_start.split(",")[3]).getTime();
+					// } catch (ParseException e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					// }
 					timeCount = Long.valueOf(strbuff_end.split(",")[9]) - Long.valueOf(strbuff_start.split(",")[9]);
 				br.close();
 			} catch (FileNotFoundException e) {
@@ -647,17 +650,17 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}else if(dataType == DATATYPE_BINARY){
+		} else if (dataType == DATATYPE_BINARY) {
 			// binary
-			final int data_length = 21; //1+1+1+1+4+1+1+1+1+8+1 = 21
+			final int data_length = 21; // 1+1+1+1+4+1+1+1+1+8+1 = 21
 			RandomAccessFile raf = null;
 			int len = 0;
 			try {
-				raf = new RandomAccessFile(filepath,"r");
-				len = (int)(raf.length()/data_length);
+				raf = new RandomAccessFile(filepath, "r");
+				len = (int) (raf.length() / data_length);
 
 				long start = 0, end = 0;
-				raf.seek(0*data_length);
+				raf.seek(0 * data_length);
 				raf.readByte();
 				raf.readByte();
 				raf.readByte();
@@ -670,7 +673,7 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 				start = raf.readLong();
 				raf.readByte();
 
-				raf.seek((len - 1)*data_length);
+				raf.seek((len - 1) * data_length);
 				raf.readByte();
 				raf.readByte();
 				raf.readByte();
@@ -708,8 +711,9 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 		return (int) (param * 100) / 100f;
 	}
 
-	/* 
-	 * @see taiyi.web.AndroidToWebAdapter.DataOfAndroidToWebAdapter#binaryFileToBaseReport(java.io.File)
+	/*
+	 * @see taiyi.web.AndroidToWebAdapter.DataOfAndroidToWebAdapter#
+	 * binaryFileToBaseReport(java.io.File)
 	 */
 	@Override
 	public BaseReport binaryFileToBaseReport(File file) {

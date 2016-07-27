@@ -378,16 +378,15 @@ public class WebServiceImpl implements WebService {
 	 * taiyi.web.service.WebService#insertReport(taiyi.web.model.dto.BaseReport)
 	 */
 	@Override
-	public void insertReport(BaseReport report) {
+	public synchronized void insertReport(BaseReport report) {
 		SleepReport sleepReport = report.getSleepReport();
 		BreatheReport breatheReport = report.getBreatheReport();
 		SubReport subReport = report.getSubReport();
 		sleepReportService.insert(sleepReport);
 		subReportService.insert(subReport);
 		breatheReportService.insert(breatheReport);
-
 		User user = userService.selectByPrimaryKey(report.getUserId());
-		user.setLastestDate(new Date());
+		user.setLastestDate(new Date()); 
 		userService.updateByPrimaryKeySelective(user);
 	}
 
@@ -418,6 +417,9 @@ public class WebServiceImpl implements WebService {
 		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(reportId);
 		SubReport subReport = subReportService.selectByPrimaryKey(reportId);
 		BreatheReport breatheReport = breatheReportService.selectByPrimaryKey(reportId);
+		if (sleepReport == null || breatheReport == null || breatheReport == null) {
+			return null;
+		}
 		BaseReport baseReport = new BaseReport(sleepReport, breatheReport, subReport);
 		return baseReport;
 	}

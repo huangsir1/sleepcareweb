@@ -31,10 +31,17 @@ public class SubReport {
 	private Date longestOxygenReduceTime;
 	// 血氧危害指数
 	private Double bloodOxygenHazardIndex;
-
+	// mac地址
 	private String macAddress;
-
+	// 医生建议
 	private String advice;
+	//平均血流灌注度
+	private Double perfusionIndex;
+	
+	public SubReport(){}
+	
+	
+
 	/**
 	 * @param id
 	 * @param oxygenReductionIndex
@@ -52,11 +59,13 @@ public class SubReport {
 	 * @param bloodOxygenHazardIndex
 	 * @param macAddress
 	 * @param advice
+	 * @param perfusionIndex
 	 */
 	public SubReport(String id, Double oxygenReductionIndex, Integer longestApneaSeconds, Date longestApneaTime,
 			Integer maxOxygenReduceSeconds, Date maxOxygenReduceTime, Double averagePulse, Double maxPulse,
 			Date maxPulseTime, Double minPulse, Date minPulseTime, Integer longestOxygenReduceSeconds,
-			Date longestOxygenReduceTime, Double bloodOxygenHazardIndex, String macAddress, String advice) {
+			Date longestOxygenReduceTime, Double bloodOxygenHazardIndex, String macAddress, String advice,
+			Double perfusionIndex) {
 		super();
 		this.id = id;
 		this.oxygenReductionIndex = oxygenReductionIndex;
@@ -74,17 +83,8 @@ public class SubReport {
 		this.bloodOxygenHazardIndex = bloodOxygenHazardIndex;
 		this.macAddress = macAddress;
 		this.advice = advice;
+		this.perfusionIndex = perfusionIndex;
 	}
-
-	
-	
-	/**
-	 * 
-	 */
-	public SubReport() {
-		super();
-	}
-
 
 
 
@@ -94,7 +94,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.id
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public String getId() {
 		return id;
@@ -107,7 +107,7 @@ public class SubReport {
 	 * @param id
 	 *            the value for sub_report.id
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -119,7 +119,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.oxygen_reduction_index
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Double getOxygenReductionIndex() {
 		return oxygenReductionIndex;
@@ -132,7 +132,7 @@ public class SubReport {
 	 * @param oxygenReductionIndex
 	 *            the value for sub_report.oxygen_reduction_index
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setOxygenReductionIndex(Double oxygenReductionIndex) {
 		this.oxygenReductionIndex = oxygenReductionIndex;
@@ -144,7 +144,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.longest_apnea_seconds
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Integer getLongestApneaSeconds() {
 		return longestApneaSeconds;
@@ -157,7 +157,7 @@ public class SubReport {
 	 * @param longestApneaSeconds
 	 *            the value for sub_report.longest_apnea_seconds
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setLongestApneaSeconds(Integer longestApneaSeconds) {
 		this.longestApneaSeconds = longestApneaSeconds;
@@ -169,7 +169,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.longest_apnea_time
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Date getLongestApneaTime() {
 		return longestApneaTime;
@@ -182,7 +182,7 @@ public class SubReport {
 	 * @param longestApneaTime
 	 *            the value for sub_report.longest_apnea_time
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setLongestApneaTime(Date longestApneaTime) {
 		this.longestApneaTime = longestApneaTime;
@@ -194,7 +194,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.max_oxygen_reduce_seconds
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Integer getMaxOxygenReduceSeconds() {
 		return maxOxygenReduceSeconds;
@@ -207,7 +207,7 @@ public class SubReport {
 	 * @param maxOxygenReduceSeconds
 	 *            the value for sub_report.max_oxygen_reduce_seconds
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setMaxOxygenReduceSeconds(Integer maxOxygenReduceSeconds) {
 		this.maxOxygenReduceSeconds = maxOxygenReduceSeconds;
@@ -219,7 +219,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.max_oxygen_reduce_time
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Date getMaxOxygenReduceTime() {
 		return maxOxygenReduceTime;
@@ -232,7 +232,7 @@ public class SubReport {
 	 * @param maxOxygenReduceTime
 	 *            the value for sub_report.max_oxygen_reduce_time
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setMaxOxygenReduceTime(Date maxOxygenReduceTime) {
 		this.maxOxygenReduceTime = maxOxygenReduceTime;
@@ -244,7 +244,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.average_pulse
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Double getAveragePulse() {
 		return averagePulse;
@@ -257,7 +257,7 @@ public class SubReport {
 	 * @param averagePulse
 	 *            the value for sub_report.average_pulse
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setAveragePulse(Double averagePulse) {
 		this.averagePulse = averagePulse;
@@ -269,7 +269,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.max_pulse
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Double getMaxPulse() {
 		return maxPulse;
@@ -282,7 +282,7 @@ public class SubReport {
 	 * @param maxPulse
 	 *            the value for sub_report.max_pulse
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setMaxPulse(Double maxPulse) {
 		this.maxPulse = maxPulse;
@@ -294,7 +294,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.max_pulse_time
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Date getMaxPulseTime() {
 		return maxPulseTime;
@@ -307,7 +307,7 @@ public class SubReport {
 	 * @param maxPulseTime
 	 *            the value for sub_report.max_pulse_time
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setMaxPulseTime(Date maxPulseTime) {
 		this.maxPulseTime = maxPulseTime;
@@ -319,7 +319,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.min_pulse
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Double getMinPulse() {
 		return minPulse;
@@ -332,7 +332,7 @@ public class SubReport {
 	 * @param minPulse
 	 *            the value for sub_report.min_pulse
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setMinPulse(Double minPulse) {
 		this.minPulse = minPulse;
@@ -344,7 +344,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.min_pulse_time
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Date getMinPulseTime() {
 		return minPulseTime;
@@ -357,7 +357,7 @@ public class SubReport {
 	 * @param minPulseTime
 	 *            the value for sub_report.min_pulse_time
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setMinPulseTime(Date minPulseTime) {
 		this.minPulseTime = minPulseTime;
@@ -369,7 +369,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.longest_oxygen_reduce_seconds
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Integer getLongestOxygenReduceSeconds() {
 		return longestOxygenReduceSeconds;
@@ -382,7 +382,7 @@ public class SubReport {
 	 * @param longestOxygenReduceSeconds
 	 *            the value for sub_report.longest_oxygen_reduce_seconds
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setLongestOxygenReduceSeconds(Integer longestOxygenReduceSeconds) {
 		this.longestOxygenReduceSeconds = longestOxygenReduceSeconds;
@@ -394,7 +394,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.longest_oxygen_reduce_time
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Date getLongestOxygenReduceTime() {
 		return longestOxygenReduceTime;
@@ -407,7 +407,7 @@ public class SubReport {
 	 * @param longestOxygenReduceTime
 	 *            the value for sub_report.longest_oxygen_reduce_time
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setLongestOxygenReduceTime(Date longestOxygenReduceTime) {
 		this.longestOxygenReduceTime = longestOxygenReduceTime;
@@ -419,7 +419,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.blood_oxygen_hazard_index
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public Double getBloodOxygenHazardIndex() {
 		return bloodOxygenHazardIndex;
@@ -432,7 +432,7 @@ public class SubReport {
 	 * @param bloodOxygenHazardIndex
 	 *            the value for sub_report.blood_oxygen_hazard_index
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setBloodOxygenHazardIndex(Double bloodOxygenHazardIndex) {
 		this.bloodOxygenHazardIndex = bloodOxygenHazardIndex;
@@ -444,7 +444,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.mac_address
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public String getMacAddress() {
 		return macAddress;
@@ -457,7 +457,7 @@ public class SubReport {
 	 * @param macAddress
 	 *            the value for sub_report.mac_address
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setMacAddress(String macAddress) {
 		this.macAddress = macAddress;
@@ -469,7 +469,7 @@ public class SubReport {
 	 *
 	 * @return the value of sub_report.advice
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public String getAdvice() {
 		return advice;
@@ -482,9 +482,34 @@ public class SubReport {
 	 * @param advice
 	 *            the value for sub_report.advice
 	 *
-	 * @mbggenerated Fri Jun 24 15:28:49 CST 2016
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
 	 */
 	public void setAdvice(String advice) {
 		this.advice = advice;
+	}
+
+	/**
+	 * This method was generated by MyBatis Generator. This method returns the
+	 * value of the database column sub_report.perfusion_index
+	 *
+	 * @return the value of sub_report.perfusion_index
+	 *
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
+	 */
+	public Double getPerfusionIndex() {
+		return perfusionIndex;
+	}
+
+	/**
+	 * This method was generated by MyBatis Generator. This method sets the
+	 * value of the database column sub_report.perfusion_index
+	 *
+	 * @param perfusionIndex
+	 *            the value for sub_report.perfusion_index
+	 *
+	 * @mbggenerated Mon Jul 25 16:12:43 CST 2016
+	 */
+	public void setPerfusionIndex(Double perfusionIndex) {
+		this.perfusionIndex = perfusionIndex;
 	}
 }

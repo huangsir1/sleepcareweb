@@ -104,7 +104,7 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 			e.printStackTrace();
 			return Status.FAILED;
 		}
-		return Status.FILE_UPLOAD_SUCCESSED;
+		return new Status(Status.SUCCESSED_CODE, reportId);
 
 	}
 

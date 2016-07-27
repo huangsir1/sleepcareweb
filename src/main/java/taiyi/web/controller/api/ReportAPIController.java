@@ -91,6 +91,18 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		breatheReportService.insert(breatheReport);
 		return Status.SUCCESSED;
 	}
+	
+	@RequestMapping(value = "/subReport/upload", consumes = "application/json")
+	@ResponseBody 
+	@Deprecated
+	public Status subReportReport(@RequestBody SubReport subReport) {
+		// TODO 验证用户合法性
+		if (subReportService.selectByPrimaryKey(subReport.getId()) != null) {
+			return Status.REPORT_EXSIT;
+		}
+		subReportService.insert(subReport);
+		return Status.SUCCESSED;
+	}
 
 	@RequestMapping(value = "/baseReport/upload", consumes = "application/json")
 	@ResponseBody
@@ -195,6 +207,18 @@ public class ReportAPIController extends APIExceptionHandlerController {
 				webService.flushPdf(request, response, reportId);
 			}
 		}
+	}
+	
+	@RequestMapping("/report/get/{reportId}")
+	@ResponseBody
+	public Status getReport(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		 BaseReport baseReport = webService.selectById(reportId);
+		 if (baseReport != null) {
+			return new Status(Status.SUCCESSED_CODE, JSON.toJSONString(baseReport));
+		}
+		return Status.REPORT_NOT_EXSIT;
+		
 	}
 
 }

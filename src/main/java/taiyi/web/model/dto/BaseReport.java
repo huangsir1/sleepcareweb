@@ -129,6 +129,9 @@ public class BaseReport {
 	private String macAddress;
 
 	private String advice;
+	
+	private Double perfusionIndex;
+	
 	public BaseReport() {
 		
 	}
@@ -832,7 +835,7 @@ public class BaseReport {
 	@JsonIgnore
 	@JSONField(serialize=false)
 	public SubReport getSubReport() {
-		return new SubReport(id, oxygenReductionIndex, longestApneaSeconds, longestApneaTime, maxOxygenReduceSeconds, maxOxygenReduceTime, averagePulse, maxPulse, maxPulseTime, minPulse, minPulseTime, longestOxygenReduceSeconds, longestOxygenReduceTime, bloodOxygenHazardIndex,macAddress,advice);
+		return new SubReport(id, oxygenReductionIndex, longestApneaSeconds, longestApneaTime, maxOxygenReduceSeconds, maxOxygenReduceTime, averagePulse, maxPulse, maxPulseTime, minPulse, minPulseTime, longestOxygenReduceSeconds, longestOxygenReduceTime, bloodOxygenHazardIndex,macAddress,advice,perfusionIndex);
 	}
 
 	/**
@@ -915,6 +918,20 @@ public class BaseReport {
 				+ lightSleepSeconds + ", deepSleepSeconds=" + deepSleepSeconds + ", totalSeconds=" + totalSeconds
 				+ ", sleep_score=" + sleep_score + ", sleep_awake=" + sleep_awake + ", macAddress=" + macAddress
 				+ ", advice=" + advice + "]";
+	}
+
+	/**
+	 * @return the perfusionIndex
+	 */
+	public Double getPerfusionIndex() {
+		return perfusionIndex;
+	}
+
+	/**
+	 * @param perfusionIndex the perfusionIndex to set
+	 */
+	public void setPerfusionIndex(Double perfusionIndex) {
+		this.perfusionIndex = perfusionIndex;
 	}
 	
 	
