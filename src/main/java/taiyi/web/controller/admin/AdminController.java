@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.itextpdf.text.DocumentException;
@@ -148,9 +149,17 @@ public class AdminController extends ExceptionHandlerController {
 	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
 	@RequestMapping("/getReportByUserId/{userId}")
 	@ResponseBody
-	public List<ReportPreviewDto> getReportByUserId(@PathVariable String userId) {
-		return webService.packagePerviewReportDtoByUserId(userId);
-	}
+	public HashMap<String, Object> getReportByUserId(@PathVariable String userId,@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer rows) {
+		if (page != null && rows != null) {
+			PageHelper.startPage(page, rows);
+		}
+		List<SleepReport> sleepReports = sleepReportService.selectByUserId(userId);
+		 List<ReportPreviewDto> reportPreviewDtos = webService.packagePerviewReportDto(sleepReports);
+		 PageInfo<SleepReport> pageInfo = new PageInfo<SleepReport>(sleepReports);
+		 PageModel pageModel = new PageModel(pageInfo.getTotal(), reportPreviewDtos);
+		 return pageModel.get();
+	} 
 
 	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view","hostipal:view" })
 	@RequestMapping("/showReport/{id}")

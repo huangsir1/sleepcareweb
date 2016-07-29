@@ -45,6 +45,7 @@ function add() {
 	$(function(){
 		$('#dg').datagrid({
 			url: '<%=basePath%>admin/getReportByUserId/'+ getQueryString("id"),
+			pageSize:20,
 			onDblClickRow: function (rowIndex, rowData) {
 				window.location.href="<%=basePath%>admin/showReport/" + rowData.id; 
 			}
@@ -83,7 +84,7 @@ function add() {
 <body>
 	<table id="dg" title="报告概览(双击查看报告)" class="easyui-datagrid" style=""
 		toolbar="#toolbar" rownumbers="true" fitColumns="true"
-		singleSelect="true">
+		singleSelect="true" pagination="true">
 		<thead>
 			<tr>
 				<th  field="id">id</th>

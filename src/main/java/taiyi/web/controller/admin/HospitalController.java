@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -92,6 +93,14 @@ public class HospitalController extends APIExceptionHandlerController {
 		hospital.setId(null);
 		hospital.setRegDate(new Date());
 		hospitalService.insert(hospital);
+		return Status.SUCCESSED;
+	}
+	
+	@RequiresPermissions("system:update")
+	@RequestMapping("admin/editHospital")
+	@ResponseBody
+	public Status editHospital(Hostipal hospital) {
+		hospitalService.updateByPrimaryKeySelective(hospital);
 		return Status.SUCCESSED;
 	}
 

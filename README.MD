@@ -512,13 +512,11 @@
    "maxHyponeaSeconds":60,
    "maxOxygenReduceSeconds":46,
    "maxOxygenReduceTime":1458164436000,
-   "maxOxygenSaturation":0,
    "maxPulse":179,
    "maxPulseTime":1458136763000,
    "minOxygenSaturation":69,
    "minPulse":47,
    "minPulseTime":1458159274000,
-   "odi":0,
    "oxygenReductionIndex":27.31,
    "oxygenSaturationEightyToEightyNinePercentHyponea":600,
    "oxygenSaturationEightyToEightyNinePercentTimes":41,
@@ -533,13 +531,14 @@
    "oxygenSaturationSeventyToSeventyNinePercentTimes":3,
    "oxygenSaturationSixtyToSixtyNinePercentHyponea":0,
    "oxygenSaturationSixtyToSixtyNinePercentTimes":1,
-   "reducedOxygenTimes":0,
+   "perfusionIndex":11.11,
    "sleep_score":0,
    "startTime":1458136226000,
-   "totalHyponeaSeconds":0,
    "totalSeconds":29648,
+   "uploadDate":1460444869000,
    "userId":"b6d24c67-e121-4405-b53a-eaa4119c9656"
 }
+
 ``` 
 
 **参数：** 
@@ -557,7 +556,7 @@
 | endTime | number| 睡眠结束时间 |
 | hyponeaHappenDate | number| 低通气发生时间 |
 | hypopneaTimes | number| 低通气次数 |
-| id | string| 报告id，由客户端生成16进制 8-4-4-4-12位的uuid，数值为1-F，请参照示例，该id为标准的UUID。ios: NSUUID().UUIDString ,java: UUID.randomUUID().toString() |
+| id | string| 报告id，由客户端生成16进制 8-4-4-4-12位的uuid，数值为16进制，请参照示例，该id为标准的UUID。ios: NSUUID().UUIDString ,java: UUID.randomUUID().toString() |
 | lightSleepSeconds | number| 浅睡眠时长（秒） |
 | longestApneaSeconds | number| 最长呼吸暂停时长（秒） |
 | longestApneaTime | number| 最长呼吸暂停发生时间 |
@@ -590,11 +589,11 @@
 | oxygenSaturationSixtyToSixtyNinePercentTimes | number| 血氧60%-69%的次数 |
 | reducedOxygenTimes | number| 氧减次数 |
 | sleep_score | number| 睡眠评分 |
-| startTime | number| 睡眠开始时间 |
+| startTime | number| 睡眠开始时间 Epoch Time，January 1, 1970, 00:00:00 GMT到今天的毫秒数 |
 | totalHyponeaSeconds | number| 低通气总时间秒数 |
 | totalSeconds | number| 睡眠总时长秒数 |
 | userId | string| 用户id |
-
+| perfusionIndex |Double | 平均血流灌注度 |
 
 
  **返回示例**
@@ -705,7 +704,7 @@
 |参数名|必选|类型|说明|
 |:-------|:-------|:-------|:-------|
 | file | 是|file| 文件 |
-| reportId | 是|string| 报告id |
+| userId | 是|string| 用户id |
 |macAddress|是|string|mac地址|
 
 
@@ -714,7 +713,7 @@
 ``` 
 {  
    "code":2000,
-   "message":"成功"
+   "message":"2e87291b-2394-4ea5-ae68-79c487e8690b"
 }
 ```
 失败
@@ -730,7 +729,7 @@
 |参数名|类型|说明|
 |:-------|:-------|:-------|
 | code | number| 状态码，2000，2003，2004为成功，5000为失败，6003报告不存在， |
-| message | string| 返回提示信息 |
+| message | string| 返回提示信息，***如果成功返回报告id*** |
 
 
  **备注** 
@@ -828,6 +827,7 @@
 
 
  **返回示例**
+ 
 成功:
 ``` 
 {  
@@ -858,6 +858,169 @@
 
 ------------
 
+#### 获取报告
+**简要描述：** 
+
+- 获取报告
+
+**请求URL：** 
+- ` http://taiir.com/web/api/report/get/{reportId}
+  
+**请求方式：**
+- GET / POST 
+
+**参数：** 
+
+|URL参数|必选|类型|说明|
+|:-------|:-------|:-------|:-------|
+| {reportId} | 是|string| 上传成功后返回的报告id |
+
+
+**返回示例**
+
+成功：
+``` 
+{  
+   "code":2000,
+   "message":"{\"advice\":\"2333\",\"apneaHypopneaIndex\":27.19,\"apneaTimes\":123,\"averageOxygenSaturation\":97.02,\"averagePulse\":76.03,\"bloodOxygenHazardIndex\":10.32,\"brathe_score\":0,\"deepSleepSeconds\":3300,\"endTime\":1458165949000,\"hyponeaHappenDate\":1458143870000,\"hypopneaTimes\":101,\"id\":\"2e87291b-2394-4ea5-ae68-79c487e8690b\",\"lightSleepSeconds\":25567,\"longestApneaSeconds\":135,\"longestApneaTime\":1458143870000,\"longestOxygenReduceSeconds\":120,\"longestOxygenReduceTime\":1458159274000,\"macAddress\":\"8C:DE:52:64:98:BC\",\"maxHyponeaSeconds\":60,\"maxOxygenReduceSeconds\":46,\"maxOxygenReduceTime\":1458164436000,\"maxPulse\":179,\"maxPulseTime\":1458136763000,\"minOxygenSaturation\":69,\"minPulse\":47,\"minPulseTime\":1458159274000,\"oxygenReductionIndex\":27.31,\"oxygenSaturationEightyToEightyNinePercentHyponea\":600,\"oxygenSaturationEightyToEightyNinePercentTimes\":41,\"oxygenSaturationFiftyToFiftyNinePercentHyponea\":0,\"oxygenSaturationFiftyToFiftyNinePercentTimes\":0,\"oxygenSaturationLessthanFiftyPercentHyponea\":0,\"oxygenSaturationLessthanFiftyPercentTimes\":0,\"oxygenSaturationLessthanNinetyPercent\":2.3,\"oxygenSaturationNinetyToHundredPercentHyponea\":28988,\"oxygenSaturationNinetyToHundredPercentTimes\":180,\"oxygenSaturationSeventyToSeventyNinePercentHyponea\":0,\"oxygenSaturationSeventyToSeventyNinePercentTimes\":3,\"oxygenSaturationSixtyToSixtyNinePercentHyponea\":0,\"oxygenSaturationSixtyToSixtyNinePercentTimes\":1,\"perfusionIndex\":11.11,\"sleep_score\":0,\"startTime\":1458136226000,\"totalSeconds\":29648,\"uploadDate\":1460444869000,\"userId\":\"b6d24c67-e121-4405-b53a-eaa4119c9656\"}"
+}
+```
+
+失败：
+```
+{  
+   "code":6003,
+   "message":"报告不存在"
+}
+
+```
+**返回说明：** 
+
+|参数名|类型|说明|
+|:-------|:-------|:-------|
+| code | number| 状态码，2000-2999为成功，其他为失败|
+| message | string| 返回提示信息，当返回成功时，本字段内为数据的json格式 |
+
+json字段说明：
+
+|键|类型|说明|
+|:-------|:-------|:-------|
+| advice | string| 医生建议 |
+| apneaHypopneaIndex | number| 呼吸暂停低通气指数 |
+| apneaTimes | number| 呼吸暂停次数 |
+| averageOxygenSaturation | number| 平均血氧饱和度 |
+| averagePulse | number| 平均脉率 |
+| bloodOxygenHazardIndex | number| 血氧危害指数 |
+| brathe_score | number| 呼吸评分 |
+| deepSleepSeconds | number| 深度睡眠时长（秒） |
+| endTime | number| 睡眠结束时间 |
+| hyponeaHappenDate | number| 低通气发生时间 |
+| hypopneaTimes | number| 低通气次数 |
+| id | string| 报告id，由客户端生成16进制 8-4-4-4-12位的uuid，数值为16进制，请参照示例，该id为标准的UUID。ios: NSUUID().UUIDString ,java: UUID.randomUUID().toString() |
+| lightSleepSeconds | number| 浅睡眠时长（秒） |
+| longestApneaSeconds | number| 最长呼吸暂停时长（秒） |
+| longestApneaTime | number| 最长呼吸暂停发生时间 |
+| longestOxygenReduceSeconds | number| 最长氧降时长（秒） |
+| longestOxygenReduceTime | number|  最长氧降发生时间 |
+| macAddress | string| mac地址 |
+| maxHyponeaSeconds | number| 最长低通气秒数 |
+| maxOxygenReduceSeconds | number| 最大氧降秒数 |
+| maxOxygenReduceTime | number| 最大氧降发生时间 |
+| maxOxygenSaturation | number| 最高血氧饱和度 |
+| maxPulse | number| 最大脉率 |
+| maxPulseTime | number| 最大脉率发生时间 |
+| minOxygenSaturation | number| 最低血氧饱和度 |
+| minPulse | number| 最小脉率 |
+| minPulseTime | number| 最小脉率发生时间 |
+| odi | number| odi |
+| oxygenReductionIndex | number| OxygenReductionIndex |
+| oxygenSaturationEightyToEightyNinePercentHyponea | number| 血氧80%-89%的持续时间秒数 |
+| oxygenSaturationEightyToEightyNinePercentTimes | number| 血氧80%-89%的次数 |
+| oxygenSaturationFiftyToFiftyNinePercentHyponea | number| 血氧50%-59%的持续时间秒数 |
+| oxygenSaturationFiftyToFiftyNinePercentTimes | number| 血氧50%-59%的次数 |
+| oxygenSaturationLessthanFiftyPercentHyponea | number| 血氧<50%的持续时间秒数 |
+| oxygenSaturationLessthanFiftyPercentTimes | number|  血氧<50%的次数 |
+| oxygenSaturationLessthanNinetyPercent | number| 血氧低于90%的百分比 |
+| oxygenSaturationNinetyToHundredPercentHyponea | number| 血氧90%-100%的持续时间秒数 |
+| oxygenSaturationNinetyToHundredPercentTimes | number| 血氧90%-100%的次数 |
+| oxygenSaturationSeventyToSeventyNinePercentHyponea | number| 血氧70%-79%的持续时间秒数 |
+| oxygenSaturationSeventyToSeventyNinePercentTimes | number| 血氧70%-79%的次数 |
+| oxygenSaturationSixtyToSixtyNinePercentHyponea | number| 血氧60%-69%的持续时间秒数 |
+| oxygenSaturationSixtyToSixtyNinePercentTimes | number| 血氧60%-69%的次数 |
+| reducedOxygenTimes | number| 氧减次数 |
+| sleep_score | number| 睡眠评分 |
+| startTime | number| 睡眠开始时间 Epoch Time，January 1, 1970, 00:00:00 GMT到今天的毫秒数 |
+| totalHyponeaSeconds | number| 低通气总时间秒数 |
+| totalSeconds | number| 睡眠总时长秒数 |
+| userId | string| 用户id |
+| perfusionIndex |number | 平均血流灌注度 |
+
+
+
+ **备注** 
+
+- 更多返回错误代码请看错误代码描述
+
+------------
+
+#### 意见反馈
+**简要描述：** 
+
+- 意见反馈
+
+**请求URL：** 
+- ` http://www.taiir.com/web/api/feedback/upload
+  
+**请求方式：**
+- POST 
+
+**请求头 **
+- Content-Type:application/json
+
+**请求体示例**
+``` 
+{"contact":"phone:123","content":"测试反馈","token":"bbad89d2-97bf-4632-8de4-dc36558ddf1b"}
+``` 
+
+**参数：** 
+
+
+|参数名|必选|类型|说明|
+|:-------|:-------|:-------|:-------|
+| contact |是| string  | 上传者信息 |
+| content | 是|string| 反馈内容 |
+| token | 是|string| 使用定值 bbad89d2-97bf-4632-8de4-dc36558ddf1b|
+
+
+ **返回示例**
+成功:
+``` 
+{  
+   "code":2000,
+   "message":"成功"
+}
+```
+失败
+``` 
+{  
+   "code":5000,
+   "message":"未知错误"
+}
+```
+
+ **返回参数说明** 
+
+|参数名|类型|说明|
+|:-------|:-------|:-------|
+| code | number| 状态码，2000为成功，5000为失败 |
+| message | string| 返回提示信息 |
+
+
+ **备注** 
+
+- 更多返回错误代码请看错误代码描述
+
+------------
 
 
 

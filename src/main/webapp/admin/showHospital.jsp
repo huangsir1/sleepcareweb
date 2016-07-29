@@ -30,6 +30,7 @@
 <script language="JavaScript" type="text/javascript"
 	src="<%=basePath%>js/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript">
+	var url;	
 	function showDevice() {
 		var row = $('#dg').datagrid('getSelected');
 		if (row) {
@@ -73,11 +74,12 @@
 	function addHospital(){
 		$('#dlg').dialog('open').dialog('setTitle','增加医院');
 		$('#fm').form('clear');
+		url = '<%=basePath%>admin/saveHospital?' + Math.random();
 	}
 	
 	function saveHospital(){
 		$('#fm').form('submit',{
-			url: '<%=basePath%>admin/saveHospital?' + Math.random(),
+			url: url,
 			onSubmit : function() {
 				return $(this).form('validate');
 			},
@@ -98,6 +100,15 @@
 				}
 			}
 		});
+	}
+	
+	function editHospital(){
+		var row = $('#dg').datagrid('getSelected');
+		if (row){
+			$('#dlg').dialog('open').dialog('setTitle','修改医院');
+			$('#fm').form('load',row);
+			url= '<%=basePath%>admin/editHospital?id='+row.id+'&rnd=' + Math.random();
+		}
 	}
 </script>
 
@@ -123,6 +134,7 @@
 	<div id="toolbar">
 		<a href="#" class="easyui-linkbutton" iconcls="icon-tip" plain="true" onclick="showDoctor()">查看医生</a>
 		<a href="#" class="easyui-linkbutton" iconCls="icon-tip" plain="true" onclick="showDevice()">查看设备</a> 
+		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editHospital()">修改医院</a> 
 		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addHospital()">增加医院</a> 
 		<a href="#" class="easyui-linkbutton"
 			iconCls="icon-remove" plain="true" onclick="destroyHospital()">删除</a>
