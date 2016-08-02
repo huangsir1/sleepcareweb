@@ -5,6 +5,7 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	pageContext.setAttribute("basePath", basePath);
 %>
 <html>
 <head>
@@ -16,21 +17,21 @@
 </head>
 
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/jquery.min.js" charset="utf-8"></script>
+	src="${basePath}js/jquery.min.js" charset="utf-8"></script>
 <!--(指定编码方式，防止出现乱码)引入EasyUI中使用的Jquery版本-->
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/jquery.easyui.min.js" charset="utf-8"></script>
+	src="${basePath}js/jquery.easyui.min.js" charset="utf-8"></script>
 <!--(指定编码方式，防止出现乱码)引入EasyUi文件-->
 
-<link rel="stylesheet" type="text/css" href="<%=basePath%>css/easyui.css">
+<link rel="stylesheet" type="text/css" href="${basePath}css/easyui.css">
 <!--引入CSS样式-->
-<link rel="stylesheet" type="text/css" href="<%=basePath%>css/icon.css">
+<link rel="stylesheet" type="text/css" href="${basePath}css/icon.css">
 <!--Icon引入-->
 
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/easyui-lang-zh_CN.js"></script>
+	src="${basePath}js/easyui-lang-zh_CN.js"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/util.js"></script>
+	src="${basePath}js/util.js"></script>
 <script type="text/javascript">
 function add() {
 	$('#dlg').dialog('open').dialog('setTitle','增加设备');
@@ -38,7 +39,7 @@ function add() {
 }
 	$(function(){
 		$('#dg').datagrid({
-			url: '<%=basePath%>admin/getDeviceByHostapilId/'+ getQueryString("id"),
+			url: '${basePath}admin/getDeviceByHostapilId/'+ getQueryString("id"),
 		});
 	});
 	function del(){
@@ -46,7 +47,7 @@ function add() {
 		if (row){
 			$.messager.confirm('确认','真的要删除该报告嘛?',function(r){
 				if (r){
-					$.post('<%=basePath%>admin/deleteDevice', {
+					$.post('${basePath}admin/deleteDevice', {
 						macAddress : row.macAddress
 					}, function(result) {
 						$('#dg').datagrid('reload'); // reload the user data
@@ -68,7 +69,7 @@ function add() {
 	
 	function saveDevice(){
 		$('#fm').form('submit',{
-			url: '<%=basePath%>admin/addDevice?random=' + Math.random(),
+			url: '${basePath}admin/addDevice?random=' + Math.random(),
 			onSubmit : function() {
 				$('#hostipalId').attr("value",getQueryString("id"))
 				return $(this).form('validate');

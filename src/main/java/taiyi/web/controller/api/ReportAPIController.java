@@ -91,9 +91,9 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		breatheReportService.insert(breatheReport);
 		return Status.SUCCESSED;
 	}
-	
+
 	@RequestMapping(value = "/subReport/upload", consumes = "application/json")
-	@ResponseBody 
+	@ResponseBody
 	@Deprecated
 	public Status subReportReport(@RequestBody SubReport subReport) {
 		// TODO 验证用户合法性
@@ -128,7 +128,7 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		}
 		return Status.SUCCESSED_UPLOAD_REPORT;
 	}
-	
+
 	@RequestMapping(value = "/advice/upload", consumes = "application/json")
 	@ResponseBody
 	public Status uploadReportAdvice(@RequestBody SubReport subReport, HttpServletRequest request) throws Exception {
@@ -150,7 +150,8 @@ public class ReportAPIController extends APIExceptionHandlerController {
 
 	@RequestMapping(value = "/report/file/upload")
 	@ResponseBody
-	public Status uploadReportFile(@RequestParam(value = "file") MultipartFile file, String reportId, HttpServletRequest request) {
+	public Status uploadReportFile(@RequestParam(value = "file") MultipartFile file, String reportId,
+			HttpServletRequest request) {
 		String servletRailPath = request.getServletContext().getRealPath("/");
 		String path = request.getContextPath();
 		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
@@ -183,7 +184,7 @@ public class ReportAPIController extends APIExceptionHandlerController {
 
 	}
 
-//	@RequestMapping("/renewPdf/{reportId}")
+	// @RequestMapping("/renewPdf/{reportId}")
 	public void renewPdf(@PathVariable String reportId, HttpServletRequest request) throws Exception {
 		String servletRailPath = request.getServletContext().getRealPath("/");
 		String path = request.getContextPath();
@@ -208,17 +209,17 @@ public class ReportAPIController extends APIExceptionHandlerController {
 			}
 		}
 	}
-	
+
 	@RequestMapping("/report/get/{reportId}")
 	@ResponseBody
 	public Status getReport(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		 BaseReport baseReport = webService.selectById(reportId);
-		 if (baseReport != null) {
+		BaseReport baseReport = webService.selectById(reportId);
+		if (baseReport != null) {
 			return new Status(Status.SUCCESSED_CODE, JSON.toJSONString(baseReport));
 		}
 		return Status.REPORT_NOT_EXSIT;
-		
+
 	}
 
 }

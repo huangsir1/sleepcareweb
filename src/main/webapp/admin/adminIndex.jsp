@@ -16,6 +16,7 @@
 	type="text/css" />-->
 <link rel="stylesheet" type="text/css" href="${basePath}css/easyui.css" />
 <link rel="stylesheet" type="text/css" href="${basePath}css/icon.css" />
+<script language="JavaScript" type="text/javascript" src="${basePath}js/util.js"></script> 
 <style>
 * {
 	font-size: 12px;
@@ -222,17 +223,17 @@ a:hover {
 				"menuname" : "增加用户",
 				"icon" : "icon-nav",
 				"url" : "${basePath}admin/addUser"
+			}, {
+				"menuid" : "211",
+				"menuname" : "医院管理",
+				"icon" : "icon-nav",
+				"url" : "${basePath}admin/hospital"
 			} ]
 		}, {
 			"menuid" : "20",
 			"icon" : "icon-sys",
 			"menuname" : "其他管理",
 			"menus" : [ {
-				"menuid" : "211",
-				"menuname" : "医院🏥管理",
-				"icon" : "icon-nav",
-				"url" : "${basePath}admin/hospital"
-			}, {
 				"menuid" : "213",
 				"menuname" : "测试",
 				"icon" : "icon-nav",
@@ -269,14 +270,20 @@ a:hover {
 			<img src="images/noscript.gif" alt='抱歉，请开启javascript！' />
 		</div>
 	</noscript>
-	<div region="north" split="true" border="false" 
+	<div region="north" split="true" border="false"
 		style="overflow: hidden; height: 50px;
     	        background: url(${basePath}css/images/layout-browser-hd-bg.gif) #3fb5e9 repeat-x center 50%;
     	        line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
-		<span style="padding-left: 10px;font-size: 16px;float: left;font-size: 25px;margin-top: 12px;margin-left: 20px;"><img
+		<span
+			style="padding-left: 10px; font-size: 16px; float: left; font-size: 25px; margin-top: 12px; margin-left: 20px;"><img
 			src="${basePath}images/taiir-logo.png" width="97" height="25"
 			align="absmiddle" /> 钛铱Taiir睡眠监测系统</span>
-			<div><a style="padding-left: 10px;font-size: 16px;float: right;color: white;margin-right: 50px;margin-top: 12px;" href="${basePath}logout"><img src="${basePath}images/home-exit01.png"></img></a></div> 
+		<div>
+			<a
+				style="padding-left: 10px; font-size: 16px; float: right; color: white; margin-right: 50px; margin-top: 12px;"
+				href="${basePath}logout"><img
+				src="${basePath}images/home-exit01.png"></img></a>
+		</div>
 		<ul id="css3menu"
 			style="padding: 0px; margin: 0px; list-type: none; float: left; margin-left: 40px;">
 			<li><a class="active" name="basic" href="javascript:;" title=""></a></li>
@@ -308,7 +315,7 @@ a:hover {
 
 			</div>
 		</div>
-	</div> 
+	</div>
 
 
 

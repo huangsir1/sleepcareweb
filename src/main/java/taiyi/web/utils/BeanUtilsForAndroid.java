@@ -6,6 +6,7 @@ package taiyi.web.utils;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import taiyi.web.model.BreatheReport;
@@ -58,8 +59,8 @@ public class BeanUtilsForAndroid {
 					}
 					destMethod.invoke(destination, value);
 				} catch(Exception e){
-					Logger logger = Logger.getLogger("logger");
-					logger.warning("BeanUtilsForAndroid : "+ methodName + " 不存在相对应的setter或者getter");
+					Logger logger = Logger.getLogger("logger"); 
+					logger.log(Level.FINE, "BeanUtilsForAndroid : "+ methodName + " 不存在相对应的setter或者getter");
 				}
 				
 			}

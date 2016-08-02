@@ -5,6 +5,7 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	pageContext.setAttribute("basePath", basePath);
 %>
 <html>
 <head>
@@ -15,43 +16,54 @@
 
 </head>
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/jquery.min.js" charset="utf-8"></script>
+	src="${basePath}js/jquery.min.js" charset="utf-8"></script>
 <!--(指定编码方式，防止出现乱码)引入EasyUI中使用的Jquery版本-->
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/jquery.easyui.min.js" charset="utf-8"></script>
+	src="${basePath}js/jquery.easyui.min.js" charset="utf-8"></script>
 <!--(指定编码方式，防止出现乱码)引入EasyUi文件-->
 
-<link rel="stylesheet" type="text/css"
-	href="<%=basePath%>css/easyui.css">
+<link rel="stylesheet" type="text/css" href="${basePath}css/easyui.css">
 <!--引入CSS样式-->
-<link rel="stylesheet" type="text/css" href="<%=basePath%>css/icon.css">
+<link rel="stylesheet" type="text/css" href="${basePath}css/icon.css">
 <!--Icon引入-->
 
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/easyui-lang-zh_CN.js"></script>
+	src="${basePath}js/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript">
-	var url;	
+	var url;
 	function showDevice() {
 		var row = $('#dg').datagrid('getSelected');
 		if (row) {
-			window.location.href = "<%=basePath%>admin/showDevice.jsp?id=" + row.id;
+			window.location.href = "${basePath}admin/showDevice.jsp?id="
+					+ row.id;
 		}
 
 	}
-	
-	$(function(){
+
+	$(function() {
 		$('#dg').datagrid({
-			url: '<%=basePath%>admin/getAllHospital',
-			pageSize:20
+			url : '${basePath}admin/getAllHospital',
+			onDblClickRow : function(rowIndex, rowData) {
+				showReport() ;
+			},
+			pageSize : 20
 		})
 	});
-	
-	function destroyHospital(){
+
+	function showReport() {
 		var row = $('#dg').datagrid('getSelected');
-		if (row){
-			$.messager.confirm('确认','真的要删除该医院嘛?',function(r){
-				if (r){
-					$.post('<%=basePath%>admin/deleteHospital', {
+		if (row) {
+			window.location.href = "${basePath}admin/showHosptialUser.jsp?id="+ row.id;
+		}
+
+	}
+
+	function destroyHospital() {
+		var row = $('#dg').datagrid('getSelected');
+		if (row) {
+			$.messager.confirm('确认', '真的要删除该医院嘛?', function(r) {
+				if (r) {
+					$.post('${basePath}admin/deleteHospital', {
 						hospitalId : row.id
 					}, function(result) {
 						$('#dg').datagrid('reload'); // reload the user data
@@ -71,15 +83,15 @@
 		}
 	}
 
-	function addHospital(){
-		$('#dlg').dialog('open').dialog('setTitle','增加医院');
+	function addHospital() {
+		$('#dlg').dialog('open').dialog('setTitle', '增加医院');
 		$('#fm').form('clear');
-		url = '<%=basePath%>admin/saveHospital?' + Math.random();
+		url = '${basePath}admin/saveHospital?' + Math.random();
 	}
-	
-	function saveHospital(){
-		$('#fm').form('submit',{
-			url: url,
+
+	function saveHospital() {
+		$('#fm').form('submit', {
+			url : url,
 			onSubmit : function() {
 				return $(this).form('validate');
 			},
@@ -101,13 +113,14 @@
 			}
 		});
 	}
-	
-	function editHospital(){
+
+	function editHospital() {
 		var row = $('#dg').datagrid('getSelected');
-		if (row){
-			$('#dlg').dialog('open').dialog('setTitle','修改医院');
-			$('#fm').form('load',row);
-			url= '<%=basePath%>admin/editHospital?id='+row.id+'&rnd=' + Math.random();
+		if (row) {
+			$('#dlg').dialog('open').dialog('setTitle', '修改医院');
+			$('#fm').form('load', row);
+			url = '${basePath}admin/editHospital?id=' + row.id + '&rnd='
+					+ Math.random();
 		}
 	}
 </script>
@@ -116,10 +129,9 @@
 	
 </script>
 <body>
-	<table id="dg" title="用户查看(双击查看详情)" class="easyui-datagrid"
-		style="" toolbar="#toolbar" rownumbers="true"
-		fitColumns="true" singleSelect="true" rownumbers="true"
-		pagination="true">
+	<table id="dg" title="用户查看(双击查看详情)" class="easyui-datagrid" style=""
+		toolbar="#toolbar" rownumbers="true" fitColumns="true"
+		singleSelect="true" rownumbers="true" pagination="true">
 		<thead>
 			<tr>
 				<th hidden="true" field="id">id</th>
@@ -132,14 +144,17 @@
 		</thead>
 	</table>
 	<div id="toolbar">
-		<a href="#" class="easyui-linkbutton" iconcls="icon-tip" plain="true" onclick="showDoctor()">查看医生</a>
-		<a href="#" class="easyui-linkbutton" iconCls="icon-tip" plain="true" onclick="showDevice()">查看设备</a> 
-		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editHospital()">修改医院</a> 
-		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addHospital()">增加医院</a> 
-		<a href="#" class="easyui-linkbutton"
-			iconCls="icon-remove" plain="true" onclick="destroyHospital()">删除</a>
-		<a href="#" class="easyui-linkbutton"
-			iconCls="icon-back" plain="true" onclick="history.go(-1)">返回</a>
+		<a href="#" class="easyui-linkbutton" iconcls="icon-tip" plain="true"
+			onclick="showReport()">查看报告</a> <a href="#" class="easyui-linkbutton"
+			iconCls="icon-tip" plain="true" onclick="showDevice()">查看设备</a> <a
+			href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+			onclick="editHospital()">修改医院</a> <a href="#"
+			class="easyui-linkbutton" iconCls="icon-add" plain="true"
+			onclick="addHospital()">增加医院</a> <a href="#"
+			class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+			onclick="destroyHospital()">删除</a> <a href="#"
+			class="easyui-linkbutton" iconCls="icon-back" plain="true"
+			onclick="history.go(-1)">返回</a>
 		<!--   <br /> <span>姓名:</span>
 		<input id="name" style="width: 50px; border: 1px solid #ccc">
 		<span>体重:</span> <input id="weight"

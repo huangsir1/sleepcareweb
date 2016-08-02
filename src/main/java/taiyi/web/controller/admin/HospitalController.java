@@ -121,6 +121,35 @@ public class HospitalController extends APIExceptionHandlerController {
 		}
 
 	}
+	
+	@RequiresPermissions("system:view")
+	@RequestMapping("/admin/getReportByHospitalAndUser/{hospitalId}/{userId}")
+	@ResponseBody
+	public HashMap<String, Object> getUserByHospitalAndUserId(@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer rows,@PathVariable Integer hospitalId,@PathVariable String userId) {
+		if (page != null && rows != null) {
+			PageHelper.startPage(page, rows);
+		}
+		List<SleepReport> sleepReports = sleepReportService.selectByHostipalIdAndUserId(userId, hospitalId);
+		PageInfo<SleepReport> pageinfo = new PageInfo<SleepReport>(sleepReports);
+		List<ReportPreviewDto> packagePerviewReportDto = webService.packagePerviewReportDto(sleepReports);
+		PageModel pageModel = new PageModel(pageinfo.getTotal(), packagePerviewReportDto);
+		return pageModel.get();
+	}
+	
+	@RequiresPermissions("system:view")
+	@RequestMapping("/admin/getUserByHospital/{hospitalId}")
+	@ResponseBody
+	public HashMap<String, Object> getUserByHospitalId(@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer rows,@PathVariable Integer hospitalId) {
+		if (page != null && rows != null) {
+			PageHelper.startPage(page, rows);
+		}
+		List<User> users = userService.selectUserByHostipalId(hospitalId);
+		PageInfo<User> pageinfo = new PageInfo<User>(users);
+		PageModel pageModel = new PageModel(pageinfo.getTotal(), users);
+		return pageModel.get();
+	}
 
 	@RequiresPermissions("hospital:view")
 	@RequestMapping("/admin/getHospitalUsers")
