@@ -47,6 +47,7 @@ import taiyi.web.model.dto.DiseaseHistoryDto;
 import taiyi.web.model.dto.PageModel;
 import taiyi.web.model.dto.ReportPreviewDto;
 import taiyi.web.model.dto.Status;
+import taiyi.web.model.dto.SystemUserRoleDto;
 import taiyi.web.service.BreatheReportService;
 import taiyi.web.service.DiseaseHistoryUserService;
 import taiyi.web.service.EssUserService;
@@ -321,8 +322,16 @@ public class AdminController extends ExceptionHandlerController {
 	public void showPdf(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, DocumentException {
 		webService.flushPdf(request, response, reportId);
-
 	}
+	
+	@RequiresPermissions(logical = Logical.OR, value = { "system:view" })
+	@RequestMapping("/showFile/{reportId}")
+	public void showFile(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)
+			throws IOException, DocumentException {
+		webService.flushFile(request, response, reportId);
+	}
+	
+	
 	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
 	@RequestMapping("searchUsers")
 	@ResponseBody
@@ -430,6 +439,15 @@ public class AdminController extends ExceptionHandlerController {
 			return Status.PASSWORD_NOT_MATCH;
 		}
 	}
+	
+	
+	@RequestMapping("/getHospitalAdmin/{hospitalId}")
+	@RequiresPermissions("system:view")
+	@ResponseBody
+	public List<SystemUserRoleDto> getHospitalAdmin(@PathVariable int hospitalId) {
+		return systemUserService.selectWithRoleByHostipal(hospitalId);
+	}
+	
 
 	// @RequestMapping("/generateFullPdf/{reportId}")
 	// @ResponseBody

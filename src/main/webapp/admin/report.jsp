@@ -5,6 +5,8 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	pageContext.setAttribute("basePath", basePath);
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -13,13 +15,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>${user.name}的报告</title>
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/jquery.min.js" charset="utf-8"></script>
-<link href="<%=basePath%>css/internet.css" rel="stylesheet"
+	src="${basePath}js/jquery.min.js" charset="utf-8"></script>
+<link href="${basePath}css/internet.css" rel="stylesheet"
 	type="text/css" />
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/echarts.common.min.js"></script>
+	src="${basePath}js/echarts.common.min.js"></script>
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/util.js"></script>
+	src="${basePath}js/util.js"></script>
 <script>
 
 
@@ -184,7 +186,7 @@
 	
 	function save(){
 		 var d=$("#form").serialize();
-	     $.post("<%=basePath%>admin/generateFullPdf/${sleepReport.id}", 
+	     $.post("${basePath}admin/generateFullPdf/${sleepReport.id}", 
 	    		d, 
 	    	function (result) { 
 	    		 if (result.code == 2000) {
@@ -233,11 +235,12 @@ td {
 
 <body>
 	<button id="print" onclick="generatePdf()">重新生成pdf</button><button id="print" onclick="showpdf()">查看pdf</button><button id="print" onclick="history.go(-1)">返回</button>
-	<c:if test="${!file }"><form enctype="multipart/form-data" action="<%=basePath%>admin/uploadFile" method="post" ><input type="file" name="file"/> <input type="submit" value="上传文件" /><input type="hidden" value="${ sleepReport.id}" name="id" /></form> 
+	<c:if test="${!file }"><form enctype="multipart/form-data" action="${basePath}admin/uploadFile" method="post" ><input type="file" name="file"/> <input type="submit" value="上传文件" /><input type="hidden" value="${ sleepReport.id}" name="id" /></form> 
 	</c:if>
 	<c:if test="${file }">
 	文件已存在！！！
-	<form enctype="multipart/form-data" action="<%=basePath%>admin/uploadFile" method="post" ><input type="file" name="file"/> <input type="submit" value="上传文件" /><input type="hidden" value="${ sleepReport.id}" name="id" /></form> 
+	<a href="${basePath}admin/showFile/${ sleepReport.id}"><input type="button" value="下载数据文件"></input></a>
+	<form enctype="multipart/form-data" action="${basePath}admin/uploadFile" method="post" ><input type="file" name="file"/> <input type="submit" value="上传文件" /><input type="hidden" value="${ sleepReport.id}" name="id" /></form> 
 	</c:if>
 	<!--begin-->
 	<div id="container">

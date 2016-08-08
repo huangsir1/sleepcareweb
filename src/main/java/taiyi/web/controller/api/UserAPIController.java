@@ -48,6 +48,9 @@ public class UserAPIController extends APIExceptionHandlerController {
 //			if (false) {
 //				return Status.PARAM_ERROR;
 //			}
+			if (!"男".equals(user.getGender()) && !"女".equals(user.getGender())) {
+				return new Status(Status.FAILED_CODE, "性别参数错误!!!");
+			}
 			user.setId(UUID.randomUUID().toString());
 			user.setRegisterDate(new Date());
 			user.setLastestDate(new Date());

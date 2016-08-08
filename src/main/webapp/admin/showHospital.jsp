@@ -39,6 +39,15 @@
 		}
 
 	}
+	
+	function showAdmin() {
+		var row = $('#dg').datagrid('getSelected');
+		if (row) {
+			window.location.href = "${basePath}admin/showHosptialAdmin.jsp?id="
+					+ row.id;
+		}
+
+	}
 
 	$(function() {
 		$('#dg').datagrid({
@@ -145,8 +154,10 @@
 	</table>
 	<div id="toolbar">
 		<a href="#" class="easyui-linkbutton" iconcls="icon-tip" plain="true"
-			onclick="showReport()">查看报告</a> <a href="#" class="easyui-linkbutton"
-			iconCls="icon-tip" plain="true" onclick="showDevice()">查看设备</a> <a
+			onclick="showReport()">查看报告</a> 
+			<a href="#" class="easyui-linkbutton" iconCls="icon-tip" plain="true" onclick="showDevice()">查看设备</a>
+		    <a href="#" class="easyui-linkbutton" iconCls="icon-tip" plain="true" onclick="showAdmin()"></a>
+			 <a
 			href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
 			onclick="editHospital()">修改医院</a> <a href="#"
 			class="easyui-linkbutton" iconCls="icon-add" plain="true"

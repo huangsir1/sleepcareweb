@@ -23,8 +23,6 @@ import taiyi.web.model.dto.BaseReport;
  */
 public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter {
 
-	private Sleep_ApneaDetection mSleep_ApneaDetection = null; // 呼吸指标计算类
-	private Sleep_stageSeperate mSleep_stageSeperate = null; // 睡眠分期指标计算类
 
 	// 数据文件内数据的编码方式
 	public static final int DATATYPE_ASCII = 0;
@@ -35,6 +33,11 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 
 	@Override
 	public BaseReport originalFileToBaseReport(File file) {
+
+		Sleep_ApneaDetection mSleep_ApneaDetection = null; // 呼吸指标计算类
+		Sleep_stageSeperate mSleep_stageSeperate = null; // 睡眠分期指标计算类
+		BaseReport mBaseReport = null;
+		
 		String filePath = file.getPath();
 		long time_last = timeCountTotal(filePath, dataType);
 		int line_count = lineCountTotal(filePath, dataType);
@@ -50,22 +53,22 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 				mSleep_ApneaDetection = new Sleep_ApneaDetection();
 				mSleep_ApneaDetection.calculate(filePath, false, false, DATA_SEPARATOR, dataType);
 			}
+			
+			UserSleep userSleep = convertToUserSleep(mSleep_stageSeperate);
+			UserIndex userIndex = convertToUserIndex(mSleep_ApneaDetection);
+			try {
+				mBaseReport = toBaseReport(userSleep, userIndex);
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			System.out.println("数据太短！");
 		}
-		UserSleep userSleep = convertToUserSleep(mSleep_stageSeperate);
-		UserIndex userIndex = convertToUserIndex(mSleep_ApneaDetection);
-		BaseReport mBaseReport = null;
-		try {
-			mBaseReport = toBaseReport(userSleep, userIndex);
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		
 		return mBaseReport;
 	}
 

@@ -18,10 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.deser.Deserializers.Base;
 import com.google.common.collect.Lists;
 import com.itextpdf.text.DocumentException;
 
@@ -417,7 +417,7 @@ public class WebServiceImpl implements WebService {
 		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(reportId);
 		SubReport subReport = subReportService.selectByPrimaryKey(reportId);
 		BreatheReport breatheReport = breatheReportService.selectByPrimaryKey(reportId);
-		if (sleepReport == null || breatheReport == null || breatheReport == null) {
+		if (sleepReport == null || breatheReport == null || subReport == null) {
 			return null;
 		}
 		BaseReport baseReport = new BaseReport(sleepReport, breatheReport, subReport);
@@ -468,6 +468,28 @@ public class WebServiceImpl implements WebService {
 		out.flush();
 		fis.close();
 	}
+	
+	@Override
+	public void flushFile(HttpServletRequest request, HttpServletResponse response, String reportId) throws IOException {
+
+		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(reportId);
+		String fileName = WebProperties.getFilePath() + File.separator + sleepReport.getUserId() + File.separator
+				+ reportId + File.separator + "source.txt";
+		logger.warn(fileName);
+		File file = new File(fileName);
+		FileInputStream fis = null;
+		OutputStream out = response.getOutputStream();
+		fis = new FileInputStream(file);
+		byte[] b = new byte[fis.available()];
+		int read = fis.read(b);
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "form-data; name=\"attachment\"; filename=\"data.gz\"");
+		logger.debug("flush of file" + read);
+		out.write(b);
+		out.flush();
+		fis.close();
+	}
+	
 
 	/*
 	 * @see

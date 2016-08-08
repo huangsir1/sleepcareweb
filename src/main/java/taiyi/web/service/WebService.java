@@ -46,4 +46,6 @@ public interface WebService {
 	List<ReportPreviewDto> packagePerviewReportDto(List<SleepReport> sleepReports);
 
 	BaseReport selectById(String reportId) throws IllegalAccessException, InvocationTargetException;
+
+	void flushFile(HttpServletRequest request, HttpServletResponse response, String reportId) throws IOException;
 }

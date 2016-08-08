@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService{
 	 * @see taiyi.web.service.UserService#updateByPrimaryKeySelective(taiyi.web.model.User)
 	 */
 	@Override
-	public int updateByPrimaryKeySelective(User record) {
+	public synchronized int updateByPrimaryKeySelective(User record) {
 		return userMapper.updateByPrimaryKeySelective(record);
 	}
 
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService{
 	 * @see taiyi.web.service.UserService#updateByPrimaryKey(taiyi.web.model.User)
 	 */
 	@Override
-	public int updateByPrimaryKey(User record) {
+	public synchronized int updateByPrimaryKey(User record) {
 		return userMapper.updateByPrimaryKey(record);
 	}
 
@@ -175,7 +175,7 @@ public class UserServiceImpl implements UserService{
 	 * @see taiyi.web.service.UserService#updateLatestDateToNow(java.lang.String)
 	 */
 	@Override
-	public void updateLatestDateToNow(String userId) {
+	public synchronized void updateLatestDateToNow(String userId) {
 		User user = new User();
 		user.setId(userId);
 		user.setLastestDate(new Date());

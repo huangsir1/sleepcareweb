@@ -4,13 +4,20 @@
 package taiyi.web.service.Impl;
 
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
+import taiyi.web.dao.SystemRoleMapper;
 import taiyi.web.dao.SystemUserMapper;
 import taiyi.web.model.SystemUser;
+import taiyi.web.model.dto.SystemUserRoleDto;
+import taiyi.web.utils.BeanUtilsForAndroid;
 
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
@@ -24,6 +31,9 @@ import taiyi.web.model.SystemUser;
 public class SystemUserServiceImpl implements taiyi.web.service.SystemUserService {
 	@Autowired
 	private SystemUserMapper systemUserMapper;
+	@Autowired
+	private SystemRoleMapper systemRoleMapper;
+	
 
 	/* 
 	 * @see taiyi.web.service.SystemUserService#deleteByPrimaryKey(java.lang.String)
@@ -95,6 +105,23 @@ public class SystemUserServiceImpl implements taiyi.web.service.SystemUserServic
 	@Override
 	public SystemUser selectByTrueName(String name) {
 		return systemUserMapper.selectByTrueName(name);
+	}
+
+	/* 
+	 * @see taiyi.web.service.SystemUserService#selectWithRoleByHostipal(java.lang.Integer)
+	 */
+	@Override
+	public List<SystemUserRoleDto> selectWithRoleByHostipal(Integer HostipalId) {
+		List<SystemUser> systemUsers = systemUserMapper.selectByHostipal(HostipalId);
+		List<SystemUserRoleDto> systemUserRoleDtos = Lists.newArrayListWithCapacity(systemUsers.size());
+		for(SystemUser systemUser : systemUsers) {
+			SystemUserRoleDto systemUserRoleDto = new SystemUserRoleDto();
+			BeanUtilsForAndroid.copy(systemUser, systemUserRoleDto);
+			Set<String> selectRoleStringsByUserId = systemRoleMapper.selectRoleStringsByUserId(systemUser.getId());
+			systemUserRoleDto.setSystemRoles(new TreeSet<String>(selectRoleStringsByUserId));
+			systemUserRoleDtos.add(systemUserRoleDto);
+		}
+		return systemUserRoleDtos;
 	}
 
 

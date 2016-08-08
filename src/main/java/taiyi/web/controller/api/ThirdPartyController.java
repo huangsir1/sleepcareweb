@@ -43,18 +43,18 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 	private DataOfAndroidToWebAdapter dataOfAndroidToWebAdapter;
 	@Autowired
 	private UserService userService;
-	
-	@RequestMapping(value="/report/fileOnly/upload")
+
+	@RequestMapping(value = "/report/fileOnly/upload")
 	@ResponseBody
-	public Status uploadReportOnlyFile(@RequestParam(value = "file") MultipartFile file,@RequestParam(required = false) String macAddress, String userId,
-			HttpServletRequest request)  {
+	public Status uploadReportOnlyFile(@RequestParam(value = "file") MultipartFile file,
+			@RequestParam(required = false) String macAddress, String userId, HttpServletRequest request) {
 		return uploadReportFile(file, macAddress, userId, request);
 	}
-	
+
 	@RequestMapping(value = "/third/report/file/upload")
 	@ResponseBody
-	public Status uploadReportFile(@RequestParam(value = "file") MultipartFile file,@RequestParam(required = false) String macAddress, String userId,
-			HttpServletRequest request) {
+	public Status uploadReportFile(@RequestParam(value = "file") MultipartFile file,
+			@RequestParam(required = false) String macAddress, String userId, HttpServletRequest request) {
 		String servletRailPath = request.getServletContext().getRealPath("/");
 		String path = request.getContextPath();
 		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
@@ -75,9 +75,9 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 			// 保存
 			file.transferTo(targetFile);
 			BaseReport baseReport;
-			FileInputStream fileInputStream = new FileInputStream(targetFile);
-			FileOutputStream fileOutputStream = new FileOutputStream(fileName + ".taiir");
-			try {
+
+			try (FileInputStream fileInputStream = new FileInputStream(targetFile);
+					FileOutputStream fileOutputStream = new FileOutputStream(fileName + ".taiir")) {
 				GZipUtils.decompress(fileInputStream, fileOutputStream);
 				fileOutputStream.flush();
 				File file2 = new File(fileName + ".taiir");
@@ -110,8 +110,8 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 
 	@RequestMapping(value = "/third/reportForDawn/file/upload")
 	@ResponseBody
-	public Status uploadReportForDawnFile(@RequestParam(value = "file") MultipartFile file,@RequestParam(required = false) String macAddress,
-			HttpServletRequest request) {
+	public Status uploadReportForDawnFile(@RequestParam(value = "file") MultipartFile file,
+			@RequestParam(required = false) String macAddress, HttpServletRequest request) {
 		return uploadReportFile(file, macAddress, "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF", request);
 	}
 }

@@ -91,7 +91,7 @@ function add() {
 				<th field="startTime">开始时间</th>
 				<th field="endTime">结束时间</th> 
 				<th field="uploadDate">上传日期</th>
-				<!--  <th field="macAddress" >mac地址</th>-->
+				<th field="macAddress" >mac地址</th>
 			</tr>
 		</thead>
 	</table>
