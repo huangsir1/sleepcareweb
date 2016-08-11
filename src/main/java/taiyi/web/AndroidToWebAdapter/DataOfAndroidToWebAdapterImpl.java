@@ -155,6 +155,10 @@ public class DataOfAndroidToWebAdapterImpl implements DataOfAndroidToWebAdapter 
 			sur.setBloodOxygenHazardIndex(Double.parseDouble(userIndex.getXywhzsIndex()));
 			// mac地址
 			sur.setMacAddress(userIndex.getMacaddress());
+			
+			sur.setTotalApneaTimeSeconds(userIndex.getHxztzsjtimes());
+			sur.setTotalHypoventilationTimeSeconds(userIndex.getDtqzsjtimes());
+			
 			try {
 				sur.setPerfusionIndex(Double.parseDouble(userIndex.getAvgxlgzd()));
 			} catch (Exception e) {

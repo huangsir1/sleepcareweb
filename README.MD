@@ -444,6 +444,7 @@
 | userId | 是|string| 用户id |
 
 
+
  **返回示例**
 成功:
 ``` 
@@ -536,7 +537,9 @@
    "startTime":1458136226000,
    "totalSeconds":29648,
    "uploadDate":1460444869000,
-   "userId":"b6d24c67-e121-4405-b53a-eaa4119c9656"
+   "userId":"b6d24c67-e121-4405-b53a-eaa4119c9656",
+   "totalApneaTimeSeconds":12450,
+   "totalHypoventilationTimeSeconds":12450
 }
 
 ``` 
@@ -594,6 +597,9 @@
 | totalSeconds | number| 睡眠总时长秒数 |
 | userId | string| 用户id |
 | perfusionIndex |Double | 平均血流灌注度 |
+| totalApneaTimeSeconds |number | 总呼吸暂停时长(秒数) |
+| totalHypoventilationTimeSeconds |number | 总低通气时长(秒数) |
+
 
 
  **返回示例**
@@ -882,7 +888,7 @@
 ``` 
 {  
    "code":2000,
-   "message":"{\"advice\":\"2333\",\"apneaHypopneaIndex\":27.19,\"apneaTimes\":123,\"averageOxygenSaturation\":97.02,\"averagePulse\":76.03,\"bloodOxygenHazardIndex\":10.32,\"brathe_score\":0,\"deepSleepSeconds\":3300,\"endTime\":1458165949000,\"hyponeaHappenDate\":1458143870000,\"hypopneaTimes\":101,\"id\":\"2e87291b-2394-4ea5-ae68-79c487e8690b\",\"lightSleepSeconds\":25567,\"longestApneaSeconds\":135,\"longestApneaTime\":1458143870000,\"longestOxygenReduceSeconds\":120,\"longestOxygenReduceTime\":1458159274000,\"macAddress\":\"8C:DE:52:64:98:BC\",\"maxHyponeaSeconds\":60,\"maxOxygenReduceSeconds\":46,\"maxOxygenReduceTime\":1458164436000,\"maxPulse\":179,\"maxPulseTime\":1458136763000,\"minOxygenSaturation\":69,\"minPulse\":47,\"minPulseTime\":1458159274000,\"oxygenReductionIndex\":27.31,\"oxygenSaturationEightyToEightyNinePercentHyponea\":600,\"oxygenSaturationEightyToEightyNinePercentTimes\":41,\"oxygenSaturationFiftyToFiftyNinePercentHyponea\":0,\"oxygenSaturationFiftyToFiftyNinePercentTimes\":0,\"oxygenSaturationLessthanFiftyPercentHyponea\":0,\"oxygenSaturationLessthanFiftyPercentTimes\":0,\"oxygenSaturationLessthanNinetyPercent\":2.3,\"oxygenSaturationNinetyToHundredPercentHyponea\":28988,\"oxygenSaturationNinetyToHundredPercentTimes\":180,\"oxygenSaturationSeventyToSeventyNinePercentHyponea\":0,\"oxygenSaturationSeventyToSeventyNinePercentTimes\":3,\"oxygenSaturationSixtyToSixtyNinePercentHyponea\":0,\"oxygenSaturationSixtyToSixtyNinePercentTimes\":1,\"perfusionIndex\":11.11,\"sleep_score\":0,\"startTime\":1458136226000,\"totalSeconds\":29648,\"uploadDate\":1460444869000,\"userId\":\"b6d24c67-e121-4405-b53a-eaa4119c9656\"}"
+   "message":"{\"apneaHypopneaIndex\":26.96,\"apneaTimes\":1,\"averageOxygenSaturation\":97.31,\"averagePulse\":848.02,\"awakeSeconds\":0,\"bloodOxygenHazardIndex\":0,\"brathe_score\":73,\"deepSleepSeconds\":0,\"endTime\":1470626965000,\"hyponeaHappenDate\":1470626733000,\"hypopneaTimes\":3,\"id\":\"86a66592-3d88-4a73-8060-ee9a06d2e1aa\",\"lightSleepSeconds\":0,\"longestApneaSeconds\":26,\"longestApneaTime\":1470626700000,\"longestOxygenReduceSeconds\":36,\"longestOxygenReduceTime\":1470626649000,\"maxHyponeaSeconds\":16,\"maxOxygenReduceSeconds\":14,\"maxOxygenReduceTime\":1470626635000,\"maxPulse\":848,\"maxPulseTime\":1470626965000,\"minOxygenSaturation\":90,\"minPulse\":848,\"odi\":33.7,\"oxygenReductionIndex\":33.7,\"oxygenSaturationEightyToEightyNinePercentHyponea\":0,\"oxygenSaturationEightyToEightyNinePercentTimes\":0,\"oxygenSaturationFiftyToFiftyNinePercentHyponea\":0,\"oxygenSaturationFiftyToFiftyNinePercentTimes\":0,\"oxygenSaturationLessthanFiftyPercentHyponea\":0,\"oxygenSaturationLessthanFiftyPercentTimes\":0,\"oxygenSaturationLessthanNinetyPercent\":0,\"oxygenSaturationNinetyToHundredPercentHyponea\":534,\"oxygenSaturationNinetyToHundredPercentTimes\":5,\"oxygenSaturationSeventyToSeventyNinePercentHyponea\":0,\"oxygenSaturationSeventyToSeventyNinePercentTimes\":0,\"oxygenSaturationSixtyToSixtyNinePercentHyponea\":0,\"oxygenSaturationSixtyToSixtyNinePercentTimes\":0,\"perfusionIndex\":0.16,\"reducedOxygenTimes\":5,\"sleep_awake\":499,\"sleep_score\":59,\"startTime\":1470626431000,\"totalApneaTimeSeconds\":0,\"totalHyponeaSeconds\":38,\"totalHypoventilationTimeSeconds\":0,\"totalSeconds\":534,\"uploadDate\":1470627005000,\"userId\":\"87c0c221-9fa9-4fa6-80c5-09f1388208b3\"}"
 }
 ```
 
@@ -954,6 +960,8 @@ json字段说明：
 | totalSeconds | number| 睡眠总时长秒数 |
 | userId | string| 用户id |
 | perfusionIndex |number | 平均血流灌注度 |
+| totalApneaTimeSeconds |number | 总呼吸暂停时长(秒数) |
+| totalHypoventilationTimeSeconds |number | 总低通气时长(秒数) |
 
 
 

@@ -40,7 +40,7 @@
 	</sql>
 	<select id="selectUserByHostipalId" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
-		select
+		select distinct
 		<include refid="Base" />
 		from user u
 		left join sleep_report slr on slr.user_id = u.id
@@ -59,13 +59,6 @@
 		order by lastest_date desc
 	</select>
 
-	<select id="selectBySysUserId" resultMap="BaseResultMap"
-		parameterType="java.lang.String">
-		select
-		<include refid="Base_Column_List" />
-		from user where doctor_id = #{userId}
-		order by lastest_date desc
-	</select>
 
 	<select id="getAllUsers" resultMap="BaseResultMap">
 		select

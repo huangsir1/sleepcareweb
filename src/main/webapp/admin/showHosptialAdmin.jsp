@@ -35,22 +35,143 @@
 	}
 
 	$(function() {
+		$.extend($.fn.validatebox.defaults.rules, {
+			/*必须和某个字段相等*/
+			equals : {
+				validator : function(value, param) {
+					return $(param[0]).val() == value;
+				},
+				message : '新密码不相同'
+			}
+
+		});
 		$('#dg').datagrid({
 			url : '${basePath}admin/getHospitalAdmin/' + getQueryString("id"),
 			pageSize : 20,
 			onDblClickRow : function(rowIndex, rowData) {
-				 jump() ;
+				jump();
 			}
-		})
+		});
+
 	});
 
-	function destroyUser() {
+	function saveHospitalAdmin() {
+		$('#hospitalId').val(getQueryString("id"));
+		$('#fm2').form('submit', {
+			url : '${basePath}admin/saveHospitalAdmin?' + Math.random(),
+			onSubmit : function() {
+				return $(this).form('validate');
+			},
+			success : function(result) {
+				var result = eval('(' + result + ')');
+				if (result.code != 2000) {
+					$.messager.show({
+						title : 'Error',
+						msg : result.message
+					});
+				} else {
+					$('#dlg2').dialog('close'); // close the dialog
+					$('#dg').datagrid('reload'); // reload the user data
+					$.messager.show({ // show error message
+						title : "成功",
+						msg : "成功"
+					});
+				}
+			}
+		});
+	}
+
+	function addHospitalAdmin() {
+		$('#dlg2').dialog('open').dialog('setTitle', '增加管理员');
+		$('#fm2').form('clear');
+		//url = '${basePath}admin/editHospital?id=' + row.id + '&rnd='+ Math.random();
+	}
+
+	function editHospitalAdmin() {
 		var row = $('#dg').datagrid('getSelected');
 		if (row) {
-			$.messager.confirm('确认', '真的要删除该用户嘛?', function(r) {
+			$('#dlg').dialog('open').dialog('setTitle', '修改管理员信息');
+			$('#fm').form('load', row);
+			//url = '${basePath}admin/editHospital?id=' + row.id + '&rnd='+ Math.random();
+		}
+	}
+	function changeHospitalAdminPassword() {
+		var row = $('#dg').datagrid('getSelected');
+		if (row) {
+			$('#dlgpass').dialog('open').dialog('setTitle', '修改密码');
+		}
+	}
+
+	function alterHospitalAdmin() {
+		var row = $('#dg').datagrid('getSelected');
+		if (row) {
+			$('#fm').form('submit', {
+				url : '${basePath}admin/editHospitalAdmin?' + Math.random(),
+				onSubmit : function(param) {
+					param.id = row.id;
+					return $(this).form('validate');
+				},
+				success : function(result) {
+					var result = eval('(' + result + ')');
+					if (result.code != 2000) {
+						$.messager.show({
+							title : 'Error',
+							msg : result.message
+						});
+					} else {
+						$('#dlg').dialog('close'); // close the dialog
+						$('#dg').datagrid('reload'); // reload the user data
+						$.messager.show({ // show error message
+							title : "成功",
+							msg : "成功"
+						});
+					}
+				}
+			});
+		}
+
+	}
+
+	function saveHospitalAdminPassword() {
+		var row = $('#dg').datagrid('getSelected');
+		if (row) {
+			$('#fmpass').form(
+					'submit',
+					{
+						url : '${basePath}admin/updateHospitalAdminPassword?'
+								+ Math.random(),
+						onSubmit : function(param) {
+							param.id = row.id;
+							return $(this).form('validate');
+						},
+						success : function(result) {
+							var result = eval('(' + result + ')');
+							if (result.code != 2000) {
+								$.messager.show({
+									title : 'Error',
+									msg : result.message
+								});
+							} else {
+								$('#dlgpass').dialog('close'); // close the dialog
+								$('#dg').datagrid('reload'); // reload the user data
+								$.messager.show({ // show error message
+									title : "成功",
+									msg : "成功"
+								});
+							}
+						}
+					});
+		}
+
+	}
+
+	function deleteHospitalAdmin() {
+		var row = $('#dg').datagrid('getSelected');
+		if (row) {
+			$.messager.confirm('确认', '真的要删除该管理员嘛?', function(r) {
 				if (r) {
-					$.post('${basePath}admin/deleteUser', {
-						userId : row.id
+					$.post('${basePath}admin/deleteHospitalAdmin', {
+						id : row.id
 					}, function(result) {
 						$('#dg').datagrid('reload'); // reload the user data
 						var title = "";
@@ -88,11 +209,14 @@
 		</thead>
 	</table>
 	<div id="toolbar">
-	<a href="#" class="easyui-linkbutton" iconCls="icon-add"plain="true" onclick="jump()">增加</a>
-		<a href="#" class="easyui-linkbutton" iconCls="icon-edit"plain="true" onclick="jump()">编辑</a>
-		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
-			onclick="">修改密码</a> <a href="#" class="easyui-linkbutton"
-			iconCls="icon-remove" plain="true" onclick="">删除</a> <a
+		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+			onclick="addHospitalAdmin()">增加</a> <a href="#"
+			class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+			onclick="editHospitalAdmin()">编辑</a> <a href="#"
+			class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+			onclick="changeHospitalAdminPassword()">修改密码</a> <a href="#"
+			class="easyui-linkbutton" iconCls="icon-remove"
+			onclick="deleteHospitalAdmin()" plain="true" onclick="">删除</a> <a
 			href="#" class="easyui-linkbutton" iconCls="icon-back" plain="true"
 			onclick="history.go(-1)">返回</a>
 		<!--   <br /> <span>姓名:</span>
@@ -107,8 +231,112 @@
 			onclick="doSearch()">搜索</a>-->
 	</div>
 
+	<div id="dlg" class="easyui-dialog"
+		style="width: 250px; height: 250px; padding: 10px 20px" closed="true"
+		buttons="#dlg-buttons">
+		<br />
+		<form id="fm" method="post">
+			<div class="fitem">
+				<label>名称:</label> <input name="name">
+			</div>
+			<br />
+			<div class="fitem">
+				<label>用户名:</label> <input name="username">
+			</div>
+			<br />
+			<div class="fitem">
+				<label>权限:</label> <input name="systemRoles" type="checkbox"
+					value="doctor" />医生<input name="systemRoles" type="checkbox"
+					value="hospital" />医院
+			</div>
+			<br />
+			<div class="fitem">
+				<label>账号是否有效:</label> <input type="radio" value="true"
+					name="isValid"> 有效<input type="radio" value="false"
+					name="isValid"> 无效
+			</div>
+		</form>
+	</div>
+	<div id="dlg-buttons">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-ok"
+			onclick="alterHospitalAdmin()">保存</a> <a href="#"
+			class="easyui-linkbutton" iconCls="icon-cancel"
+			onclick="javascript:$('#dlg').dialog('close')">取消</a>
+	</div>
 
 
+	<div id="dlg2" class="easyui-dialog"
+		style="width: 300px; height: 300px; padding: 10px 20px" closed="true"
+		buttons="#dlg-buttons">
+		<br />
+		<form id="fm2" method="post">
+			<input type="hidden" name="hospitalId" id="hospitalId">
+			<div class="fitem">
+				<label>名称:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label> <input
+					name="name">
+			</div>
+			<br />
+			<div class="fitem">
+				<label>用户名:&nbsp;&nbsp;&nbsp;</label> <input name="username">
+			</div>
+			<br />
+			<div class="fitem">
+				<label>密码:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label> <input
+					id="newp" type="password" name="password"
+					class="easyui-validatebox" data-options="required:true"><br />
+			</div>
+			<br />
+			<div class="fitem">
+				<label>确认密码:</label> <input id="confirm" type="password"
+					name="confirm" class="easyui-validatebox"
+					data-options="required:true" validType="equals['#newp']"><br />
+			</div>
+			<br />
+			<div class="fitem">
+				<label>权限:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+				<input name="systemRoles" type="checkbox" value="doctor" />医生<input
+					name="systemRoles" type="checkbox" value="hospital" />医院
+			</div>
+			<br />
+			<div class="fitem">
+				<label>账号是否有效:</label> <input type="radio" value="true"
+					name="isValid"> 有效<input type="radio" value="false"
+					name="isValid"> 无效
+			</div>
+		</form>
+	</div>
+	<div id="dlg-buttons">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-ok"
+			onclick="saveHospitalAdmin()">保存</a> <a href="#"
+			class="easyui-linkbutton" iconCls="icon-cancel"
+			onclick="javascript:$('#dlg2').dialog('close')">取消</a>
+	</div>
+
+
+	<div id="dlgpass" class="easyui-dialog"
+		style="width: 300px; height: 200px; padding: 10px 20px" closed="true"
+		buttons="#dlg-buttons">
+		<br />
+		<form id="fmpass" method="post">
+			<div class="fitem">
+				<label>密码:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label> <input
+					id="adminp" type="password" name="password"
+					class="easyui-validatebox" data-options="required:true"><br />
+			</div>
+			<br />
+			<div class="fitem">
+				<label>确认密码:</label> <input id="adminnp" type="password"
+					name="confirm" class="easyui-validatebox"
+					data-options="required:true" validType="equals['#adminp']"><br />
+			</div>
+		</form>
+	</div>
+	<div id="dlg-buttons">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-ok"
+			onclick="saveHospitalAdminPassword()">保存</a> <a href="#"
+			class="easyui-linkbutton" iconCls="icon-cancel"
+			onclick="javascript:$('#dlgpass').dialog('close')">取消</a>
+	</div>
 
 
 

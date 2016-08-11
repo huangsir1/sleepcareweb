@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import taiyi.web.model.SleepReport;
+import taiyi.web.model.SystemUser;
 import taiyi.web.model.dto.BaseReport;
 import taiyi.web.model.dto.ReportPreviewDto;
 
@@ -48,4 +49,6 @@ public interface WebService {
 	BaseReport selectById(String reportId) throws IllegalAccessException, InvocationTargetException;
 
 	void flushFile(HttpServletRequest request, HttpServletResponse response, String reportId) throws IOException;
+
+	
 }

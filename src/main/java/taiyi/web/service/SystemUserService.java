@@ -3,6 +3,7 @@ package taiyi.web.service;
 import java.util.List;
 
 import taiyi.web.model.SystemUser;
+import taiyi.web.model.dto.Status;
 import taiyi.web.model.dto.SystemUserRoleDto;
 
 public interface SystemUserService {
@@ -56,6 +57,18 @@ public interface SystemUserService {
      * @mbggenerated Thu Jun 02 15:23:31 CST 2016
      */
     int updateByPrimaryKey(SystemUser record);
-    
+    void saveHospitalAdmin(SystemUser systemUser, String[] systemRoles, String password);
+
+	/**
+	 * @param systemUser
+	 * @param systemRoles
+	 */
+	void editHospitalAdmin(SystemUser systemUser, String[] systemRoles);
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	Status deleteSystemUser(String id);
   
 }

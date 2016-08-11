@@ -13,10 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 import taiyi.web.AndroidToWebAdapter.DataOfAndroidToWebAdapter;
 import taiyi.web.model.dto.BaseReport;
@@ -48,6 +51,9 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 	@ResponseBody
 	public Status uploadReportOnlyFile(@RequestParam(value = "file") MultipartFile file,
 			@RequestParam(required = false) String macAddress, String userId, HttpServletRequest request) {
+		if (StringUtils.isEmpty(macAddress)) {
+			return Status.getFailed();
+		}
 		return uploadReportFile(file, macAddress, userId, request);
 	}
 
@@ -102,7 +108,7 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Status.FAILED;
+			return Status.getFailed();
 		}
 		return new Status(Status.SUCCESSED_CODE, reportId);
 

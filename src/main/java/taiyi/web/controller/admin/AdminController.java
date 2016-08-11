@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +52,7 @@ import taiyi.web.model.dto.SystemUserRoleDto;
 import taiyi.web.service.BreatheReportService;
 import taiyi.web.service.DiseaseHistoryUserService;
 import taiyi.web.service.EssUserService;
+import taiyi.web.service.PermissionService;
 import taiyi.web.service.SleepReportService;
 import taiyi.web.service.SubReportService;
 import taiyi.web.service.SystemUserService;
@@ -86,6 +88,9 @@ public class AdminController extends ExceptionHandlerController {
 	private EssUserService essUesrService;
 	@Autowired
 	private SystemUserService systemUserService;
+	
+	@Autowired
+	private PermissionService permissionService;
 	
 
 	@RequiresPermissions(logical = Logical.OR, value = { "user:insert", "doctor:insert" })
@@ -448,7 +453,69 @@ public class AdminController extends ExceptionHandlerController {
 		return systemUserService.selectWithRoleByHostipal(hospitalId);
 	}
 	
-
+	@RequestMapping("/saveHospitalAdmin")
+	@RequiresPermissions("system:insert") 
+	@ResponseBody
+	public Status saveHospitalAdmin(SystemUser systemUser,int hospitalId,String[] systemRoles,String password,String confirm) {
+		if (!password.equals(confirm)) {
+			return Status.PASSWORD_NOT_MATCH;
+		}
+		if(systemUserService.selectByUsername(systemUser.getUsername()) != null) {
+			return Status.USER_EXIST;
+		}
+		systemUser.setHostipalId(hospitalId);
+		systemUser.setId(UUID.randomUUID().toString());
+		systemUserService.saveHospitalAdmin(systemUser,systemRoles,password);
+		return Status.getSuccess();
+	}
+	
+	@RequestMapping("/editHospitalAdmin")
+	@RequiresPermissions("system:update") 
+	@ResponseBody
+	public Status editHospitalAdmin(SystemUser systemUser,String[] systemRoles) {
+		Set<String> roles = permissionService.selectRoleStringsByUserId(systemUser.getId());
+		if (roles.contains("admin")) {
+			return Status.getFailed("无法修改管理员信息！！");
+		}
+		if(systemUserService.selectByUsername(systemUser.getUsername()) != null) {
+			if (!systemUserService.selectByPrimaryKey(systemUser.getId()).getName().equals(systemUser.getName())) {
+				return Status.getFailed("用户名已存在");
+			}
+		}
+		systemUserService.editHospitalAdmin(systemUser, systemRoles);
+		return Status.getSuccess();
+	} 
+	
+	@RequestMapping("/updateHospitalAdminPassword")
+	@RequiresPermissions("system:update") 
+	@ResponseBody
+	public Status updateHospitalAdminPassword(String id,String password,String confirm) {
+		Set<String> roles = permissionService.selectRoleStringsByUserId(id);
+		if (roles.contains("admin")) {
+			return Status.getFailed("无法修改管理员信息！！");
+		}
+		if (!password.equals(confirm)) {
+			return Status.PASSWORD_NOT_MATCH;
+		}
+		SystemUser systemUser = new SystemUser();
+		systemUser.setId(id);
+		systemUser.setPassword(EncryptUtils.encryptOriginalTaiirPassword(password));
+		systemUserService.updateByPrimaryKeySelective(systemUser);
+		return Status.getSuccess();
+	} 
+	
+	
+	@RequestMapping("/deleteHospitalAdmin")
+	@RequiresPermissions("system:delete") 
+	@ResponseBody
+	public Status deleteHospitalAdmin(String id) {
+		Set<String> roles = permissionService.selectRoleStringsByUserId(id);
+		if (roles.contains("admin")) {
+			return Status.getFailed("无法删除管理员！！");
+		}
+		return systemUserService.deleteSystemUser(id);
+	}
+	
 	// @RequestMapping("/generateFullPdf/{reportId}")
 	// @ResponseBody
 	// public Status generatePdf(@PathVariable String reportId,

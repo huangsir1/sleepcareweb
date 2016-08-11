@@ -15,9 +15,16 @@ import com.google.common.collect.Lists;
 
 import taiyi.web.dao.SystemRoleMapper;
 import taiyi.web.dao.SystemUserMapper;
+import taiyi.web.dao.SystemUserRoleMapper;
+import taiyi.web.model.SystemRole;
 import taiyi.web.model.SystemUser;
+import taiyi.web.model.SystemUserRoleKey;
+import taiyi.web.model.User;
+import taiyi.web.model.dto.Status;
 import taiyi.web.model.dto.SystemUserRoleDto;
+import taiyi.web.service.UserService;
 import taiyi.web.utils.BeanUtilsForAndroid;
+import taiyi.web.utils.EncryptUtils;
 
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
@@ -33,7 +40,10 @@ public class SystemUserServiceImpl implements taiyi.web.service.SystemUserServic
 	private SystemUserMapper systemUserMapper;
 	@Autowired
 	private SystemRoleMapper systemRoleMapper;
-	
+	@Autowired
+	private SystemUserRoleMapper systemUserRoleMapper;
+	@Autowired
+	private UserService userService;
 
 	/* 
 	 * @see taiyi.web.service.SystemUserService#deleteByPrimaryKey(java.lang.String)
@@ -123,6 +133,67 @@ public class SystemUserServiceImpl implements taiyi.web.service.SystemUserServic
 		}
 		return systemUserRoleDtos;
 	}
+	
+	@Override
+	public void saveHospitalAdmin(SystemUser systemUser, String[] systemRoles, String password) {
+		
+		// save user
+		systemUser.setPassword(EncryptUtils.encryptOriginalTaiirPassword(password));
+		this.insert(systemUser);
+		// save permission
+		for (String role : systemRoles) {
+			switch (role) {
+			case "doctor":
+			case "hospital":
+				SystemRole selectByRoleName = systemRoleMapper.selectByRoleName(role);
+				SystemUserRoleKey s = new SystemUserRoleKey();
+				s.setRoleId(selectByRoleName.getId());
+				s.setUserId(systemUser.getId());
+				systemUserRoleMapper.insert(s);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	
+	@Override
+	public void editHospitalAdmin(SystemUser systemUser, String[] systemRoles) {
+		
+		// edit user
+		this.updateByPrimaryKeySelective(systemUser);
+		// edit permission
+		systemUserRoleMapper.deleteByPrimaryUserId(systemUser.getId());
+		for (String role : systemRoles) {
+			switch (role) {
+			case "doctor":
+			case "hospital":
+				SystemRole selectByRoleName = systemRoleMapper.selectByRoleName(role);
+				SystemUserRoleKey s = new SystemUserRoleKey();
+				s.setRoleId(selectByRoleName.getId());
+				s.setUserId(systemUser.getId());
+				systemUserRoleMapper.insert(s);
+				break;
+			default:
+				break;
+			}
+		}
+	}
 
+	/* 
+	 * @see taiyi.web.service.SystemUserService#deleteSystemUser(java.lang.String)
+	 */
+	@Override
+	public Status deleteSystemUser(String id) {
+		List<User> users = userService.selectBySysUsername(id);
+		if (users != null) {
+			if (users.size() != 0) {
+				return Status.getFailed("无法删除,该账户下存在普通用户！");
+			}
+		}
+		systemUserRoleMapper.deleteByPrimaryUserId(id);
+		systemUserMapper.deleteByPrimaryKey(id);
+		return Status.getSuccess();
+	}
 
 }

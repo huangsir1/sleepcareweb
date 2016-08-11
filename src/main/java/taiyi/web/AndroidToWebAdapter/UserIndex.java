@@ -223,9 +223,11 @@ public class UserIndex implements Serializable {
 	private int longyjfstimes;
 	private int zchxzttimes;
 	private int hxhappertimes;
+	//呼吸暂停总时间 
 	private int hxztzsjtimes;
 	private int zcdtqtimes;
 	private int dtqhappertimes;
+	//低通气总时间
 	private int dtqzsjtimes;
 	private int axyfbzsjtimes;
 	private int bxyfbzsjtimes;

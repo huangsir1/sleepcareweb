@@ -45,6 +45,16 @@
 $(function(){
 	$('#dlg').dialog('open').dialog('setTitle','增加用户');
 	$('#fm').form('clear');
+	$.extend($.fn.validatebox.defaults.rules, {    
+	    /*必须和某个字段相等*/  
+	    equals: {  
+	        validator:function(value,param){  
+	            return $(param[0]).val() == value;  
+	        },  
+	        message:'新密码不相同'  
+	    }  
+	             
+	});  
 });
 
 function saveUser(){

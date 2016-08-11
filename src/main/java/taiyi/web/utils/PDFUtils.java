@@ -313,6 +313,9 @@ public class PDFUtils {
 		if (subReport.getLongestApneaTime() != null) {
 			addNormalText(paragraph, "， 发生于 " + HHmmssFormat.format(subReport.getLongestApneaTime()));
 		}
+		addDefaultSpace(paragraph);
+		addBoldText(paragraph, "呼吸暂停总时长 : ");
+		addNormalText(paragraph, secondsToHHmmss(subReport.getTotalApneaTimeSeconds()));
 		addNormalText(paragraph, "\n");
 		addBoldText(paragraph, "低通气次数 : ");
 		addNormalText(paragraph, breatheReport.getHypopneaTimes() + "次");
@@ -337,6 +340,10 @@ public class PDFUtils {
 		// addNormalText(paragraph,
 		// breatheReport.getOxygenSaturationLessthanNinetyPercent() + "%");
 		// addDefaultSpace(paragraph);
+		addBoldText(paragraph, "低通气总时长 : ");
+		addNormalText(paragraph, secondsToHHmmss(subReport.getTotalHypoventilationTimeSeconds()));
+		addDefaultSpace(paragraph); 
+		
 		addBoldText(paragraph, "呼吸质量评分 : ");
 		addNormalText(paragraph, "" + breatheReport.getScore());
 		addDefaultSpace(paragraph);
@@ -729,8 +736,8 @@ public class PDFUtils {
 	}
 
 	public int getYear(Date before, Date after) {
-		int day = (int) ((after.getTime() - before.getTime()) / 1000 / 60 / 60 / 24 / 365.25);
-		System.out.println(day);
+		int day = (int) (((double)after.getTime() - before.getTime()) / 1000 / 60 / 60 / 24 / 365.25);
 		return Math.abs(day);
 	}
+	
 }

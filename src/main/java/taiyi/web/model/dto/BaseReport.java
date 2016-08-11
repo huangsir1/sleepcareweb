@@ -52,7 +52,7 @@ public class BaseReport {
 	private Date longestOxygenReduceTime;
 	// 血氧危害指数
 	private Double bloodOxygenHazardIndex;
-	
+
 	// 用户id
 	private String userId;
 	// 呼吸暂停低通气指数
@@ -76,7 +76,6 @@ public class BaseReport {
 	// 最低血氧饱和度
 	private Double minOxygenSaturation;
 
-	
 	private Double odi;
 	// 醒时
 	private Integer awakeSeconds;
@@ -122,25 +121,31 @@ public class BaseReport {
 	private Integer totalSeconds;
 
 	private Integer sleep_score;
-	
+
 	private Integer sleep_awake;
-	
 
 	private String macAddress;
 
 	private String advice;
-	
+
 	private Double perfusionIndex;
-	
+
+	// 总呼吸暂停时长
+	private Integer totalApneaTimeSeconds;
+
+	// 总低通气时长
+	private Integer totalHypoventilationTimeSeconds;
+
 	public BaseReport() {
-		
+
 	}
-	
-	public BaseReport(SleepReport sleepReport,BreatheReport breatheReport,SubReport subReport) throws IllegalAccessException, InvocationTargetException {
+
+	public BaseReport(SleepReport sleepReport, BreatheReport breatheReport, SubReport subReport)
+			throws IllegalAccessException, InvocationTargetException {
 		ConvertUtils.register(new org.apache.commons.beanutils.converters.DateConverter(null), java.util.Date.class);
-		BeanUtils.copyProperties(this,sleepReport);
-		BeanUtils.copyProperties(this,breatheReport);
-		BeanUtils.copyProperties(this,subReport);
+		BeanUtils.copyProperties(this, sleepReport);
+		BeanUtils.copyProperties(this, breatheReport);
+		BeanUtils.copyProperties(this, subReport);
 		this.awakeSeconds = breatheReport.getAwakeSeconds();
 		this.sleep_awake = sleepReport.getAwakeSeconds();
 		this.sleep_score = sleepReport.getScore();
@@ -155,7 +160,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -169,7 +175,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenReductionIndex the oxygenReductionIndex to set
+	 * @param oxygenReductionIndex
+	 *            the oxygenReductionIndex to set
 	 */
 	public void setOxygenReductionIndex(Double oxygenReductionIndex) {
 		this.oxygenReductionIndex = oxygenReductionIndex;
@@ -183,7 +190,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param longestApneaSeconds the longestApneaSeconds to set
+	 * @param longestApneaSeconds
+	 *            the longestApneaSeconds to set
 	 */
 	public void setLongestApneaSeconds(Integer longestApneaSeconds) {
 		this.longestApneaSeconds = longestApneaSeconds;
@@ -197,7 +205,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param longestApneaTime the longestApneaTime to set
+	 * @param longestApneaTime
+	 *            the longestApneaTime to set
 	 */
 	public void setLongestApneaTime(Date longestApneaTime) {
 		this.longestApneaTime = longestApneaTime;
@@ -211,7 +220,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param maxOxygenReduceSeconds the maxOxygenReduceSeconds to set
+	 * @param maxOxygenReduceSeconds
+	 *            the maxOxygenReduceSeconds to set
 	 */
 	public void setMaxOxygenReduceSeconds(Integer maxOxygenReduceSeconds) {
 		this.maxOxygenReduceSeconds = maxOxygenReduceSeconds;
@@ -225,7 +235,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param maxOxygenReduceTime the maxOxygenReduceTime to set
+	 * @param maxOxygenReduceTime
+	 *            the maxOxygenReduceTime to set
 	 */
 	public void setMaxOxygenReduceTime(Date maxOxygenReduceTime) {
 		this.maxOxygenReduceTime = maxOxygenReduceTime;
@@ -239,7 +250,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param averagePulse the averagePulse to set
+	 * @param averagePulse
+	 *            the averagePulse to set
 	 */
 	public void setAveragePulse(Double averagePulse) {
 		this.averagePulse = averagePulse;
@@ -253,7 +265,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param maxPulse the maxPulse to set
+	 * @param maxPulse
+	 *            the maxPulse to set
 	 */
 	public void setMaxPulse(Double maxPulse) {
 		this.maxPulse = maxPulse;
@@ -267,7 +280,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param maxPulseTime the maxPulseTime to set
+	 * @param maxPulseTime
+	 *            the maxPulseTime to set
 	 */
 	public void setMaxPulseTime(Date maxPulseTime) {
 		this.maxPulseTime = maxPulseTime;
@@ -281,7 +295,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param minPulse the minPulse to set
+	 * @param minPulse
+	 *            the minPulse to set
 	 */
 	public void setMinPulse(Double minPulse) {
 		this.minPulse = minPulse;
@@ -295,7 +310,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param minPulseTime the minPulseTime to set
+	 * @param minPulseTime
+	 *            the minPulseTime to set
 	 */
 	public void setMinPulseTime(Date minPulseTime) {
 		this.minPulseTime = minPulseTime;
@@ -309,7 +325,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param longestOxygenReduceSeconds the longestOxygenReduceSeconds to set
+	 * @param longestOxygenReduceSeconds
+	 *            the longestOxygenReduceSeconds to set
 	 */
 	public void setLongestOxygenReduceSeconds(Integer longestOxygenReduceSeconds) {
 		this.longestOxygenReduceSeconds = longestOxygenReduceSeconds;
@@ -323,7 +340,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param longestOxygenReduceTime the longestOxygenReduceTime to set
+	 * @param longestOxygenReduceTime
+	 *            the longestOxygenReduceTime to set
 	 */
 	public void setLongestOxygenReduceTime(Date longestOxygenReduceTime) {
 		this.longestOxygenReduceTime = longestOxygenReduceTime;
@@ -337,7 +355,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param bloodOxygenHazardIndex the bloodOxygenHazardIndex to set
+	 * @param bloodOxygenHazardIndex
+	 *            the bloodOxygenHazardIndex to set
 	 */
 	public void setBloodOxygenHazardIndex(Double bloodOxygenHazardIndex) {
 		this.bloodOxygenHazardIndex = bloodOxygenHazardIndex;
@@ -351,7 +370,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param userId the userId to set
+	 * @param userId
+	 *            the userId to set
 	 */
 	public void setUserId(String userId) {
 		this.userId = userId;
@@ -365,7 +385,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param apneaHypopneaIndex the apneaHypopneaIndex to set
+	 * @param apneaHypopneaIndex
+	 *            the apneaHypopneaIndex to set
 	 */
 	public void setApneaHypopneaIndex(Double apneaHypopneaIndex) {
 		this.apneaHypopneaIndex = apneaHypopneaIndex;
@@ -379,7 +400,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param apneaTimes the apneaTimes to set
+	 * @param apneaTimes
+	 *            the apneaTimes to set
 	 */
 	public void setApneaTimes(Integer apneaTimes) {
 		this.apneaTimes = apneaTimes;
@@ -393,7 +415,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param hypopneaTimes the hypopneaTimes to set
+	 * @param hypopneaTimes
+	 *            the hypopneaTimes to set
 	 */
 	public void setHypopneaTimes(Integer hypopneaTimes) {
 		this.hypopneaTimes = hypopneaTimes;
@@ -407,7 +430,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param maxHyponeaSeconds the maxHyponeaSeconds to set
+	 * @param maxHyponeaSeconds
+	 *            the maxHyponeaSeconds to set
 	 */
 	public void setMaxHyponeaSeconds(Integer maxHyponeaSeconds) {
 		this.maxHyponeaSeconds = maxHyponeaSeconds;
@@ -421,7 +445,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param totalHyponeaSeconds the totalHyponeaSeconds to set
+	 * @param totalHyponeaSeconds
+	 *            the totalHyponeaSeconds to set
 	 */
 	public void setTotalHyponeaSeconds(Integer totalHyponeaSeconds) {
 		this.totalHyponeaSeconds = totalHyponeaSeconds;
@@ -435,7 +460,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param hyponeaHappenDate the hyponeaHappenDate to set
+	 * @param hyponeaHappenDate
+	 *            the hyponeaHappenDate to set
 	 */
 	public void setHyponeaHappenDate(Date hyponeaHappenDate) {
 		this.hyponeaHappenDate = hyponeaHappenDate;
@@ -449,7 +475,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param reducedOxygenTimes the reducedOxygenTimes to set
+	 * @param reducedOxygenTimes
+	 *            the reducedOxygenTimes to set
 	 */
 	public void setReducedOxygenTimes(Integer reducedOxygenTimes) {
 		this.reducedOxygenTimes = reducedOxygenTimes;
@@ -463,7 +490,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param averageOxygenSaturation the averageOxygenSaturation to set
+	 * @param averageOxygenSaturation
+	 *            the averageOxygenSaturation to set
 	 */
 	public void setAverageOxygenSaturation(Double averageOxygenSaturation) {
 		this.averageOxygenSaturation = averageOxygenSaturation;
@@ -477,7 +505,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param maxOxygenSaturation the maxOxygenSaturation to set
+	 * @param maxOxygenSaturation
+	 *            the maxOxygenSaturation to set
 	 */
 	public void setMaxOxygenSaturation(Double maxOxygenSaturation) {
 		this.maxOxygenSaturation = maxOxygenSaturation;
@@ -491,7 +520,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param minOxygenSaturation the minOxygenSaturation to set
+	 * @param minOxygenSaturation
+	 *            the minOxygenSaturation to set
 	 */
 	public void setMinOxygenSaturation(Double minOxygenSaturation) {
 		this.minOxygenSaturation = minOxygenSaturation;
@@ -505,7 +535,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param odi the odi to set
+	 * @param odi
+	 *            the odi to set
 	 */
 	public void setOdi(Double odi) {
 		this.odi = odi;
@@ -519,7 +550,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param awakeSeconds the awakeSeconds to set
+	 * @param awakeSeconds
+	 *            the awakeSeconds to set
 	 */
 	public void setAwakeSeconds(Integer awakeSeconds) {
 		this.awakeSeconds = awakeSeconds;
@@ -533,7 +565,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationNinetyToHundredPercentTimes the oxygenSaturationNinetyToHundredPercentTimes to set
+	 * @param oxygenSaturationNinetyToHundredPercentTimes
+	 *            the oxygenSaturationNinetyToHundredPercentTimes to set
 	 */
 	public void setOxygenSaturationNinetyToHundredPercentTimes(Integer oxygenSaturationNinetyToHundredPercentTimes) {
 		this.oxygenSaturationNinetyToHundredPercentTimes = oxygenSaturationNinetyToHundredPercentTimes;
@@ -547,9 +580,11 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationNinetyToHundredPercentHyponea the oxygenSaturationNinetyToHundredPercentHyponea to set
+	 * @param oxygenSaturationNinetyToHundredPercentHyponea
+	 *            the oxygenSaturationNinetyToHundredPercentHyponea to set
 	 */
-	public void setOxygenSaturationNinetyToHundredPercentHyponea(Integer oxygenSaturationNinetyToHundredPercentHyponea) {
+	public void setOxygenSaturationNinetyToHundredPercentHyponea(
+			Integer oxygenSaturationNinetyToHundredPercentHyponea) {
 		this.oxygenSaturationNinetyToHundredPercentHyponea = oxygenSaturationNinetyToHundredPercentHyponea;
 	}
 
@@ -561,9 +596,11 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationEightyToEightyNinePercentTimes the oxygenSaturationEightyToEightyNinePercentTimes to set
+	 * @param oxygenSaturationEightyToEightyNinePercentTimes
+	 *            the oxygenSaturationEightyToEightyNinePercentTimes to set
 	 */
-	public void setOxygenSaturationEightyToEightyNinePercentTimes(Integer oxygenSaturationEightyToEightyNinePercentTimes) {
+	public void setOxygenSaturationEightyToEightyNinePercentTimes(
+			Integer oxygenSaturationEightyToEightyNinePercentTimes) {
 		this.oxygenSaturationEightyToEightyNinePercentTimes = oxygenSaturationEightyToEightyNinePercentTimes;
 	}
 
@@ -575,7 +612,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationEightyToEightyNinePercentHyponea the oxygenSaturationEightyToEightyNinePercentHyponea to set
+	 * @param oxygenSaturationEightyToEightyNinePercentHyponea
+	 *            the oxygenSaturationEightyToEightyNinePercentHyponea to set
 	 */
 	public void setOxygenSaturationEightyToEightyNinePercentHyponea(
 			Integer oxygenSaturationEightyToEightyNinePercentHyponea) {
@@ -590,7 +628,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationSeventyToSeventyNinePercentTimes the oxygenSaturationSeventyToSeventyNinePercentTimes to set
+	 * @param oxygenSaturationSeventyToSeventyNinePercentTimes
+	 *            the oxygenSaturationSeventyToSeventyNinePercentTimes to set
 	 */
 	public void setOxygenSaturationSeventyToSeventyNinePercentTimes(
 			Integer oxygenSaturationSeventyToSeventyNinePercentTimes) {
@@ -605,7 +644,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationSeventyToSeventyNinePercentHyponea the oxygenSaturationSeventyToSeventyNinePercentHyponea to set
+	 * @param oxygenSaturationSeventyToSeventyNinePercentHyponea
+	 *            the oxygenSaturationSeventyToSeventyNinePercentHyponea to set
 	 */
 	public void setOxygenSaturationSeventyToSeventyNinePercentHyponea(
 			Integer oxygenSaturationSeventyToSeventyNinePercentHyponea) {
@@ -620,7 +660,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationSixtyToSixtyNinePercentTimes the oxygenSaturationSixtyToSixtyNinePercentTimes to set
+	 * @param oxygenSaturationSixtyToSixtyNinePercentTimes
+	 *            the oxygenSaturationSixtyToSixtyNinePercentTimes to set
 	 */
 	public void setOxygenSaturationSixtyToSixtyNinePercentTimes(Integer oxygenSaturationSixtyToSixtyNinePercentTimes) {
 		this.oxygenSaturationSixtyToSixtyNinePercentTimes = oxygenSaturationSixtyToSixtyNinePercentTimes;
@@ -634,9 +675,11 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationSixtyToSixtyNinePercentHyponea the oxygenSaturationSixtyToSixtyNinePercentHyponea to set
+	 * @param oxygenSaturationSixtyToSixtyNinePercentHyponea
+	 *            the oxygenSaturationSixtyToSixtyNinePercentHyponea to set
 	 */
-	public void setOxygenSaturationSixtyToSixtyNinePercentHyponea(Integer oxygenSaturationSixtyToSixtyNinePercentHyponea) {
+	public void setOxygenSaturationSixtyToSixtyNinePercentHyponea(
+			Integer oxygenSaturationSixtyToSixtyNinePercentHyponea) {
 		this.oxygenSaturationSixtyToSixtyNinePercentHyponea = oxygenSaturationSixtyToSixtyNinePercentHyponea;
 	}
 
@@ -648,7 +691,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationFiftyToFiftyNinePercentTimes the oxygenSaturationFiftyToFiftyNinePercentTimes to set
+	 * @param oxygenSaturationFiftyToFiftyNinePercentTimes
+	 *            the oxygenSaturationFiftyToFiftyNinePercentTimes to set
 	 */
 	public void setOxygenSaturationFiftyToFiftyNinePercentTimes(Integer oxygenSaturationFiftyToFiftyNinePercentTimes) {
 		this.oxygenSaturationFiftyToFiftyNinePercentTimes = oxygenSaturationFiftyToFiftyNinePercentTimes;
@@ -662,9 +706,11 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationFiftyToFiftyNinePercentHyponea the oxygenSaturationFiftyToFiftyNinePercentHyponea to set
+	 * @param oxygenSaturationFiftyToFiftyNinePercentHyponea
+	 *            the oxygenSaturationFiftyToFiftyNinePercentHyponea to set
 	 */
-	public void setOxygenSaturationFiftyToFiftyNinePercentHyponea(Integer oxygenSaturationFiftyToFiftyNinePercentHyponea) {
+	public void setOxygenSaturationFiftyToFiftyNinePercentHyponea(
+			Integer oxygenSaturationFiftyToFiftyNinePercentHyponea) {
 		this.oxygenSaturationFiftyToFiftyNinePercentHyponea = oxygenSaturationFiftyToFiftyNinePercentHyponea;
 	}
 
@@ -676,7 +722,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationLessthanFiftyPercentTimes the oxygenSaturationLessthanFiftyPercentTimes to set
+	 * @param oxygenSaturationLessthanFiftyPercentTimes
+	 *            the oxygenSaturationLessthanFiftyPercentTimes to set
 	 */
 	public void setOxygenSaturationLessthanFiftyPercentTimes(Integer oxygenSaturationLessthanFiftyPercentTimes) {
 		this.oxygenSaturationLessthanFiftyPercentTimes = oxygenSaturationLessthanFiftyPercentTimes;
@@ -690,7 +737,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationLessthanFiftyPercentHyponea the oxygenSaturationLessthanFiftyPercentHyponea to set
+	 * @param oxygenSaturationLessthanFiftyPercentHyponea
+	 *            the oxygenSaturationLessthanFiftyPercentHyponea to set
 	 */
 	public void setOxygenSaturationLessthanFiftyPercentHyponea(Integer oxygenSaturationLessthanFiftyPercentHyponea) {
 		this.oxygenSaturationLessthanFiftyPercentHyponea = oxygenSaturationLessthanFiftyPercentHyponea;
@@ -704,7 +752,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param oxygenSaturationLessthanNinetyPercent the oxygenSaturationLessthanNinetyPercent to set
+	 * @param oxygenSaturationLessthanNinetyPercent
+	 *            the oxygenSaturationLessthanNinetyPercent to set
 	 */
 	public void setOxygenSaturationLessthanNinetyPercent(Double oxygenSaturationLessthanNinetyPercent) {
 		this.oxygenSaturationLessthanNinetyPercent = oxygenSaturationLessthanNinetyPercent;
@@ -718,7 +767,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param brathe_score the brathe_score to set
+	 * @param brathe_score
+	 *            the brathe_score to set
 	 */
 	public void setBrathe_score(Integer brathe_score) {
 		this.brathe_score = brathe_score;
@@ -732,7 +782,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param uploadDate the uploadDate to set
+	 * @param uploadDate
+	 *            the uploadDate to set
 	 */
 	public void setUploadDate(Date uploadDate) {
 		this.uploadDate = uploadDate;
@@ -746,7 +797,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param startTime the startTime to set
+	 * @param startTime
+	 *            the startTime to set
 	 */
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
@@ -760,7 +812,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param endTime the endTime to set
+	 * @param endTime
+	 *            the endTime to set
 	 */
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
@@ -774,7 +827,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param lightSleepSeconds the lightSleepSeconds to set
+	 * @param lightSleepSeconds
+	 *            the lightSleepSeconds to set
 	 */
 	public void setLightSleepSeconds(Integer lightSleepSeconds) {
 		this.lightSleepSeconds = lightSleepSeconds;
@@ -788,7 +842,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param deepSleepSeconds the deepSleepSeconds to set
+	 * @param deepSleepSeconds
+	 *            the deepSleepSeconds to set
 	 */
 	public void setDeepSleepSeconds(Integer deepSleepSeconds) {
 		this.deepSleepSeconds = deepSleepSeconds;
@@ -802,7 +857,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param totalSeconds the totalSeconds to set
+	 * @param totalSeconds
+	 *            the totalSeconds to set
 	 */
 	public void setTotalSeconds(Integer totalSeconds) {
 		this.totalSeconds = totalSeconds;
@@ -816,26 +872,42 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param sleep_score the sleep_score to set
+	 * @param sleep_score
+	 *            the sleep_score to set
 	 */
 	public void setSleep_score(Integer sleep_score) {
 		this.sleep_score = sleep_score;
 	}
-	
+
 	@JsonIgnore
-	@JSONField(serialize=false)
+	@JSONField(serialize = false)
 	public SleepReport getSleepReport() {
-		return new SleepReport(id, userId, startTime, endTime, lightSleepSeconds, deepSleepSeconds, sleep_awake, totalSeconds, sleep_score, uploadDate);
+		return new SleepReport(id, userId, startTime, endTime, lightSleepSeconds, deepSleepSeconds, sleep_awake,
+				totalSeconds, sleep_score, uploadDate);
 	}
+
 	@JsonIgnore
-	@JSONField(serialize=false)
+	@JSONField(serialize = false)
 	public BreatheReport getBreatheReport() {
-		return new BreatheReport(id, userId, apneaHypopneaIndex, apneaTimes, hypopneaTimes, maxHyponeaSeconds, totalHyponeaSeconds, hyponeaHappenDate, reducedOxygenTimes, averageOxygenSaturation, maxOxygenSaturation, minOxygenSaturation, odi, awakeSeconds, oxygenSaturationNinetyToHundredPercentTimes, oxygenSaturationNinetyToHundredPercentHyponea, oxygenSaturationEightyToEightyNinePercentTimes, oxygenSaturationEightyToEightyNinePercentHyponea, oxygenSaturationSeventyToSeventyNinePercentTimes, oxygenSaturationSeventyToSeventyNinePercentHyponea, oxygenSaturationSixtyToSixtyNinePercentTimes, oxygenSaturationSixtyToSixtyNinePercentHyponea, oxygenSaturationFiftyToFiftyNinePercentTimes, oxygenSaturationFiftyToFiftyNinePercentHyponea, oxygenSaturationLessthanFiftyPercentTimes, oxygenSaturationLessthanFiftyPercentHyponea, oxygenSaturationLessthanNinetyPercent, brathe_score, uploadDate);
+		return new BreatheReport(id, userId, apneaHypopneaIndex, apneaTimes, hypopneaTimes, maxHyponeaSeconds,
+				totalHyponeaSeconds, hyponeaHappenDate, reducedOxygenTimes, averageOxygenSaturation,
+				maxOxygenSaturation, minOxygenSaturation, odi, awakeSeconds,
+				oxygenSaturationNinetyToHundredPercentTimes, oxygenSaturationNinetyToHundredPercentHyponea,
+				oxygenSaturationEightyToEightyNinePercentTimes, oxygenSaturationEightyToEightyNinePercentHyponea,
+				oxygenSaturationSeventyToSeventyNinePercentTimes, oxygenSaturationSeventyToSeventyNinePercentHyponea,
+				oxygenSaturationSixtyToSixtyNinePercentTimes, oxygenSaturationSixtyToSixtyNinePercentHyponea,
+				oxygenSaturationFiftyToFiftyNinePercentTimes, oxygenSaturationFiftyToFiftyNinePercentHyponea,
+				oxygenSaturationLessthanFiftyPercentTimes, oxygenSaturationLessthanFiftyPercentHyponea,
+				oxygenSaturationLessthanNinetyPercent, brathe_score, uploadDate);
 	}
+
 	@JsonIgnore
-	@JSONField(serialize=false)
+	@JSONField(serialize = false)
 	public SubReport getSubReport() {
-		return new SubReport(id, oxygenReductionIndex, longestApneaSeconds, longestApneaTime, maxOxygenReduceSeconds, maxOxygenReduceTime, averagePulse, maxPulse, maxPulseTime, minPulse, minPulseTime, longestOxygenReduceSeconds, longestOxygenReduceTime, bloodOxygenHazardIndex,macAddress,advice,perfusionIndex);
+		return new SubReport(id, oxygenReductionIndex, longestApneaSeconds, longestApneaTime, maxOxygenReduceSeconds,
+				maxOxygenReduceTime, averagePulse, maxPulse, maxPulseTime, minPulse, minPulseTime,
+				longestOxygenReduceSeconds, longestOxygenReduceTime, bloodOxygenHazardIndex, macAddress, advice,
+				perfusionIndex,totalApneaTimeSeconds,totalHypoventilationTimeSeconds);
 	}
 
 	/**
@@ -846,12 +918,12 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param sleep_awake the sleep_awake to set
+	 * @param sleep_awake
+	 *            the sleep_awake to set
 	 */
 	public void setSleep_awake(Integer sleep_awake) {
 		this.sleep_awake = sleep_awake;
 	}
-
 
 	/**
 	 * @return the macAddress
@@ -861,7 +933,8 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param macAddress the macAddress to set
+	 * @param macAddress
+	 *            the macAddress to set
 	 */
 	public void setMacAddress(String macAddress) {
 		this.macAddress = macAddress;
@@ -875,10 +948,58 @@ public class BaseReport {
 	}
 
 	/**
-	 * @param advice the advice to set
+	 * @param advice
+	 *            the advice to set
 	 */
 	public void setAdvice(String advice) {
 		this.advice = advice;
+	}
+
+
+	/**
+	 * @return the totalApneaTimeSeconds
+	 */
+	public Integer getTotalApneaTimeSeconds() {
+		return totalApneaTimeSeconds;
+	}
+
+	/**
+	 * @param totalApneaTimeSeconds
+	 *            the totalApneaTimeSeconds to set
+	 */
+	public void setTotalApneaTimeSeconds(Integer totalApneaTimeSeconds) {
+		this.totalApneaTimeSeconds = totalApneaTimeSeconds;
+	}
+
+	
+
+	/**
+	 * @return the totalHypoventilationTimeSeconds
+	 */
+	public Integer getTotalHypoventilationTimeSeconds() {
+		return totalHypoventilationTimeSeconds;
+	}
+
+	/**
+	 * @param totalHypoventilationTimeSeconds the totalHypoventilationTimeSeconds to set
+	 */
+	public void setTotalHypoventilationTimeSeconds(Integer totalHypoventilationTimeSeconds) {
+		this.totalHypoventilationTimeSeconds = totalHypoventilationTimeSeconds;
+	}
+
+	/**
+	 * @return the perfusionIndex
+	 */
+	public Double getPerfusionIndex() {
+		return perfusionIndex;
+	}
+
+	/**
+	 * @param perfusionIndex
+	 *            the perfusionIndex to set
+	 */
+	public void setPerfusionIndex(Double perfusionIndex) {
+		this.perfusionIndex = perfusionIndex;
 	}
 
 	/* 
@@ -917,23 +1038,10 @@ public class BaseReport {
 				+ uploadDate + ", startTime=" + startTime + ", endTime=" + endTime + ", lightSleepSeconds="
 				+ lightSleepSeconds + ", deepSleepSeconds=" + deepSleepSeconds + ", totalSeconds=" + totalSeconds
 				+ ", sleep_score=" + sleep_score + ", sleep_awake=" + sleep_awake + ", macAddress=" + macAddress
-				+ ", advice=" + advice + "]";
+				+ ", advice=" + advice + ", perfusionIndex=" + perfusionIndex + ", totalApneaTimeSeconds="
+				+ totalApneaTimeSeconds + ", toralHypoventilationTimeSeconds=" + totalHypoventilationTimeSeconds + "]";
 	}
+	
+	
 
-	/**
-	 * @return the perfusionIndex
-	 */
-	public Double getPerfusionIndex() {
-		return perfusionIndex;
-	}
-
-	/**
-	 * @param perfusionIndex the perfusionIndex to set
-	 */
-	public void setPerfusionIndex(Double perfusionIndex) {
-		this.perfusionIndex = perfusionIndex;
-	}
-	
-	
-	
 }

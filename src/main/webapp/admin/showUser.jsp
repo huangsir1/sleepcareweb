@@ -122,7 +122,7 @@
 				<th field="essRank">ess评分</th>
 				<th field="gender">性别</th>
 				<th field="phone">电话</th>
-				<th field="address">地址</th>
+				<th field="address">邮箱</th>
 			</tr>
 		</thead>
 	</table>

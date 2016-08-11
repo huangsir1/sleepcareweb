@@ -18,17 +18,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 import com.itextpdf.text.DocumentException;
 
+import taiyi.web.dao.SystemRoleMapper;
+import taiyi.web.dao.SystemUserRoleMapper;
 import taiyi.web.model.BreatheReport;
 import taiyi.web.model.Hostipal;
 import taiyi.web.model.SleepReport;
 import taiyi.web.model.SubReport;
+import taiyi.web.model.SystemRole;
+import taiyi.web.model.SystemUser;
+import taiyi.web.model.SystemUserRoleKey;
 import taiyi.web.model.User;
 import taiyi.web.model.dto.BaseReport;
 import taiyi.web.model.dto.ReportPreviewDto;
@@ -36,10 +40,12 @@ import taiyi.web.service.BreatheReportService;
 import taiyi.web.service.HostipalService;
 import taiyi.web.service.SleepReportService;
 import taiyi.web.service.SubReportService;
+import taiyi.web.service.SystemUserService;
 import taiyi.web.service.UserService;
 import taiyi.web.service.WebService;
 import taiyi.web.utils.BarChartImageUtil;
 import taiyi.web.utils.BeanUtilsForAndroid;
+import taiyi.web.utils.EncryptUtils;
 import taiyi.web.utils.FileOperateUtils;
 import taiyi.web.utils.LineChartImageUtil;
 import taiyi.web.utils.PDFUtils;
@@ -67,7 +73,10 @@ public class WebServiceImpl implements WebService {
 	private SubReportService subReportService;
 	@Autowired
 	private HostipalService hostipalService;
-
+	@Autowired
+	private SystemUserService systemUserService;
+	
+	
 	public Map<String, Integer[]> getReportNumber(String reportId) {
 		Map<String, Integer[]> maps = new HashMap<String, Integer[]>();
 		BreatheReport breatheReport = breatheReportService.selectByPrimaryKey(reportId);
@@ -184,13 +193,13 @@ public class WebServiceImpl implements WebService {
 			e.printStackTrace();
 			logger.error("图片生成失败");
 		}
-		//create pdf 
+		// create pdf
 		createPdf(user, baseReport);
 
 		logger.info("报告生成成功 " + fileName + "report.pdf");
 		deleteFile(fileName);
-		return basePath + "files" + File.separator + user.getId() + File.separator + baseReport.getId()
-				+ File.separator + "report.pdf";
+		return basePath + "files" + File.separator + user.getId() + File.separator + baseReport.getId() + File.separator
+				+ "report.pdf";
 
 	}
 
@@ -276,7 +285,8 @@ public class WebServiceImpl implements WebService {
 		}
 		new PDFUtils(font, logo).createPdf(fileName + "report.pdf", fileName + "ROSeconds.png",
 				fileName + "ROTimes.png", fileName + "ROml.png", fileName + "ROxy.png", user,
-				baseReport.getSleepReport(), baseReport.getBreatheReport(), result, baseReport.getSubReport(),hostipal.getAlias());
+				baseReport.getSleepReport(), baseReport.getBreatheReport(), result, baseReport.getSubReport(),
+				hostipal.getAlias());
 	}
 
 	// private Pulse generatePulse(Map<String, String[]> readAsMap) throws
@@ -386,7 +396,7 @@ public class WebServiceImpl implements WebService {
 		subReportService.insert(subReport);
 		breatheReportService.insert(breatheReport);
 		User user = userService.selectByPrimaryKey(report.getUserId());
-		user.setLastestDate(new Date()); 
+		user.setLastestDate(new Date());
 		userService.updateByPrimaryKeySelective(user);
 	}
 
@@ -468,9 +478,10 @@ public class WebServiceImpl implements WebService {
 		out.flush();
 		fis.close();
 	}
-	
+
 	@Override
-	public void flushFile(HttpServletRequest request, HttpServletResponse response, String reportId) throws IOException {
+	public void flushFile(HttpServletRequest request, HttpServletResponse response, String reportId)
+			throws IOException {
 
 		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(reportId);
 		String fileName = WebProperties.getFilePath() + File.separator + sleepReport.getUserId() + File.separator
@@ -489,7 +500,6 @@ public class WebServiceImpl implements WebService {
 		out.flush();
 		fis.close();
 	}
-	
 
 	/*
 	 * @see
@@ -527,5 +537,11 @@ public class WebServiceImpl implements WebService {
 
 		return reportPreviewDtos;
 	}
+
+	/*
+	 * @see taiyi.web.service.WebService#saveHospitalAdmin(taiyi.web.model.
+	 * SystemUser, java.lang.String[], java.lang.String)
+	 */
+	
 
 }

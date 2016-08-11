@@ -12,6 +12,7 @@ package taiyi.web.model.dto;
  */
 
 public class Status implements Comparable<Status>{
+	private static Status status;
 	public final static int SUCCESSED_CODE = 2000;
 	public final static int SUCCESSED_UPLOAD_REPORT_CDOE = 2001;
 	public final static int SUCCESSED_UPLOAD_REPORT_AND_GENERATE_IT_CODE = 2002;
@@ -74,6 +75,44 @@ public class Status implements Comparable<Status>{
 	
 	private int code = FAILED_CODE;
 	private String message = "no info";
+	
+	public synchronized static Status getSuccess() {
+		if (status == null) {
+			status = Status.SUCCESSED;
+		} else {
+			status.setCode(Status.SUCCESSED_CODE);
+			status.setMessage("成功");
+		}
+		return status;
+	}
+	
+	public synchronized static Status getSuccess(String msg) {
+		if (status == null) {
+			status = Status.SUCCESSED;
+		}
+		status.setCode(Status.SUCCESSED_CODE);
+		status.setMessage(msg);
+		return status;
+	}
+	
+	public synchronized static Status getFailed(String msg) {
+		if (status == null) {
+			status = Status.FAILED;
+		}
+		status.setCode(Status.FAILED_CODE);
+		status.setMessage(msg);
+		return status;
+	}
+	
+	public synchronized static Status getFailed() {
+		if (status == null) {
+			status = Status.FAILED;
+		} else {
+			status.setCode(Status.FAILED_CODE);
+			status.setMessage("失败");
+		}
+		return status;
+	}
 
 	public Status() {
 
