@@ -51,9 +51,9 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 	@ResponseBody
 	public Status uploadReportOnlyFile(@RequestParam(value = "file") MultipartFile file,
 			@RequestParam(required = false) String macAddress, String userId, HttpServletRequest request) {
-		if (StringUtils.isEmpty(macAddress)) {
-			return Status.getFailed();
-		}
+//		if (StringUtils.isEmpty(macAddress)) {
+//			return Status.getFailed();
+//		}
 		return uploadReportFile(file, macAddress, userId, request);
 	}
 
