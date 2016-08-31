@@ -2,14 +2,12 @@ package taiyi.web.utils;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.TimeZone;
 
 import org.jfree.chart.ChartFactory;
@@ -21,12 +19,12 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.title.TextTitle;
-import org.jfree.data.time.Hour;
 import org.jfree.data.time.Minute;
-import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
+
+import taiyi.web.constant.Internationalization;
 
 public class LineChartImageUtil {
 
@@ -78,7 +76,7 @@ public class LineChartImageUtil {
 		plot.setDomainGridlinePaint(new Color(194, 53, 49));
 		// 设置网格横线颜色 
 		plot.setRangeGridlinePaint(Color.pink);
-		plot.setNoDataMessage("没有数据");
+		plot.setNoDataMessage("NO DATA 没有数据");
 		plot.setNoDataMessageFont(new Font("微软雅黑", Font.BOLD, 22));
 		XYItemRenderer renderer = plot.getRenderer();
 		renderer.setSeriesPaint(0, new Color(194, 53, 49));
@@ -89,12 +87,23 @@ public class LineChartImageUtil {
 	}
 
 	public static void generateMailvImage(String[] riqi, String[] mailv, String imagePathAndExt) throws Exception {
-		create(riqi, mailv, "脉率趋势图", null, "次/分钟", imagePathAndExt);
+		generateMailvImage(riqi, mailv, imagePathAndExt,Locale.CHINA);
 	}
 
 	public static void generateXueyangImage(String[] riqi, String[] xueyang, String imagePathAndExt) throws Exception {
-		create(riqi, xueyang, "血氧趋势图", null, "百分比", imagePathAndExt);
+		generateXueyangImage(riqi, xueyang, imagePathAndExt,Locale.CHINA);
 	}
+	
+	public static void generateMailvImage(String[] riqi, String[] mailv, String imagePathAndExt,Locale locale) throws Exception {
+		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+		create(riqi, mailv, bundle.getString(Internationalization.PR_TREND), null, bundle.getString(Internationalization.FREQUENCY)+"/"+bundle.getString(Internationalization.MIN), imagePathAndExt);
+	}
+
+	public static void generateXueyangImage(String[] riqi, String[] xueyang, String imagePathAndExt,Locale locale) throws Exception {
+		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+		create(riqi, xueyang, bundle.getString(Internationalization.SPO2_TREND), null, bundle.getString(Internationalization.PERCENTAGE), imagePathAndExt);
+	}
+
 
 	public static JFreeChart createTimeSeriesChart(JFreeChart timeSeriesChart) throws Exception {
 		ChartFrame frame = new ChartFrame("TestPieChart", timeSeriesChart);

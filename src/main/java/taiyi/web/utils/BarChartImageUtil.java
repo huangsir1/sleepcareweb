@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -30,6 +32,8 @@ import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.TextAnchor;
+
+import taiyi.web.constant.Internationalization;
 
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
@@ -70,7 +74,7 @@ public class BarChartImageUtil {
 		plot.setDomainGridlinePaint(new Color(194, 53, 49));
 		// 设置网格横线颜色
 		plot.setRangeGridlinePaint(Color.pink);
-		plot.setNoDataMessage("没有数据");
+		plot.setNoDataMessage("NO DATA 没有数据");
 		BarRenderer customBarRenderer = (BarRenderer) plot.getRenderer();
 		ItemLabelPosition itemLabelPosition = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
 				TextAnchor.BASELINE_CENTER);
@@ -175,13 +179,28 @@ public class BarChartImageUtil {
 
 	public static void generateTimesOfReducedOxygenImage(Integer[] yValue, String imagePathNameAndExt)
 			throws IOException {
-		generateBarChartToImage(yValue, "次数", "氧减分布图", "百分比", "次数", imagePathNameAndExt);
+		generateTimesOfReducedOxygenImage(yValue, imagePathNameAndExt,Locale.CHINA);
 	}
 
 	public static void generateSecondsOfReducedOxygenImage(Integer[] yValue, String xLabel, String imagePathNameAndExt)
 			throws IOException {
-		generateBarChartToImage(yValue, "次数", "血氧分布图", "百分比", xLabel, imagePathNameAndExt);
+		generateSecondsOfReducedOxygenImage(yValue, xLabel, imagePathNameAndExt,Locale.CHINA);
 	}
+	
+	public static void generateTimesOfReducedOxygenImage(Integer[] yValue, String imagePathNameAndExt,Locale locale)
+			throws IOException {
+		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+		generateBarChartToImage(yValue, bundle.getString(Internationalization.FREQUENCY), bundle.getString(Internationalization.OXYGEN_DISTRIBUTION), bundle.getString(Internationalization.PERCENTAGE), bundle.getString(Internationalization.FREQUENCY), imagePathNameAndExt);
+	}
+
+	public static void generateSecondsOfReducedOxygenImage(Integer[] yValue, String xLabel, String imagePathNameAndExt,Locale locale)
+			throws IOException {
+		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+		generateBarChartToImage(yValue, bundle.getString(Internationalization.FREQUENCY), bundle.getString(Internationalization.OXYGEN_DESATURATION_DISTRIBUTION), bundle.getString(Internationalization.PERCENTAGE), bundle.getString(Internationalization.MIN), imagePathNameAndExt);
+	}
+	
+	
+	
 }
 
 class CustomTickUnit extends NumberTickUnit {

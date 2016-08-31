@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.druid.support.logging.Log;
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 import taiyi.web.AndroidToWebAdapter.DataOfAndroidToWebAdapter;
@@ -40,6 +42,7 @@ import taiyi.web.utils.WebProperties;
 @Controller
 @RequestMapping("/api")
 public class ThirdPartyController extends APIExceptionHandlerController {
+	Logger logger = Logger.getLogger(getClass());
 	@Autowired
 	private WebService webService;
 	@Autowired
@@ -99,9 +102,10 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 			baseReport.setId(reportId);
 			baseReport.setUserId(userId);
 			baseReport.setUploadDate(new Date());
+			baseReport.setMacAddress(macAddress);
 			webService.insertReport(baseReport);
 			userService.updateLatestDateToNow(userId);
-			System.out.println(fileName + " 保存成功");
+			logger.info("报告"+reportId+"上传成功");
 			if (webService.isReportAllReady(reportId)) {
 				new GenerateReportThread(webService, reportId, basePath, servletRailPath).start();
 				// return Status.FILE_UPLOAD_SUCCESSED_AND_GENERATE_IT;

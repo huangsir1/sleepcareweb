@@ -5,6 +5,7 @@ package taiyi.web.controller.api;
 
 import java.io.File;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -201,11 +202,12 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
 				+ "/";
 		if (webService.isReportAllReady(reportId)) {
-			if (webService.isReportPdfExist(reportId)) {
-				webService.flushPdf(request, response, reportId);
+			Locale reportPdfExist = webService.isReportPdfExist(reportId);
+			if (reportPdfExist != null) {
+				webService.flushPdf(request, response, reportId,reportPdfExist);
 			} else {
-				webService.generatePdfByReportId(reportId, basePath, servletRailPath);
-				webService.flushPdf(request, response, reportId);
+				webService.generatePdfByReportId(reportId, basePath, servletRailPath,Locale.CHINA);
+				webService.flushPdf(request, response, reportId,Locale.CHINA);
 			}
 		}
 	}

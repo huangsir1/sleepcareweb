@@ -6,13 +6,13 @@ package taiyi.web.service;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import taiyi.web.model.SleepReport;
-import taiyi.web.model.SystemUser;
 import taiyi.web.model.dto.BaseReport;
 import taiyi.web.model.dto.ReportPreviewDto;
 
@@ -38,9 +38,9 @@ public interface WebService {
 
 	String generatePdfByReportId(String reportId, String basePath, String servletRailPath) throws Exception;
 
-	void flushPdf(HttpServletRequest request, HttpServletResponse response, String reportId) throws IOException;
+	void flushPdf(HttpServletRequest request, HttpServletResponse response, String reportId,Locale locale) throws IOException;
 
-	boolean isReportPdfExist(String reportId);
+	Locale isReportPdfExist(String reportId);
 
 	List<ReportPreviewDto> packagePerviewReportDtoByUserId(String userId);
 	
@@ -50,5 +50,6 @@ public interface WebService {
 
 	void flushFile(HttpServletRequest request, HttpServletResponse response, String reportId) throws IOException;
 
-	
+	public String generatePdfByReportId(String reportId, String basePath, String servletRailPath, Locale locale)
+			throws Exception;
 }

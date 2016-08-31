@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
@@ -23,6 +25,7 @@ import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import taiyi.web.constant.Internationalization;
 import taiyi.web.model.BreatheReport;
 import taiyi.web.model.DiseaseHistory;
 import taiyi.web.model.SleepReport;
@@ -44,6 +47,8 @@ public class PDFUtils {
 	public final SimpleDateFormat HHmmssFormat = new SimpleDateFormat("HH:mm:ss");
 	public Image logo;
 	public Logger logger = Logger.getLogger(PDFUtils.class);
+	private Locale local = Locale.CHINA;
+	private ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", local);
 
 	public PDFUtils(String font) throws DocumentException, IOException {
 		CHINESE_FONT = font;
@@ -59,10 +64,12 @@ public class PDFUtils {
 		this(font);
 		this.logo = Image.getInstance(logo);
 	}
+
 	public void createPdf(String dest, String imagePathROSeconds, String imagePathROTimes, String imagePathROml,
-			String imagePathROxy, User user, SleepReport sleepReport, BreatheReport breatheReport, String result,
+			String imagePathROxy, User user, SleepReport sleepReport, BreatheReport breatheReport,
 			SubReport subReport) throws Exception {
-		createPdf(dest, imagePathROSeconds, imagePathROTimes, imagePathROml, imagePathROxy, user, sleepReport, breatheReport, result, subReport, ""); 
+		createPdf(dest, imagePathROSeconds, imagePathROTimes, imagePathROml, imagePathROxy, user, sleepReport,
+				breatheReport, subReport, "");
 	}
 
 	/**
@@ -80,13 +87,19 @@ public class PDFUtils {
 	 * @throws Exception
 	 */
 	public void createPdf(String dest, String imagePathROSeconds, String imagePathROTimes, String imagePathROml,
-			String imagePathROxy, User user, SleepReport sleepReport, BreatheReport breatheReport, String result,
-			SubReport subReport,String header) throws Exception {
+			String imagePathROxy, User user, SleepReport sleepReport, BreatheReport breatheReport,
+			SubReport subReport, String header) throws Exception {
 		try {
 			Document document = new Document(PageSize.A4);
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(dest));
 			document.open();
-
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < 	resourceBundle.getString(Internationalization.SLEEP_APNEA_SYNDROME).length(); i++) {
+				sb.append(" ");
+			}
+			String result = "1. "+resourceBundle.getString(Internationalization.SLEEP_APNEA_SYNDROME)+"：" + getOSAHSResult(breatheReport, user) + "\n"
+					+ sb.toString() + "2. "+resourceBundle.getString(Internationalization.SLEEP_HYPOXEMIA)+"：" + getSleepHypoxiaResult(breatheReport);
+			
 			Image image = Image.getInstance(imagePathROSeconds);
 			Image image2 = Image.getInstance(imagePathROTimes);
 			Image image3 = Image.getInstance(imagePathROml);
@@ -117,7 +130,7 @@ public class PDFUtils {
 			document.add(image4);
 
 			// drawAndSetRetangle(430, 585, writer);
-			Paragraph t = new Paragraph("睡眠监测报告", fontBigTitle);
+			Paragraph t = new Paragraph(resourceBundle.getString(Internationalization.SLEEP_REPORT), fontBigTitle);
 			t.setAlignment(Element.ALIGN_CENTER);
 			document.add(t);
 			drawDIYHeader(writer, header);
@@ -132,7 +145,7 @@ public class PDFUtils {
 			darwPulseRateAnalysisPart(writer, subReport);
 			drawSleepAnalysisPart(writer, sleepReport);
 			//
-			String advice = subReport.getAdvice() == null ? "结果请结合临床。 " : subReport.getAdvice();
+			String advice = subReport.getAdvice() == null ? resourceBundle.getString(Internationalization.RESULT_REFERENCE_CLINICAL)+" " : subReport.getAdvice();
 			drawAnalysisResultPart(writer, result, advice);
 
 			// Rectangle rectangle = drawAndSetRetangle(750, 600, writer);
@@ -146,7 +159,8 @@ public class PDFUtils {
 			throw new Exception(e);
 		}
 	}
-	public void drawDIYHeader(PdfWriter writer,String header) throws DocumentException {
+
+	public void drawDIYHeader(PdfWriter writer, String header) throws DocumentException {
 		if (!StringUtils.isEmpty(header)) {
 			Rectangle rectangle = new Rectangle(25, 810, 575, 790);
 			ColumnText ct = new ColumnText(writer.getDirectContent());
@@ -159,9 +173,9 @@ public class PDFUtils {
 			ct.addElement(paragraph);
 			ct.go();
 		}
-		
+
 	}
-	
+
 	public void drawAnalysisResultPart(PdfWriter writer, String result, String advice) throws DocumentException {
 		Rectangle rectangle = drawAndSetRetangle(110, 20, writer);
 		ColumnText ct = new ColumnText(writer.getDirectContent());
@@ -169,15 +183,19 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add("分析结果 \n");
-		addBoldText(paragraph, "结论 : ");
+		paragraph.add(resourceBundle.getString(Internationalization.RESULTS_OF_THE_ANALYSIS)+" \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.CONCLUSION)+" : ");
 		addNormalText(paragraph, result);
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, "建议 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.SUGGESTION)+" : ");
 		addNormalText(paragraph, advice);
 		addDefaultSpace(paragraph);
 		ct.addElement(paragraph);
 		ct.go();
+	}
+
+	public void drawAnalysisResultPart(PdfWriter writer) {
+
 	}
 
 	public void drawSleepAnalysisPart(PdfWriter writer, SleepReport sleepReport) throws DocumentException {
@@ -187,27 +205,27 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add("睡眠分析 \n");
-		addBoldText(paragraph, "睡眠时间 : ");
+		paragraph.add(resourceBundle.getString(Internationalization.SLEEP_ANALYSIS)+" \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.SLEEP_TIME)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(sleepReport.getTotalSeconds()));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "深睡眠时长 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.DEEP_SLEEP_DURATION)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(sleepReport.getDeepSleepSeconds()));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "深睡眠占比 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.THE_PROPORTION_OF_DEEP_SLEEP)+" : ");
 		addNormalText(paragraph,
 				decimalFormat.format((double) sleepReport.getDeepSleepSeconds() * 100 / sleepReport.getTotalSeconds())
 						+ "%");
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "浅睡眠时长 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.LIGHT_SLEEP_DURATION)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(sleepReport.getLightSleepSeconds()));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "浅睡眠占比 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.THE_PROPORTION_OF_LIGHT_SLEEP)+" : ");
 		addNormalText(paragraph,
 				decimalFormat.format((double) sleepReport.getLightSleepSeconds() * 100 / sleepReport.getTotalSeconds())
 						+ "%");
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, "睡眠质量评分 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.SCORE_OF_SLEEP_QUALITY)+" : ");
 		addNormalText(paragraph, "" + sleepReport.getScore());
 		addDefaultSpace(paragraph);
 		ct.addElement(paragraph);
@@ -221,21 +239,21 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add("脉率分析 \n");
-		addBoldText(paragraph, "平均脉率 : ");
-		addNormalText(paragraph, decimalFormat.format(pulse.getAveragePulse()) + "次/分钟");
+		paragraph.add(resourceBundle.getString(Internationalization.PR_ANALYSIS)+" \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEAN_PR)+" : ");
+		addNormalText(paragraph, decimalFormat.format(pulse.getAveragePulse()) + " "+ resourceBundle.getString(Internationalization.FREQUENCY)+"/"+resourceBundle.getString(Internationalization.MIN));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "最低脉率 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MIN_PR)+" : ");
 		addNormalText(paragraph, decimalFormat.format(pulse.getMinPulse()));
 		if (pulse.getMinPulseTime() != null) {
-			addNormalText(paragraph, "次/分钟， 发生于 " + HHmmssFormat.format(pulse.getMinPulseTime()));
+			addNormalText(paragraph, " "+resourceBundle.getString(Internationalization.FREQUENCY)+"/"+resourceBundle.getString(Internationalization.MIN)+"， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(pulse.getMinPulseTime()));
 		}
 
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "最高脉率 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MAX_PR)+" : ");
 		addNormalText(paragraph, decimalFormat.format(pulse.getMaxPulse()));
 		if (pulse.getMaxPulseTime() != null) {
-			addNormalText(paragraph, "次/分钟， 发生于 " + HHmmssFormat.format(pulse.getMaxPulseTime()));
+			addNormalText(paragraph, " "+resourceBundle.getString(Internationalization.FREQUENCY)+"/"+resourceBundle.getString(Internationalization.MIN)+"， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(pulse.getMaxPulseTime()));
 		}
 		addDefaultSpace(paragraph);
 		// 脉率趋势图
@@ -252,32 +270,32 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add("血氧饱和度分析 \n");
-		addBoldText(paragraph, "平均血氧饱和度 : ");
+		paragraph.add(resourceBundle.getString(Internationalization.SPO2_ANALYSIS)+" \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEAN_SPO2)+": ");
 		addNormalText(paragraph, decimalFormat.format(breatheReport.getAverageOxygenSaturation()) + "%");
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "最低血氧饱和度 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MIN_SPO2)+" : ");
 		addNormalText(paragraph, decimalFormat.format(breatheReport.getMinOxygenSaturation()) + "%");
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "血氧饱和度低于90%占比 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.T90_SPO2_90)+" : ");
 		addNormalText(paragraph, decimalFormat.format(breatheReport.getOxygenSaturationLessthanNinetyPercent()) + "%");
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "氧减指数 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.OXYGEN_DESATURATION)+" : ");
 		addNormalText(paragraph, decimalFormat.format(subReport.getOxygenReductionIndex()));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "最大氧降 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MAX_OXYGEN_DESATURATION)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getMaxOxygenReduceSeconds()));
 		if (subReport.getMaxOxygenReduceTime() != null) {
-			addNormalText(paragraph, "， 发生于 " + HHmmssFormat.format(subReport.getMaxOxygenReduceTime()));
+			addNormalText(paragraph, "， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getMaxOxygenReduceTime()));
 		}
-		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, "最长氧降时长 : ");
+		addNormalText(paragraph, "   ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_OXYGEN_DESATURATION)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getLongestOxygenReduceSeconds()));
 		if (subReport.getLongestOxygenReduceTime() != null) {
-			addNormalText(paragraph, "， 发生于 " + HHmmssFormat.format(subReport.getLongestOxygenReduceTime()));
+			addNormalText(paragraph, "， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getLongestOxygenReduceTime()));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "氧减危害指数 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.ODRI)+" : ");
 		addNormalText(paragraph, decimalFormat.format(subReport.getBloodOxygenHazardIndex()));
 		addDefaultSpace(paragraph);
 		/*
@@ -297,33 +315,33 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add("呼吸统计 \n");
-		addBoldText(paragraph, "呼吸紊乱指数 : ");
+		paragraph.add(resourceBundle.getString(Internationalization.BREATHING_STATISTICS)+" \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.RESPIRATORY_DISTURBANCE_INDEX)+" : ");
 		try {
 			addNormalText(paragraph, decimalFormat.format(breatheReport.getApneaHypopneaIndex()));
 		} catch (Exception e) {
 			addNormalText(paragraph, "0");
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "呼吸暂停次数 : ");
-		addNormalText(paragraph, breatheReport.getApneaTimes() + "次");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.APNEAS)+" : ");
+		addNormalText(paragraph, breatheReport.getApneaTimes() + resourceBundle.getString(Internationalization.FREQUENCY));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "最长呼吸暂停 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_APNEA)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getLongestApneaSeconds()));
 		if (subReport.getLongestApneaTime() != null) {
-			addNormalText(paragraph, "， 发生于 " + HHmmssFormat.format(subReport.getLongestApneaTime()));
+			addNormalText(paragraph, "， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getLongestApneaTime()));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "呼吸暂停总时长 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.TOTAL_DURATION_OF_APNEA_EVENTS)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getTotalApneaTimeSeconds()));
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, "低通气次数 : ");
-		addNormalText(paragraph, breatheReport.getHypopneaTimes() + "次");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.HYPOPNEAS)+" : ");
+		addNormalText(paragraph, breatheReport.getHypopneaTimes() + resourceBundle.getString(Internationalization.FREQUENCY));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "最长低通气 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_HYPOPNEAS)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(breatheReport.getMaxHyponeaSeconds()));
 		if (breatheReport.getHyponeaHappenDate() != null) {
-			addNormalText(paragraph, "， 发生于 " + HHmmssFormat.format(breatheReport.getHyponeaHappenDate()));
+			addNormalText(paragraph, "， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(breatheReport.getHyponeaHappenDate()));
 		}
 		addDefaultSpace(paragraph);
 		// addBoldText(paragraph, "氧减次数 : ");
@@ -340,11 +358,11 @@ public class PDFUtils {
 		// addNormalText(paragraph,
 		// breatheReport.getOxygenSaturationLessthanNinetyPercent() + "%");
 		// addDefaultSpace(paragraph);
-		addBoldText(paragraph, "低通气总时长 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.TOTAL_DURATION_OF_HYPOPNEA_EVENTS)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getTotalHypoventilationTimeSeconds()));
-		addDefaultSpace(paragraph); 
-		
-		addBoldText(paragraph, "呼吸质量评分 : ");
+		addDefaultSpace(paragraph);
+
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.SCORE_OF_RESPIRATORY_QUALITY)+" : ");
 		addNormalText(paragraph, "" + breatheReport.getScore());
 		addDefaultSpace(paragraph);
 		// addBoldText(paragraph, "上传日期 : ");
@@ -367,57 +385,57 @@ public class PDFUtils {
 		paragraph.setLeading(12f);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add("睡眠报告 \n");
-		addBoldText(paragraph, "开始时间 : ");
+		paragraph.add(resourceBundle.getString(Internationalization.SLEEP_REPORT)+" \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.STARTING_TIME)+" : ");
 		try {
 			addNormalText(paragraph, simpleDateFormat.format(sleepReport.getStartTime()));
 		} catch (Exception e) {
-			addNormalText(paragraph, "无数据");
+			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "结束时间 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.END_TIME)+" : ");
 		try {
 			addNormalText(paragraph, simpleDateFormat.format(sleepReport.getEndTime()));
 		} catch (Exception e) {
-			addNormalText(paragraph, "无数据");
+			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA)+"");
 		}
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, "浅睡时长 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.LIGHT_SLEEP_DURATION)+": ");
 		try {
 			addNormalText(paragraph, secondsToHHmmss(sleepReport.getLightSleepSeconds()));
 		} catch (Exception e) {
-			addNormalText(paragraph, "无数据");
+			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "深睡时长 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.DEEP_SLEEP_DURATION)+" : ");
 		try {
 			addNormalText(paragraph, secondsToHHmmss(sleepReport.getDeepSleepSeconds()));
 		} catch (Exception e) {
-			addNormalText(paragraph, "无数据");
+			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "清醒时长 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.WAKE_DURATION)+" : ");
 		try {
 			addNormalText(paragraph, secondsToHHmmss(sleepReport.getAwakeSeconds()));
 		} catch (Exception e) {
-			addNormalText(paragraph, "无数据");
+			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "总计 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.TOTAL)+" : ");
 		try {
 			addNormalText(paragraph, secondsToHHmmss(sleepReport.getTotalSeconds()));
 		} catch (Exception e) {
-			addNormalText(paragraph, "无数据");
+			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA));
 		}
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, "评分 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.SCORE)+" : ");
 		addNormalText(paragraph, "" + sleepReport.getScore());
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "上传日期 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.UPLOAD_DATE)+" : ");
 		try {
 			addNormalText(paragraph, yyyyMMDDFormat.format(sleepReport.getUploadDate()));
 		} catch (Exception e) {
-			addNormalText(paragraph, "无数据");
+			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA)+"");
 		}
 
 		ct.addElement(paragraph);
@@ -431,14 +449,14 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add("用户信息 \n");
-		addBoldText(paragraph, "姓名 : ");
+		paragraph.add(resourceBundle.getString(Internationalization.USER_INFO)+" \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.NAME)+": ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 20);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "年龄 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.AGE)+" : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 10);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "性别 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.GENDER)+" : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 5);
 		addDefaultSpace(paragraph);
 		// addBoldText(paragraph, "生日 : ");
@@ -451,58 +469,58 @@ public class PDFUtils {
 		// addTextAndSpaceWithUnderLine(paragraph, "无数据", 40);
 		// }
 		// addDefaultSpace(paragraph);
-		addBoldText(paragraph, "身高 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.HEIGHT)+" : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 12);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "体重 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.WEIGHT)+" : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 20);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "电话 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.PHONE)+" : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 30);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "ESS评分 : ");
-		addTextAndSpaceWithUnderLine(paragraph, "", 50);
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.ESS_SCORE)+" : ");
+		addTextAndSpaceWithUnderLine(paragraph, "", 25);
 		addDefaultSpace(paragraph);
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, "BMI指数 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.BMI_INDEX)+" : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 10);
 
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "病史 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEDICAL_HISTORY)+" : ");
 
 		addSpaceWithUnderLine(paragraph, 200);
 
 		addNormalText(paragraph, "\n");
 		// 监测日期、开始时间、结束时间、监测时长
-		addBoldText(paragraph, "监测日期 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DATE)+" : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDFormat.format(sleepReport.getStartTime()), 30);
 		} catch (Exception e) {
 			addTextAndSpaceWithUnderLine(paragraph, "", 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "开始时间 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.STARTING_TIME)+" : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDHHmmssFormat.format(sleepReport.getStartTime()), 30);
 		} catch (Exception e) {
-			addTextAndSpaceWithUnderLine(paragraph, " 无数据", 30);
+			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA), 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "结束时间 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.END_TIME)+": ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDHHmmssFormat.format(sleepReport.getEndTime()), 30);
 		} catch (Exception e) {
-			addTextAndSpaceWithUnderLine(paragraph, " 无数据", 30);
+			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA)+"", 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "监测时长 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DURATION)+" : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph,
 					secondsToHHmmss(
 							sleepReport.getEndTime().getTime() / 1000 - sleepReport.getStartTime().getTime() / 1000),
 					30);
 		} catch (Exception e) {
-			addTextAndSpaceWithUnderLine(paragraph, " 无数据", 30);
+			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA)+"", 30);
 		}
 		addDefaultSpace(paragraph);
 		ct.addElement(paragraph);
@@ -517,15 +535,15 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add("用户信息 \n");
-		addBoldText(paragraph, "姓名 : ");
+		paragraph.add(resourceBundle.getString(Internationalization.USER_INFO)+" \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.NAME)+" : ");
 		addTextAndSpaceWithUnderLine(paragraph, user.getName(), 20);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "年龄 : ");
-		addTextAndSpaceWithUnderLine(paragraph, getYear(user.getBirthday(), new Date()) + "岁", 10);
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.AGE)+" : ");
+		addTextAndSpaceWithUnderLine(paragraph, getYear(user.getBirthday(), new Date()) +" "+ resourceBundle.getString(Internationalization.YEAR_OLD), 10);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "性别 : ");
-		addTextAndSpaceWithUnderLine(paragraph, user.getGender(), 5);
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.GENDER)+" : ");
+		addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(user.getGender(true)), 5);
 		addDefaultSpace(paragraph);
 		// addBoldText(paragraph, "生日 : ");
 		// SimpleDateFormat simpleDateFormat = new
@@ -537,80 +555,80 @@ public class PDFUtils {
 		// addTextAndSpaceWithUnderLine(paragraph, "无数据", 40);
 		// }
 		// addDefaultSpace(paragraph);
-		addBoldText(paragraph, "身高 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.HEIGHT)+" : ");
 		addTextAndSpaceWithUnderLine(paragraph, user.getHeight() + "cm", 12);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "体重 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.WEIGHT)+" : ");
 		addTextAndSpaceWithUnderLine(paragraph, user.getWeight() + "kg", 20);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "电话 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.PHONE)+" : ");
 		addTextAndSpaceWithUnderLine(paragraph, user.getPhone(), 30);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "ESS评分 : ");
-		addTextAndSpaceWithUnderLine(paragraph, user.getEssRank() + "(" + user.getEssResult() + ")", 50);
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.ESS_SCORE)+" : ");
+		addTextAndSpaceWithUnderLine(paragraph, user.getEssRank() + "(" + resourceBundle.getString(user.getEssResult()) + ")", 25);
 		addDefaultSpace(paragraph);
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, "BMI指数 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.BMI_INDEX)+" : ");
 		try {
 			addTextAndSpaceWithUnderLine(
 					paragraph, decimalFormat.format(user.getWeight() * 10000 / user.getHeight() / user.getHeight())
 							+ "(" + getBMIResult(user.getWeight() * 10000 / user.getHeight() / user.getHeight()) + ")",
 					30);
 		} catch (Exception e) {
-			addTextAndSpaceWithUnderLine(paragraph, "无数据", 10);
+			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA), 10);
 		}
 
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "病史 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEDICAL_HISTORY)+" : ");
 		StringBuilder sb = new StringBuilder();
-		if (user.getDiseaseHistories().size() <= 8) {
+		if (user.getDiseaseHistories().size() <= 5) {
 			for (DiseaseHistory dh : user.getDiseaseHistories()) {
-				sb.append(dh.getName() + "、");
+				sb.append(resourceBundle.getString(dh.getName()) + "、");
 			}
 		} else {
-			for (int i = 0; i < 8; i++) {
-				sb.append(user.getDiseaseHistories().get(i).getName() + "、");
+			for (int i = 0; i < 5; i++) {
+				sb.append(resourceBundle.getString(user.getDiseaseHistories().get(i).getName()) + "、");
 			}
-			sb.append("等、");
+			sb.append(resourceBundle.getString(Internationalization.ETC)+"、");
 		}
 
 		try {
-			addTextAndSpaceWithUnderLine(paragraph, sb.substring(0, sb.length() - 1), 200);
+			addTextAndSpaceWithUnderLine(paragraph, sb.substring(0, sb.length() - 1), 170);
 		} catch (Exception e) {
 			addSpaceWithUnderLine(paragraph, 200);
 		}
 
 		addNormalText(paragraph, "\n");
 		// 监测日期、开始时间、结束时间、监测时长
-		addBoldText(paragraph, "监测日期 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DATE)+" : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDFormat.format(sleepReport.getStartTime()), 30);
 		} catch (Exception e) {
-			addTextAndSpaceWithUnderLine(paragraph, " 无数据", 30);
+			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA), 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "开始时间 : ");
+		addBoldText(paragraph,resourceBundle.getString(Internationalization.STARTING_TIME)+" : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDHHmmssFormat.format(sleepReport.getStartTime()), 30);
 		} catch (Exception e) {
-			addTextAndSpaceWithUnderLine(paragraph, " 无数据", 30);
+			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA), 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "结束时间 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.END_TIME)+" : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDHHmmssFormat.format(sleepReport.getEndTime()), 30);
 		} catch (Exception e) {
-			addTextAndSpaceWithUnderLine(paragraph, " 无数据", 30);
+			addTextAndSpaceWithUnderLine(paragraph,resourceBundle.getString(Internationalization.NO_DATA)+"", 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, "监测时长 : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DURATION)+" : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph,
 					secondsToHHmmss(
 							sleepReport.getEndTime().getTime() / 1000 - sleepReport.getStartTime().getTime() / 1000),
 					30);
 		} catch (Exception e) {
-			addTextAndSpaceWithUnderLine(paragraph, " 无数据", 30);
+			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA), 30);
 		}
 		addDefaultSpace(paragraph);
 		ct.addElement(paragraph);
@@ -624,15 +642,15 @@ public class PDFUtils {
 	private String getBMIResult(double fat) {
 		String result = null;
 		if (fat < 18.5) {
-			result = "过轻";
+			result = resourceBundle.getString(Internationalization.UNDERWEIGHT);
 		} else if (fat >= 18.5 && fat <= 24.99) {
-			result = "正常";
+			result = resourceBundle.getString(Internationalization.NORMAL);
 		} else if (fat > 25 && fat < 28) {
-			result = "过重";
+			result = resourceBundle.getString(Internationalization.OVERWEIGHT);
 		} else if (fat > 28 && fat < 32) {
-			result = "肥胖";
+			result = resourceBundle.getString(Internationalization.OBESE);
 		} else if (fat > 32) {
-			result = "非常肥胖";
+			result = resourceBundle.getString(Internationalization.SEVERELY_OBESE);
 		}
 		return result;
 	}
@@ -728,16 +746,74 @@ public class PDFUtils {
 			long hour = seconds / 3600;
 			long minute = seconds % 3600 / 60;
 			long second = seconds % 60;
-			return hour + "小时" + minute + "分" + second + "秒";
+			return hour + resourceBundle.getString(Internationalization.HR) + minute + resourceBundle.getString(Internationalization.MIN) + second + resourceBundle.getString(Internationalization.SEC);
 		} catch (Exception e) {
 
 		}
-		return "无数据";
+		return resourceBundle.getString(Internationalization.NO_DATA);
 	}
 
 	public int getYear(Date before, Date after) {
-		int day = (int) (((double)after.getTime() - before.getTime()) / 1000 / 60 / 60 / 24 / 365.25);
+		int day = (int) (((double) after.getTime() - before.getTime()) / 1000 / 60 / 60 / 24 / 365.25);
 		return Math.abs(day);
 	}
-	
+
+	/**
+	 * @return the local
+	 */
+	public Locale getLocal() {
+		return local;
+	}
+
+	/**
+	 * @param local
+	 *            the local to set
+	 */
+	public void setLocal(Locale local) {
+		this.local = local;
+		resourceBundle = ResourceBundle.getBundle("messages", local);
+	}
+
+	public String getOSAHSResult(BreatheReport breatheReport, User user) {
+		// List<DiseaseHistory> diseaseHistories = user.getDiseaseHistories();
+		String result = resourceBundle.getString(Internationalization.NO);
+		double AHI = breatheReport.getApneaHypopneaIndex();
+		// boolean isDisease = false;
+		// boolean isOSAHS = false;
+		// for (DiseaseHistory d : diseaseHistories) {
+		// if("失 眠".equals(d.getName()) || "高血压".equals(d.getName()) ||
+		// "冠心病".equals(d.getName()) || "脑血管疾病".equals(d.getName()) ||
+		// "糖尿病".equals(d.getName())) {
+		// isDisease = true;
+		// }
+		// }
+		//
+		// if((essscore >= 9 && AHI > 5) || (essscore < 9 && AHI >= 10) || (AHI
+		// > 5 && isDisease)){
+		// isOSAHS = true;
+		// }
+		if (AHI <= 5 && breatheReport.getMinOxygenSaturation() >= 90)
+			result = resourceBundle.getString(Internationalization.NO);
+		if (AHI > 30) {
+			result = resourceBundle.getString(Internationalization.SEVERE);
+		} else if (AHI > 15) {
+			result = resourceBundle.getString(Internationalization.MODERATE);
+		} else if (AHI > 5) {
+			result = resourceBundle.getString(Internationalization.SLIGHT);
+		}
+		return result;
+	}
+
+	public String getSleepHypoxiaResult(BreatheReport breatheReport) {
+		Double lspo2 = breatheReport.getMinOxygenSaturation();
+		String result = resourceBundle.getString(Internationalization.NO);
+		if (lspo2 < 80) {
+			result = resourceBundle.getString(Internationalization.SEVERE);
+		} else if (lspo2 < 85) {
+			result = resourceBundle.getString(Internationalization.MODERATE);
+		} else if (lspo2 < 90) {
+			result = resourceBundle.getString(Internationalization.SLIGHT);
+		}
+		return result;
+	}
 }

@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -326,7 +327,7 @@ public class AdminController extends ExceptionHandlerController {
 	@RequestMapping("/showPdf/{reportId}")
 	public void showPdf(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, DocumentException {
-		webService.flushPdf(request, response, reportId);
+		webService.flushPdf(request, response, reportId,Locale.CHINA);
 	}
 	
 	@RequiresPermissions(logical = Logical.OR, value = { "system:view" })

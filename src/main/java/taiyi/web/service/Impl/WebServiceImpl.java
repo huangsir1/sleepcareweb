@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,15 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Lists;
 import com.itextpdf.text.DocumentException;
 
-import taiyi.web.dao.SystemRoleMapper;
-import taiyi.web.dao.SystemUserRoleMapper;
 import taiyi.web.model.BreatheReport;
 import taiyi.web.model.Hostipal;
 import taiyi.web.model.SleepReport;
 import taiyi.web.model.SubReport;
-import taiyi.web.model.SystemRole;
-import taiyi.web.model.SystemUser;
-import taiyi.web.model.SystemUserRoleKey;
 import taiyi.web.model.User;
 import taiyi.web.model.dto.BaseReport;
 import taiyi.web.model.dto.ReportPreviewDto;
@@ -45,7 +41,6 @@ import taiyi.web.service.UserService;
 import taiyi.web.service.WebService;
 import taiyi.web.utils.BarChartImageUtil;
 import taiyi.web.utils.BeanUtilsForAndroid;
-import taiyi.web.utils.EncryptUtils;
 import taiyi.web.utils.FileOperateUtils;
 import taiyi.web.utils.LineChartImageUtil;
 import taiyi.web.utils.PDFUtils;
@@ -75,8 +70,7 @@ public class WebServiceImpl implements WebService {
 	private HostipalService hostipalService;
 	@Autowired
 	private SystemUserService systemUserService;
-	
-	
+
 	public Map<String, Integer[]> getReportNumber(String reportId) {
 		Map<String, Integer[]> maps = new HashMap<String, Integer[]>();
 		BreatheReport breatheReport = breatheReportService.selectByPrimaryKey(reportId);
@@ -101,6 +95,7 @@ public class WebServiceImpl implements WebService {
 		return maps;
 	}
 
+	@Deprecated
 	public String generatePdfByReportId_oldVersion(String reportId, String basePath, String servletRailPath)
 			throws Exception {
 
@@ -110,8 +105,6 @@ public class WebServiceImpl implements WebService {
 		User user = userService.selectWithDH(sleepReport.getUserId());
 		String fileName = WebProperties.getFilePath() + File.separator + user.getId() + File.separator
 				+ sleepReport.getId() + File.separator;
-		String result = "1. 睡眠呼吸暂停低通气综合症：" + getOSAHSResult(breatheReport, user) + "\n" + "            2. 睡眠低氧血症："
-				+ getSleepHypoxiaResult(breatheReport);
 		SubReport sub = subReportService.selectByPrimaryKey(reportId);
 
 		File file = new File(fileName);
@@ -148,14 +141,15 @@ public class WebServiceImpl implements WebService {
 
 		new PDFUtils(font, logo).createPdf(fileName + "report.pdf", fileName + "ROSeconds.png",
 				fileName + "ROTimes.png", fileName + "ROml.png", fileName + "ROxy.png", user, sleepReport,
-				breatheReport, result, sub);
-		System.out.println("报告生成成功 " + fileName + "report.pdf");
-		deleteFile(fileName);
+				breatheReport, sub);
+		logger.info("报告生成成功 " + fileName + "report.pdf");
+		deleteFile(fileName,null);
 		return basePath + "files" + File.separator + user.getId() + File.separator + sleepReport.getId()
 				+ File.separator + "report.pdf";
 	}
 
-	public String generatePdfByReportId(String reportId, String basePath, String servletRailPath) throws Exception {
+	public String generatePdfByReportId(String reportId, String basePath, String servletRailPath, Locale locale)
+			throws Exception {
 		Map<String, Integer[]> maps = getReportNumber(reportId);
 		BaseReport baseReport = this.selectById(reportId);
 
@@ -183,21 +177,28 @@ public class WebServiceImpl implements WebService {
 			readAsMap.put("mailv", new String[0]);
 			readAsMap.put("xueyang", new String[0]);
 		}
-		BarChartImageUtil.generateSecondsOfReducedOxygenImage(maps.get("seconds"), "分", fileName + "ROSeconds.png");
-		BarChartImageUtil.generateTimesOfReducedOxygenImage(maps.get("times"), fileName + "ROTimes.png");
+
+		PDFUtils pdfUtils = createPdfUtils();
+		pdfUtils.setLocal(locale);
+
+		BarChartImageUtil.generateSecondsOfReducedOxygenImage(maps.get("seconds"), "分",
+				fileName + "ROSeconds_" + locale.getLanguage() + ".png", pdfUtils.getLocal());
+		BarChartImageUtil.generateTimesOfReducedOxygenImage(maps.get("times"),
+				fileName + "ROTimes_" + locale.getLanguage() + ".png", pdfUtils.getLocal());
 		try {
-			LineChartImageUtil.generateMailvImage(readAsMap.get("riqi"), readAsMap.get("mailv"), fileName + "ROml.png");
+			LineChartImageUtil.generateMailvImage(readAsMap.get("riqi"), readAsMap.get("mailv"),
+					fileName + "ROml_" + locale.getLanguage() + ".png", pdfUtils.getLocal());
 			LineChartImageUtil.generateXueyangImage(readAsMap.get("riqi"), readAsMap.get("xueyang"),
-					fileName + "ROxy.png");
+					fileName + "ROxy_" + locale.getLanguage() + ".png", pdfUtils.getLocal());
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("图片生成失败");
 		}
 		// create pdf
-		createPdf(user, baseReport);
+		createPdf(pdfUtils, user, baseReport);
 
 		logger.info("报告生成成功 " + fileName + "report.pdf");
-		deleteFile(fileName);
+		deleteFile(fileName,locale);
 		return basePath + "files" + File.separator + user.getId() + File.separator + baseReport.getId() + File.separator
 				+ "report.pdf";
 
@@ -206,6 +207,26 @@ public class WebServiceImpl implements WebService {
 	/**
 	 * @param fileName
 	 */
+	public void deleteFile(String basePath,Locale locale) {
+		File image1 = new File(basePath + "ROSeconds_"+locale.getLanguage()+".png");
+		if (image1.exists()) {
+			image1.delete();
+		}
+		File image2 = new File(basePath + "ROTimes_"+locale.getLanguage()+".png");
+		if (image2.exists()) {
+			image2.delete();
+		}
+		File image3 = new File(basePath + "ROml_"+locale.getLanguage()+".png");
+		if (image3.exists()) {
+			image3.delete();
+		}
+		File image4 = new File(basePath + "ROxy_"+locale.getLanguage()+".png");
+		if (image4.exists()) {
+			image4.delete();
+		}
+		logger.info("图片清理成功");
+	}
+	
 	public void deleteFile(String basePath) {
 		File image1 = new File(basePath + "ROSeconds.png");
 		if (image1.exists()) {
@@ -271,22 +292,29 @@ public class WebServiceImpl implements WebService {
 		}
 	}
 
-	public void createPdf(User user, BaseReport baseReport) throws DocumentException, IOException, Exception {
+	public PDFUtils createPdfUtils() throws DocumentException, IOException {
 		String filePath = WebProperties.getFilePath();
 		String font = filePath + "/NotoSansCJKsc-Regular.otf";
 		String logo = filePath + "/logo.png";
+		return new PDFUtils(font, logo);
+	}
+
+	public void createPdf(PDFUtils pdfUtils, User user, BaseReport baseReport)
+			throws DocumentException, IOException, Exception {
+		String filePath = WebProperties.getFilePath();
 		String fileName = filePath + File.separator + user.getId() + File.separator + baseReport.getId()
 				+ File.separator;
-		String result = "1. 睡眠呼吸暂停低通气综合症：" + getOSAHSResult(baseReport.getBreatheReport(), user) + "\n"
-				+ "            2. 睡眠低氧血症：" + getSleepHypoxiaResult(baseReport.getBreatheReport());
+
 		Hostipal hostipal = hostipalService.selectByMacAddress(baseReport.getSubReport().getMacAddress());
 		if (hostipal == null) {
 			hostipal = new Hostipal();
 		}
-		new PDFUtils(font, logo).createPdf(fileName + "report.pdf", fileName + "ROSeconds.png",
-				fileName + "ROTimes.png", fileName + "ROml.png", fileName + "ROxy.png", user,
-				baseReport.getSleepReport(), baseReport.getBreatheReport(), result, baseReport.getSubReport(),
-				hostipal.getAlias());
+		pdfUtils.createPdf(fileName + "report_" + pdfUtils.getLocal().getLanguage() + ".pdf",
+				fileName + "ROSeconds_" + pdfUtils.getLocal().getLanguage() + ".png",
+				fileName + "ROTimes_" + pdfUtils.getLocal().getLanguage() + ".png",
+				fileName + "ROml_" + pdfUtils.getLocal().getLanguage() + ".png",
+				fileName + "ROxy_" + pdfUtils.getLocal().getLanguage() + ".png", user, baseReport.getSleepReport(),
+				baseReport.getBreatheReport(), baseReport.getSubReport(), hostipal.getAlias());
 	}
 
 	// private Pulse generatePulse(Map<String, String[]> readAsMap) throws
@@ -338,49 +366,6 @@ public class WebServiceImpl implements WebService {
 		String code = "" + (int) (Math.random() * 9 + 1) + (int) (Math.random() * 9 + 1) + (int) (Math.random() * 9 + 1)
 				+ (int) (Math.random() * 9 + 1);
 		return code;
-	}
-
-	public String getOSAHSResult(BreatheReport breatheReport, User user) {
-		// List<DiseaseHistory> diseaseHistories = user.getDiseaseHistories();
-		String result = "无";
-		double AHI = breatheReport.getApneaHypopneaIndex();
-		// boolean isDisease = false;
-		// boolean isOSAHS = false;
-		// for (DiseaseHistory d : diseaseHistories) {
-		// if("失 眠".equals(d.getName()) || "高血压".equals(d.getName()) ||
-		// "冠心病".equals(d.getName()) || "脑血管疾病".equals(d.getName()) ||
-		// "糖尿病".equals(d.getName())) {
-		// isDisease = true;
-		// }
-		// }
-		//
-		// if((essscore >= 9 && AHI > 5) || (essscore < 9 && AHI >= 10) || (AHI
-		// > 5 && isDisease)){
-		// isOSAHS = true;
-		// }
-		if (AHI <= 5 && breatheReport.getMinOxygenSaturation() >= 90)
-			result = "无";
-		if (AHI > 30) {
-			result = "重度";
-		} else if (AHI > 15) {
-			result = "中度";
-		} else if (AHI > 5) {
-			result = "轻度";
-		}
-		return result;
-	}
-
-	public String getSleepHypoxiaResult(BreatheReport breatheReport) {
-		Double lspo2 = breatheReport.getMinOxygenSaturation();
-		String result = "无";
-		if (lspo2 < 80) {
-			result = "重度";
-		} else if (lspo2 < 85) {
-			result = "中度";
-		} else if (lspo2 < 90) {
-			result = "轻度";
-		}
-		return result;
 	}
 
 	/*
@@ -435,20 +420,35 @@ public class WebServiceImpl implements WebService {
 	}
 
 	@Override
-	public boolean isReportPdfExist(String reportId) {
+	public Locale isReportPdfExist(String reportId) {
 		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(reportId);
 		if (sleepReport != null) {
 			String userId = sleepReport.getUserId();
-			if (new File(WebProperties.getReportPdfName(userId, reportId)).exists()) {
-				return true;
+			File[] listFiles = new File(WebProperties.getReportPdfName(userId, reportId)).getParentFile().listFiles();
+			Locale[] I23 = new Locale[3];
+			for(File file : listFiles) {
+				if (file.getName().contains(".pdf")) {
+					if (file.getName().contains("zh")) {
+						I23[0] = new Locale( file.getName().replaceAll("report_", "").replaceAll(".pdf", ""));
+					} else if (file.getName().contains("en")) {
+						I23[1] = new Locale( file.getName().replaceAll("report_", "").replaceAll(".pdf", ""));
+					} else {
+						I23[2] = new Locale( file.getName().replaceAll("report_", "").replaceAll(".pdf", ""));
+					}
+				}
+			}
+			for(Locale names : I23) {
+				if (names != null) {
+					return names;
+				}
 			}
 		}
-		return false;
+		return null;
 
 	}
-
+	
 	@Override
-	public void flushPdf(HttpServletRequest request, HttpServletResponse response, String reportId) throws IOException {
+	public void flushPdf(HttpServletRequest request, HttpServletResponse response, String reportId,Locale locale) throws IOException {
 		String servletRailPath = request.getServletContext().getRealPath("/");
 		String path = request.getContextPath();
 		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
@@ -456,12 +456,12 @@ public class WebServiceImpl implements WebService {
 
 		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(reportId);
 		String fileName = WebProperties.getFilePath() + File.separator + sleepReport.getUserId() + File.separator
-				+ reportId + File.separator + "report.pdf";
+				+ reportId + File.separator + "report_"+locale.getLanguage() +".pdf";
 		logger.warn(fileName);
 		File file = new File(fileName);
 		if (!file.exists()) {
 			try {
-				String result = this.generatePdfByReportId(reportId, basePath, servletRailPath);
+				String result = this.generatePdfByReportId(reportId, basePath, servletRailPath,locale);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -538,10 +538,17 @@ public class WebServiceImpl implements WebService {
 		return reportPreviewDtos;
 	}
 
-	/*
+	/* 
+	 * @see taiyi.web.service.WebService#generatePdfByReportId(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String generatePdfByReportId(String reportId, String basePath, String servletRailPath) throws Exception {
+		return generatePdfByReportId(reportId, basePath, servletRailPath,Locale.CHINA);
+	}
+
+	/*                   
 	 * @see taiyi.web.service.WebService#saveHospitalAdmin(taiyi.web.model.
 	 * SystemUser, java.lang.String[], java.lang.String)
 	 */
-	
 
 }

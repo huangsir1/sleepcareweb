@@ -310,6 +310,14 @@
 				<filtering>true</filtering>
 			</resource>
 			<resource>
+				<directory>src/main/resources/i18n</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
 				<directory>src/main/java</directory>
 				<includes>
 					<include>**/*.xml</include>
@@ -319,4 +327,7 @@
 			</resource>
 		</resources>
 	</build>
+	<properties>
+		<inv>inv</inv>
+	</properties>
 </project>
