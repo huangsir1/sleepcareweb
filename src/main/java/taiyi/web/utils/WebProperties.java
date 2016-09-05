@@ -6,6 +6,7 @@ package taiyi.web.utils;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -41,6 +42,12 @@ public class WebProperties {
 	public static String getReportPdfName(String userId, String reportId) {
 		String fileName = WebProperties.getFilePath() + File.separator + userId + File.separator + reportId
 				+ File.separator + "report.pdf";
+		return fileName;
+	}
+	
+	public static String getReportPdfName(String userId, String reportId,Locale locale) {
+		String fileName = WebProperties.getFilePath() + File.separator + userId + File.separator + reportId
+				+ File.separator + "report_"+locale.getLanguage()+".pdf";
 		return fileName;
 	}
 

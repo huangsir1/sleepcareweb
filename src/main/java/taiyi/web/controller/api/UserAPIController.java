@@ -4,22 +4,31 @@
 package taiyi.web.controller.api;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 
+import taiyi.web.constant.Constant;
+import taiyi.web.model.Account;
 import taiyi.web.model.SubReport;
 import taiyi.web.model.User;
 import taiyi.web.model.dto.DiseaseHistoryDto;
 import taiyi.web.model.dto.ESSAndDisEaseHistoryDto;
 import taiyi.web.model.dto.EssDto;
 import taiyi.web.model.dto.Status;
+import taiyi.web.model.dto.Token;
+import taiyi.web.service.AccountService;
 import taiyi.web.service.DiseaseHistoryUserService;
 import taiyi.web.service.EssUserService;
 import taiyi.web.service.UserService;
@@ -40,6 +49,24 @@ public class UserAPIController extends APIExceptionHandlerController {
 	private DiseaseHistoryUserService diseaseHistoryUserService;
 	@Autowired
 	private EssUserService essUserService;
+	@Autowired
+	private AccountService accountService;
+	
+	@RequestMapping(value="/getUserByToken")
+	@ResponseBody
+	public List<User> getUserActiveUserByToken(HttpServletRequest request) {
+		String token = request.getHeader(Constant.TOKEN);
+		List<User> selectActiveUserByToken = userService.selectActiveUserByToken(token);
+		return selectActiveUserByToken;
+	}
+	
+	@RequestMapping(value="/deleteUser/{userId}")
+	@ResponseBody
+	public Status unActiveUser(HttpServletRequest request,@PathVariable String userId) {
+		String token = request.getHeader(Constant.TOKEN);
+		userService.unActiveUser(token,userId);
+		return Status.getSuccess();
+	}
 	
 	@RequestMapping(value="/register",consumes = "application/json")
 	@ResponseBody
@@ -67,12 +94,6 @@ public class UserAPIController extends APIExceptionHandlerController {
 		return Status.FAILED;
 	}
 	
-	public static void main(String[] args) {
-		SubReport subReport = new SubReport();
-		subReport.setId("id");
-		subReport.setAdvice("advice");
-		System.out.println(JSON.toJSON(subReport));
-	}
 	
 	@RequestMapping(value="/update",consumes = "application/json")
 	@ResponseBody

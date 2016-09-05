@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,6 +70,10 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
 				+ "/";
 		String reportId = UUID.randomUUID().toString();
+		String language = request.getHeader("language");
+		if (language == null) {
+			language = "zh";
+		}
 		try {
 			if (userService.selectByPrimaryKey(userId) == null) {
 				return Status.USER_UNREGISTER;
@@ -107,7 +112,7 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 			userService.updateLatestDateToNow(userId);
 			logger.info("报告"+reportId+"上传成功");
 			if (webService.isReportAllReady(reportId)) {
-				new GenerateReportThread(webService, reportId, basePath, servletRailPath).start();
+				new GenerateReportThread(webService, reportId, basePath, servletRailPath,new Locale(language)).start();
 				// return Status.FILE_UPLOAD_SUCCESSED_AND_GENERATE_IT;
 			}
 		} catch (Exception e) {

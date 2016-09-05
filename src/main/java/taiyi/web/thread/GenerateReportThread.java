@@ -3,6 +3,9 @@
  */
 package taiyi.web.thread;
 
+import java.util.Locale;
+
+import net.sf.cglib.core.Local;
 import taiyi.web.service.WebService;
 
 /**
@@ -17,7 +20,7 @@ public class GenerateReportThread extends Thread {
 	private String basePath;
 	private String servletRailPath;
 	private WebService webService;
-	
+	private Locale locale;
 	
 
 	/**
@@ -30,9 +33,16 @@ public class GenerateReportThread extends Thread {
 		this.reportId = reportId;
 		this.basePath = basePath;
 		this.servletRailPath = servletRailPath;
+		locale = Locale.CHINA;
 	}
 
-
+	public GenerateReportThread( WebService webService,String reportId, String basePath, String servletRailPath,Locale locale) {
+		this.webService = webService;
+		this.reportId = reportId;
+		this.basePath = basePath;
+		this.servletRailPath = servletRailPath;
+		this.locale = locale;
+	}
 
 
 	/* 
@@ -41,7 +51,7 @@ public class GenerateReportThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			webService.generatePdfByReportId(reportId, basePath,servletRailPath);
+			webService.generatePdfByReportId(reportId, basePath,servletRailPath,locale);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

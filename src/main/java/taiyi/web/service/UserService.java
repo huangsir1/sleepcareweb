@@ -81,4 +81,13 @@ public interface UserService {
 	 * @return
 	 */
 	PageModel searchUsersByPage(User user, Integer hospitalId, Integer page, Integer pagesize);
+	/**
+	 * @param token
+	 */
+	List<User> selectActiveUserByToken(String token);
+	/**
+	 * @param token
+	 * @param userId
+	 */
+	void unActiveUser(String token, String userId);
 }

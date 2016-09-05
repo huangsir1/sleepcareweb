@@ -38,14 +38,25 @@
 		gender, phone, address,
 		doctor_id, register_date, lastest_date
 	</sql>
+	
+	<select id="selectActiveUserByToken" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base" />
+		from user u left join account a on a.id = u.account_id left join
+		user_active ua on u.id = ua.id where (ua.`is_active` is null or
+		ua.`is_active` != 0) and token = #{token}
+	</select>
 	<select id="selectUserByHostipalId" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
 		select distinct
 		<include refid="Base" />
 		from user u
 		left join sleep_report slr on slr.user_id = u.id
-		left join sub_report sr on sr.`id` = slr.`id`
-		left join device d on sr.mac_address = d.mac_address
+		left join
+		sub_report sr on sr.`id` = slr.`id`
+		left join device d on
+		sr.mac_address = d.mac_address
 		where d.hostipal_id = #{hostipalId}
 		order by u.lastest_date desc
 	</select>
@@ -140,7 +151,7 @@
 	<select id="searchUsersByPage" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from user 
+		from user
 		where
 		<if test="user.name != null and user.name != '' ">
 			name like #{user.name,jdbcType=VARCHAR} and
@@ -174,15 +185,17 @@
 		</if>
 		limit #{current},#{pagesize}
 	</select>
-	
+
 	<select id="searchHospitalUsersByPage" resultMap="BaseResultMap">
 		select
 		<include refid="Base" />
 		from user u
 		left join sleep_report slr on slr.user_id = u.id
-		left join sub_report sr on sr.`id` = slr.`id`
-		left join device d on sr.mac_address = d.mac_address
-		where 
+		left join
+		sub_report sr on sr.`id` = slr.`id`
+		left join device d on
+		sr.mac_address = d.mac_address
+		where
 		<if test="user.name != null and user.name != '' ">
 			name like #{user.name,jdbcType=VARCHAR} and
 		</if>
@@ -212,17 +225,20 @@
 		</if>
 		and d.hostipal_id = #{hospitalId}
 		order by u.lastest_date desc
-		limit #{current},#{pagesize}
+		limit
+		#{current},#{pagesize}
 	</select>
-	
+
 	<select id="searchHospitalUsers" resultMap="BaseResultMap">
 		select
 		<include refid="Base" />
 		from user u
 		left join sleep_report slr on slr.user_id = u.id
-		left join sub_report sr on sr.`id` = slr.`id`
-		left join device d on sr.mac_address = d.mac_address
-		where 
+		left join
+		sub_report sr on sr.`id` = slr.`id`
+		left join device d on
+		sr.mac_address = d.mac_address
+		where
 		<if test="user.name != null and user.name != '' ">
 			name like #{user.name,jdbcType=VARCHAR} and
 		</if>
@@ -253,15 +269,17 @@
 		and d.hostipal_id = #{hospitalId}
 		order by u.lastest_date desc
 	</select>
-	
+
 	<select id="countHospitalUsers" resultType="long">
 		select
 		count(*)
 		from user u
-		left join sleep_report slr on slr.user_id = u.id
+		left join sleep_report slr on slr.user_id =
+		u.id
 		left join sub_report sr on sr.`id` = slr.`id`
-		left join device d on sr.mac_address = d.mac_address
-		where 
+		left join device d on
+		sr.mac_address = d.mac_address
+		where
 		<if test="user.name != null and user.name != '' ">
 			name like #{user.name,jdbcType=VARCHAR} and
 		</if>

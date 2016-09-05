@@ -6,7 +6,6 @@
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	pageContext.setAttribute("basePath", basePath);
-
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -23,8 +22,6 @@
 <script language="JavaScript" type="text/javascript"
 	src="${basePath}js/util.js"></script>
 <script>
-
-
 	$(function() {
 		// 基于准备好的dom，初始化echarts实例
 		var myChart = echarts.init(document.getElementById('chart1'));
@@ -171,11 +168,26 @@
 
 	function showpdf() {
 		//$.get('../showPdf/${sleepReport.id}').done(function(data) {
-			//if (data.code == 2000) {
-				window.location.href = "../showPdf/${sleepReport.id}";
+		//if (data.code == 2000) {
+		window.location.href = "../showPdf/${sleepReport.id}";
 		//	}
-	//	});
+		//	});
 	}
+	function showpdfZH() {
+		//$.get('../showPdf/${sleepReport.id}').done(function(data) {
+		//if (data.code == 2000) {
+		window.location.href = "../showPdf/${sleepReport.id}/zh";
+		//	}
+		//	});
+	}
+	function showpdfEN() {
+		//$.get('../showPdf/${sleepReport.id}').done(function(data) {
+		//if (data.code == 2000) {
+		window.location.href = "../showPdf/${sleepReport.id}/en";
+		//	}
+		//	});
+	}
+	
 	function generateFullPdf() {
 		$.get('../generatePdf/${sleepReport.id}').done(function(data) {
 			if (data.code == 2000) {
@@ -183,17 +195,27 @@
 			}
 		});
 	}
-	
-	function save(){
-		 var d=$("#form").serialize();
-	     $.post("${basePath}admin/generateFullPdf/${sleepReport.id}", 
-	    		d, 
-	    	function (result) { 
-	    		 if (result.code == 2000) {
-					window.location.href = result.message;  
-				}
-	    	 }, "json" ); 	
+
+	function save() {
+		var d = $("#form").serialize();
+		$.post("${basePath}admin/generateFullPdf/${sleepReport.id}", d,
+				function(result) {
+					if (result.code == 2000) {
+						window.location.href = result.message;
+					}
+				}, "json");
 	}
+	
+	function deletepdf() {
+		$.getJSON('../deleteFile/${sleepReport.id}').done(function(data) {
+			console.info(data)
+			console.info(data.code)
+			if (data.code == 2000) {
+				alert("删除成功")
+			}
+		});
+	}
+	
 </script>
 <style type="text/css">
 <!--
@@ -201,7 +223,7 @@
 	color: #5c8bc7
 }
 -->
-</style>  
+</style>
 <style type="text/css">
 table {
 	font-family: verdana, arial, sans-serif;
@@ -234,13 +256,26 @@ td {
 </head>
 
 <body>
-	<button id="print" onclick="generatePdf()">重新生成pdf</button><button id="print" onclick="showpdf()">查看pdf</button><button id="print" onclick="history.go(-1)">返回</button>
-	<c:if test="${!file }"><form enctype="multipart/form-data" action="${basePath}admin/uploadFile" method="post" ><input type="file" name="file"/> <input type="submit" value="上传文件" /><input type="hidden" value="${ sleepReport.id}" name="id" /></form> 
+	<button id="print" onclick="deletepdf()">删除已生成的pdf</button>
+	<button id="print" onclick="showpdfZH()">查看中文pdf</button>
+	<button id="print" onclick="showpdfEN()">查看英文pdf</button>
+	<button id="print" onclick="history.go(-1)">返回</button>
+	<c:if test="${!file }">
+		<form enctype="multipart/form-data"
+			action="${basePath}admin/uploadFile" method="post">
+			<input type="file" name="file" /> <input type="submit" value="上传文件" /><input
+				type="hidden" value="${ sleepReport.id}" name="id" />
+		</form>
 	</c:if>
 	<c:if test="${file }">
 	文件已存在！！！
-	<a href="${basePath}admin/showFile/${ sleepReport.id}"><input type="button" value="下载数据文件"></input></a>
-	<form enctype="multipart/form-data" action="${basePath}admin/uploadFile" method="post" ><input type="file" name="file"/> <input type="submit" value="上传文件" /><input type="hidden" value="${ sleepReport.id}" name="id" /></form> 
+	<a href="${basePath}admin/showFile/${ sleepReport.id}"><input
+			type="button" value="下载数据文件"></input></a>
+		<form enctype="multipart/form-data"
+			action="${basePath}admin/uploadFile" method="post">
+			<input type="file" name="file" /> <input type="submit" value="上传文件" /><input
+				type="hidden" value="${ sleepReport.id}" name="id" />
+		</form>
 	</c:if>
 	<!--begin-->
 	<div id="container">

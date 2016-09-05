@@ -446,6 +446,21 @@ public class WebServiceImpl implements WebService {
 		return null;
 
 	}
+	/* 
+	 * @see taiyi.web.service.WebService#isReportPdfFileExist(java.util.Locale)
+	 */
+	@Override
+	public boolean isReportPdfFileExist(String reportId,Locale locale) {
+		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(reportId);
+		if (sleepReport != null) {
+			String userId = sleepReport.getUserId();
+			String reportPdfName = WebProperties.getReportPdfName(userId, reportId,locale);
+			if (new File(reportPdfName).exists()) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	@Override
 	public void flushPdf(HttpServletRequest request, HttpServletResponse response, String reportId,Locale locale) throws IOException {
@@ -546,9 +561,22 @@ public class WebServiceImpl implements WebService {
 		return generatePdfByReportId(reportId, basePath, servletRailPath,Locale.CHINA);
 	}
 
-	/*                   
-	 * @see taiyi.web.service.WebService#saveHospitalAdmin(taiyi.web.model.
-	 * SystemUser, java.lang.String[], java.lang.String)
+	/* 
+	 * @see taiyi.web.service.WebService#deletePdf(java.lang.String)
 	 */
+	@Override
+	public void deletePdf(String reportId) {
+		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(reportId);
+		String fileName = WebProperties.getFilePath() + File.separator + sleepReport.getUserId() + File.separator
+				+ reportId;
+		for(File file : new File(fileName).listFiles()) {
+			if (file.getName().contains(".pdf")) {
+				file.delete();
+			}
+		}
+	}
+
+	
+
 
 }

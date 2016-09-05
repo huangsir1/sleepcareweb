@@ -324,10 +324,22 @@ public class AdminController extends ExceptionHandlerController {
 	}
 	
 	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view","hospital:view" })
+	@RequestMapping("/showPdf/{reportId}/{language}")
+	public void showPdf(@PathVariable String reportId,@PathVariable String language, HttpServletRequest request, HttpServletResponse response)
+			throws IOException, DocumentException {
+		
+		if (language == null) {
+			language = "zh";
+		}
+		Locale locale = new Locale(language);
+		webService.flushPdf(request, response, reportId,locale);
+	}
+	
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view","hospital:view" })
 	@RequestMapping("/showPdf/{reportId}")
 	public void showPdf(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, DocumentException {
-		webService.flushPdf(request, response, reportId,Locale.CHINA);
+		showPdf(reportId, null, request, response);
 	}
 	
 	@RequiresPermissions(logical = Logical.OR, value = { "system:view" })
@@ -337,6 +349,14 @@ public class AdminController extends ExceptionHandlerController {
 		webService.flushFile(request, response, reportId);
 	}
 	
+	@RequiresPermissions(logical = Logical.OR, value = { "system:delete" })
+	@RequestMapping("/deleteFile/{reportId}")
+	@ResponseBody
+	public Status showFile(@PathVariable String reportId, HttpServletResponse response)
+			throws IOException, DocumentException {
+		webService.deletePdf(reportId);
+		return Status.getSuccess();
+	}
 	
 	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
 	@RequestMapping("searchUsers")

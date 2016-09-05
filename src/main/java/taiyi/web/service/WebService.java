@@ -52,4 +52,9 @@ public interface WebService {
 
 	public String generatePdfByReportId(String reportId, String basePath, String servletRailPath, Locale locale)
 			throws Exception;
+
+
+	boolean isReportPdfFileExist(String reportId, Locale locale);
+
+	void deletePdf(String reportId);
 }

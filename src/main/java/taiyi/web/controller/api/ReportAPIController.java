@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 
+import net.sf.cglib.core.Local;
 import taiyi.web.model.BreatheReport;
 import taiyi.web.model.SleepReport;
 import taiyi.web.model.SubReport;
@@ -113,7 +114,11 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
 				+ "/";
 		// check user
-
+		String language = request.getHeader("language");
+		if (language == null) {
+			language = "zh";
+		}
+		
 		if (baseReport.getUserId() == null || userService.selectByPrimaryKey(baseReport.getUserId()) == null) {
 			return Status.USER_UNREGISTER;
 		}
@@ -124,7 +129,7 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		logger.warn("baseReport   " + JSON.toJSON(baseReport));
 		webService.insertReport(baseReport);
 		if (webService.isReportAllReady(baseReport.getId())) {
-			new GenerateReportThread(webService, baseReport.getId(), basePath, servletRailPath).start();
+			new GenerateReportThread(webService, baseReport.getId(), basePath, servletRailPath, new Locale(language)).start();
 			return Status.SUCCESSED_UPLOAD_REPORT_AND_GENERATE_IT;
 		}
 		return Status.SUCCESSED_UPLOAD_REPORT;
@@ -161,6 +166,11 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		if (sReport == null) {
 			return Status.REPORT_NOT_EXSIT;
 		}
+		String language = request.getHeader("language");
+		if (language == null) {
+			language = "zh";
+		}
+		
 		try {
 			String fileName = WebProperties.getReportFileName(sReport.getUserId(), reportId);
 			File targetFile = new File(fileName);
@@ -174,7 +184,7 @@ public class ReportAPIController extends APIExceptionHandlerController {
 			file.transferTo(targetFile);
 			System.out.println(fileName + " 保存成功");
 			if (webService.isReportAllReady(reportId)) {
-				new GenerateReportThread(webService, reportId, basePath, servletRailPath).start();
+				new GenerateReportThread(webService, reportId, basePath, servletRailPath,new Locale(language)).start();
 				return Status.FILE_UPLOAD_SUCCESSED_AND_GENERATE_IT;
 			}
 		} catch (Exception e) {
@@ -201,13 +211,42 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		String path = request.getContextPath();
 		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
 				+ "/";
+		String header = request.getHeader("language");
+		Locale locale = null;
+		if (header != null) {
+			locale = new Locale(header);
+		} else {
+			locale = Locale.CHINA;
+		}
 		if (webService.isReportAllReady(reportId)) {
-			Locale reportPdfExist = webService.isReportPdfExist(reportId);
-			if (reportPdfExist != null) {
-				webService.flushPdf(request, response, reportId,reportPdfExist);
+			 
+			if (webService.isReportPdfFileExist(reportId,locale)) {
+				webService.flushPdf(request, response, reportId,locale);
 			} else {
-				webService.generatePdfByReportId(reportId, basePath, servletRailPath,Locale.CHINA);
-				webService.flushPdf(request, response, reportId,Locale.CHINA);
+				webService.generatePdfByReportId(reportId, basePath, servletRailPath,locale);
+				webService.flushPdf(request, response, reportId,locale);
+			}
+		}
+	}
+	
+	@RequestMapping("/getPdfI18N/{reportId}/{language}")
+	public void showPdf(@PathVariable String reportId,@PathVariable String language ,HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String servletRailPath = request.getServletContext().getRealPath("/");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
+				+ "/";
+		if (language == null) {
+			language = "zh";
+		}
+		if (webService.isReportAllReady(reportId)) {
+			Locale locale = new Locale(language);
+			 
+			if (webService.isReportPdfFileExist(reportId,locale)) {
+				webService.flushPdf(request, response, reportId,locale);
+			} else {
+				webService.generatePdfByReportId(reportId, basePath, servletRailPath,locale);
+				webService.flushPdf(request, response, reportId,locale);
 			}
 		}
 	}

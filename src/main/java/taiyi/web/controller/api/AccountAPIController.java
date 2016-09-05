@@ -35,40 +35,40 @@ public class AccountAPIController extends APIExceptionHandlerController {
 	private AccountService accountService;
 	@Autowired
 	private WebService webService;
+//
+//	static {
+//		new Thread() {
+//			@Override
+//			public void run() {
+//				for (ValidateCode v : validateCodes.values()) {
+//					Date d = new Date();
+//					Calendar calendar = Calendar.getInstance();
+//					calendar.setTime(v.getUpDate());
+//					calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) + 5);
+//					if (d.after(calendar.getTime())) {
+//						validateCodes.remove(v.getPhone());
+//					}
+//					try {
+//						Thread.sleep(60_000);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			};
+//		}.start();
+//	}
 
-	static {
-		new Thread() {
-			@Override
-			public void run() {
-				for (ValidateCode v : validateCodes.values()) {
-					Date d = new Date();
-					Calendar calendar = Calendar.getInstance();
-					calendar.setTime(v.getUpDate());
-					calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) + 5);
-					if (d.after(calendar.getTime())) {
-						validateCodes.remove(v.getPhone());
-					}
-					try {
-						Thread.sleep(60_000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			};
-		}.start();
-	}
-
-	@RequestMapping(value = "/getCode")
-	@ResponseBody
-	public Status getCode(String phone) {
-		// TODO 增加发送限制
-		ValidateCode validateCode = new ValidateCode();
-		validateCode.setCode(webService.generateValidateCode());
-		validateCode.setPhone(phone);
-		validateCode.setUpDate(new Date());
-		validateCodes.put(phone, validateCode);
-		return new Status(Status.SUCCESSED_CODE, validateCode.getCode());
-	}
+//	@RequestMapping(value = "/getCode")
+//	@ResponseBody
+//	public Status getCode(String phone) {
+//		// TODO 增加发送限制
+//		ValidateCode validateCode = new ValidateCode();
+//		validateCode.setCode(webService.generateValidateCode());
+//		validateCode.setPhone(phone);
+//		validateCode.setUpDate(new Date());
+//		validateCodes.put(phone, validateCode);
+//		return new Status(Status.SUCCESSED_CODE, validateCode.getCode());
+//	}
 
 	@RequestMapping(value = "/register")
 	@ResponseBody
