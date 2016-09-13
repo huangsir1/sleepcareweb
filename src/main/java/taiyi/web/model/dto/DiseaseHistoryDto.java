@@ -101,6 +101,10 @@ public class DiseaseHistoryDto {
 		this.userId = userId;
 	}
 	
+	public DiseaseHistoryDto(Integer... diseaseHistoryIds) {
+		this.diseaseHistoryIds = diseaseHistoryIds;
+	}
+	
 	private String userId;
 	private Integer diseaseHistoryIds[];
 	/**

@@ -42,6 +42,7 @@ public class PDFUtils {
 	public final Font fontTextUnderLine;
 	public final Font fontTextBold;
 	public final java.text.DecimalFormat decimalFormat = new java.text.DecimalFormat("0.00");
+	public final java.text.DecimalFormat timeFormat = new java.text.DecimalFormat("00");
 	public final SimpleDateFormat yyyyMMDDFormat = new SimpleDateFormat("yyyy-MM-dd");
 	public final SimpleDateFormat yyyyMMDDHHmmssFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public final SimpleDateFormat HHmmssFormat = new SimpleDateFormat("HH:mm:ss");
@@ -241,19 +242,19 @@ public class PDFUtils {
 		paragraph.setFont(fontSmallTitle);
 		paragraph.add(resourceBundle.getString(Internationalization.PR_ANALYSIS)+" \n");
 		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEAN_PR)+" : ");
-		addNormalText(paragraph, decimalFormat.format(pulse.getAveragePulse()) + " "+ resourceBundle.getString(Internationalization.FREQUENCY)+"/"+resourceBundle.getString(Internationalization.MIN));
+		addNormalText(paragraph, decimalFormat.format(pulse.getAveragePulse()) + " "+ resourceBundle.getString(Internationalization.FREQUENCY_PER_MIN));
 		addDefaultSpace(paragraph);
 		addBoldText(paragraph, resourceBundle.getString(Internationalization.MIN_PR)+" : ");
 		addNormalText(paragraph, decimalFormat.format(pulse.getMinPulse()));
 		if (pulse.getMinPulseTime() != null) {
-			addNormalText(paragraph, " "+resourceBundle.getString(Internationalization.FREQUENCY)+"/"+resourceBundle.getString(Internationalization.MIN)+"， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(pulse.getMinPulseTime()));
+			addNormalText(paragraph, " "+resourceBundle.getString(Internationalization.FREQUENCY_PER_MIN)+", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(pulse.getMinPulseTime()));
 		}
 
 		addDefaultSpace(paragraph);
 		addBoldText(paragraph, resourceBundle.getString(Internationalization.MAX_PR)+" : ");
 		addNormalText(paragraph, decimalFormat.format(pulse.getMaxPulse()));
 		if (pulse.getMaxPulseTime() != null) {
-			addNormalText(paragraph, " "+resourceBundle.getString(Internationalization.FREQUENCY)+"/"+resourceBundle.getString(Internationalization.MIN)+"， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(pulse.getMaxPulseTime()));
+			addNormalText(paragraph, " "+resourceBundle.getString(Internationalization.FREQUENCY_PER_MIN)+", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(pulse.getMaxPulseTime()));
 		}
 		addDefaultSpace(paragraph);
 		// 脉率趋势图
@@ -286,13 +287,13 @@ public class PDFUtils {
 		addBoldText(paragraph, resourceBundle.getString(Internationalization.MAX_OXYGEN_DESATURATION)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getMaxOxygenReduceSeconds()));
 		if (subReport.getMaxOxygenReduceTime() != null) {
-			addNormalText(paragraph, "， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getMaxOxygenReduceTime()));
+			addNormalText(paragraph, ", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getMaxOxygenReduceTime()));
 		}
 		addNormalText(paragraph, "   ");
 		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_OXYGEN_DESATURATION)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getLongestOxygenReduceSeconds()));
 		if (subReport.getLongestOxygenReduceTime() != null) {
-			addNormalText(paragraph, "， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getLongestOxygenReduceTime()));
+			addNormalText(paragraph, ", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getLongestOxygenReduceTime()));
 		}
 		addDefaultSpace(paragraph);
 		addBoldText(paragraph, resourceBundle.getString(Internationalization.ODRI)+" : ");
@@ -324,24 +325,24 @@ public class PDFUtils {
 		}
 		addDefaultSpace(paragraph);
 		addBoldText(paragraph, resourceBundle.getString(Internationalization.APNEAS)+" : ");
-		addNormalText(paragraph, breatheReport.getApneaTimes() + resourceBundle.getString(Internationalization.FREQUENCY));
+		addNormalText(paragraph, breatheReport.getApneaTimes() + resourceBundle.getString(Internationalization.FREQUENCY_NO));
 		addDefaultSpace(paragraph);
 		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_APNEA)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getLongestApneaSeconds()));
 		if (subReport.getLongestApneaTime() != null) {
-			addNormalText(paragraph, "， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getLongestApneaTime()));
+			addNormalText(paragraph, ", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getLongestApneaTime()));
 		}
 		addDefaultSpace(paragraph);
 		addBoldText(paragraph, resourceBundle.getString(Internationalization.TOTAL_DURATION_OF_APNEA_EVENTS)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getTotalApneaTimeSeconds()));
 		addNormalText(paragraph, "\n");
 		addBoldText(paragraph, resourceBundle.getString(Internationalization.HYPOPNEAS)+" : ");
-		addNormalText(paragraph, breatheReport.getHypopneaTimes() + resourceBundle.getString(Internationalization.FREQUENCY));
+		addNormalText(paragraph, breatheReport.getHypopneaTimes() + resourceBundle.getString(Internationalization.FREQUENCY_NO));
 		addDefaultSpace(paragraph);
 		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_HYPOPNEAS)+" : ");
 		addNormalText(paragraph, secondsToHHmmss(breatheReport.getMaxHyponeaSeconds()));
 		if (breatheReport.getHyponeaHappenDate() != null) {
-			addNormalText(paragraph, "， "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(breatheReport.getHyponeaHappenDate()));
+			addNormalText(paragraph, ", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(breatheReport.getHyponeaHappenDate()));
 		}
 		addDefaultSpace(paragraph);
 		// addBoldText(paragraph, "氧减次数 : ");
@@ -746,7 +747,7 @@ public class PDFUtils {
 			long hour = seconds / 3600;
 			long minute = seconds % 3600 / 60;
 			long second = seconds % 60;
-			return hour + resourceBundle.getString(Internationalization.HR) + minute + resourceBundle.getString(Internationalization.MIN) + second + resourceBundle.getString(Internationalization.SEC);
+			return timeFormat.format(hour) + resourceBundle.getString(Internationalization.HR) + timeFormat.format(minute) + resourceBundle.getString(Internationalization.MIN) + timeFormat.format(second) + resourceBundle.getString(Internationalization.SEC);
 		} catch (Exception e) {
 
 		}

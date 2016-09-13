@@ -252,9 +252,9 @@ public class Sleep_ApneaDetection {
 		// }
 
 		if (temp[0] > 100)
-			temp[0] = 100; // 如果第一个SPO2的值大于100，则取为100
-		if (temp[0] < 50)
-			temp[0] = (int) (90 + Math.random() * 3); // 如果第一个SPO2值小于等于50，则取为50-53的随机数
+			temp[0] = 98; // 如果第一个SPO2的值大于100，则取为98
+		if (temp[0] < 85)
+			temp[0] = (int) (90 + Math.random() * 3); // 如果第一个SPO2值小于等于85，则取为90-93的随机数
 		// 整体去噪
 		for (int i = 0; i < bef_len; i++) {
 			// 如果当前值与后一个值的差值大于15，或后一个SPO2值大于100，或后一个SPO2值小于50，或某点在前后两点值波动幅度小于等于2的情况下变化幅度大于等于5，则后一个值用前一个值代替
@@ -283,9 +283,11 @@ public class Sleep_ApneaDetection {
 			temp[0] = 75; // 如果第一个PR的值等于255，或小于等于25，则取为75
 		// 整体去噪
 		for (int i = 0; i < bef_len; i++) {
-			// 如果当前值与后一个值的差值大于40，或后一个PR值等于255，或后一个PR值小于等于25，则后一个值用前一个值代替
-			if (i + 1 < bef_len && (Math.abs(temp[i] - temp[i + 1]) > 40 || temp[i + 1] == 255 || temp[i + 1] <= 25)) {
+			// 如果后一个PR值等于255，或后一个PR值小于等于25，则后一个值用前一个值代替
+			if (i + 1 < bef_len && (temp[i + 1] == 255 || temp[i + 1] <= 25)) {
 				temp[i + 1] = temp[i];
+			} else if (i + 1 < bef_len && Math.abs(temp[i] - temp[i + 1]) > 40) {// 如果当前值与后一个值的差值大于40
+				temp[i] = (temp[i] + temp[i + 1]) / 2;
 			}
 		}
 		return temp;

@@ -1,6 +1,6 @@
 package taiyi.web.model;
 
-public class userActive {
+public class UserActive {
     private String id;
 
     private Boolean isActive;

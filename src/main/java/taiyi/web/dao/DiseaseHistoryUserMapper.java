@@ -1,5 +1,7 @@
 package taiyi.web.dao;
 
+import java.util.List;
+
 import taiyi.web.model.DiseaseHistoryUser;
 
 public interface DiseaseHistoryUserMapper {
@@ -16,4 +18,6 @@ public interface DiseaseHistoryUserMapper {
     int updateByPrimaryKey(DiseaseHistoryUser record);
     
     int deleteByUserId(String userId);
+
+	List<DiseaseHistoryUser> selectByUserId(String id);
 }

@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,13 +27,14 @@ import taiyi.web.utils.SMSTools;
  */
 @Controller
 @RequestMapping("/api/sms")
-public class SMSController {
+public class SMSController extends APIExceptionHandlerController{
 	@Autowired
 	private AccountService accountService;
 
 	@RequestMapping(value = "/login", consumes = "application/json")
 	@ResponseBody
-	public SMSValidate loginOrRegister(SMSDto smsDto) {
+	public SMSValidate loginOrRegister(@RequestBody SMSDto smsDto) {
+		System.out.println(smsDto);
 		SMSValidate smsValidate = SMSTools.checkSMS(smsDto.getPhone(), smsDto.getCode());
 		if (smsValidate.isSuccess()) {
 			Account account = accountService.selectByPhone(smsDto.getPhone());
@@ -46,6 +48,7 @@ public class SMSController {
 				accountService.insert(account);
 			} else {
 				account.setToken(UUID.randomUUID().toString().replaceAll("-", ""));
+				accountService.updateByPrimaryKeySelective(account);
 			}
 			smsValidate.setMessage(account.getToken());
 		}

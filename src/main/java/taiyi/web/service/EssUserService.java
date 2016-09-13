@@ -3,6 +3,8 @@
  */
 package taiyi.web.service;
 
+import java.util.List;
+
 import taiyi.web.model.EssUser;
 import taiyi.web.model.dto.EssDto;
 
@@ -35,4 +37,10 @@ public interface EssUserService {
 	 * @param userId
 	 */
 	void deleteByUserId(String userId);
+
+	/**
+	 * @param id
+	 * @return 
+	 */
+	List<EssUser> selectByUserId(String id);
 }

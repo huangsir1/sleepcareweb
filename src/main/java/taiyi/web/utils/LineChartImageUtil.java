@@ -96,7 +96,7 @@ public class LineChartImageUtil {
 	
 	public static void generateMailvImage(String[] riqi, String[] mailv, String imagePathAndExt,Locale locale) throws Exception {
 		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
-		create(riqi, mailv, bundle.getString(Internationalization.PR_TREND), null, bundle.getString(Internationalization.FREQUENCY)+"/"+bundle.getString(Internationalization.MIN), imagePathAndExt);
+		create(riqi, mailv, bundle.getString(Internationalization.PR_TREND), null, bundle.getString(Internationalization.FREQUENCY_PER_MIN), imagePathAndExt);
 	}
 
 	public static void generateXueyangImage(String[] riqi, String[] xueyang, String imagePathAndExt,Locale locale) throws Exception {

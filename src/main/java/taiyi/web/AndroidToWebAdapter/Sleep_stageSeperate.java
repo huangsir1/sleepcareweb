@@ -147,7 +147,7 @@ public class Sleep_stageSeperate {
 		}
 		temp_stdev_pr_ave = sum / bef_len;
 		for(int i = 0; i <bef_len; i++){
-			if(temp[i] < 40 || temp[i]> 180){
+			if(temp[i] < 25 || temp[i]> 250){
 				temp[i] = temp_stdev_pr_ave;
 			}
 		}

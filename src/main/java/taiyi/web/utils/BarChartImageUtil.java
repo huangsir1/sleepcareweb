@@ -196,7 +196,7 @@ public class BarChartImageUtil {
 	public static void generateSecondsOfReducedOxygenImage(Integer[] yValue, String xLabel, String imagePathNameAndExt,Locale locale)
 			throws IOException {
 		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
-		generateBarChartToImage(yValue, bundle.getString(Internationalization.FREQUENCY), bundle.getString(Internationalization.OXYGEN_DESATURATION_DISTRIBUTION), bundle.getString(Internationalization.PERCENTAGE), bundle.getString(Internationalization.MIN), imagePathNameAndExt);
+		generateBarChartToImage(yValue, bundle.getString(Internationalization.FREQUENCY), bundle.getString(Internationalization.OXYGEN_DESATURATION_DISTRIBUTION), bundle.getString(Internationalization.PERCENTAGE), bundle.getString(Internationalization.IMAGE_MIN), imagePathNameAndExt);
 	}
 	
 	

@@ -3,6 +3,7 @@
  */
 package taiyi.web.service.Impl;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,6 +110,14 @@ public class EssUserSerciceImpl implements EssUserService{
 	@Override
 	public void deleteByUserId(String userId) {
 		essMapper.deleteByUserId(userId);
+	}
+
+	/* 
+	 * @see taiyi.web.service.EssUserService#selectByUserId(java.lang.String)
+	 */
+	@Override
+	public List<EssUser>  selectByUserId(String userId) {
+		return essMapper.selectByUserId(userId);
 	}
 
 }

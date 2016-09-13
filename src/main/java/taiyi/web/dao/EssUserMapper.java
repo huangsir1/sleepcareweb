@@ -1,5 +1,7 @@
 package taiyi.web.dao;
 
+import java.util.List;
+
 import taiyi.web.model.EssUser;
 
 public interface EssUserMapper {
@@ -16,4 +18,6 @@ public interface EssUserMapper {
     int updateByPrimaryKeySelective(EssUser record);
 
     int updateByPrimaryKey(EssUser record);
+
+	List<EssUser> selectByUserId(String userId);
 }

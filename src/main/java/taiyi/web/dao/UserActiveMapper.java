@@ -1,17 +1,17 @@
 package taiyi.web.dao;
 
-import taiyi.web.model.userActive;
+import taiyi.web.model.UserActive;
 
 public interface UserActiveMapper {
     int deleteByPrimaryKey(String id);
 
-    int insert(userActive record);
+    int insert(UserActive record);
 
-    int insertSelective(userActive record);
+    int insertSelective(UserActive record);
 
-    userActive selectByPrimaryKey(String id);
+    UserActive selectByPrimaryKey(String id);
 
-    int updateByPrimaryKeySelective(userActive record);
+    int updateByPrimaryKeySelective(UserActive record);
 
-    int updateByPrimaryKey(userActive record);
+    int updateByPrimaryKey(UserActive record);
 }

@@ -3,6 +3,8 @@
  */
 package taiyi.web.service.Impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +61,20 @@ public class DiseaseHistoryUserServiceImpl implements DiseaseHistoryUserService{
 	@Override
 	public int deleteByUserId(String userId) {
 		return diseaseHistoryUserMapper.deleteByUserId(userId);
+	}
+
+
+	/* 
+	 * @see taiyi.web.service.DiseaseHistoryUserService#selectByUserId(java.lang.String)
+	 */
+	@Override
+	public DiseaseHistoryDto selectByUserId(String id) {
+		List<DiseaseHistoryUser> diseaseHistoryUsers = diseaseHistoryUserMapper.selectByUserId(id);
+		Integer[] integers = new Integer[diseaseHistoryUsers.size()];
+		for (int i = 0; i < diseaseHistoryUsers.size(); i++) {
+			integers[i] = diseaseHistoryUsers.get(i).getDiseaseHistoryId(); 
+		}
+		return new DiseaseHistoryDto(id,integers);
 	}
 
 }

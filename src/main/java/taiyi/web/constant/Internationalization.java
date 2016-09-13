@@ -6,9 +6,9 @@ package taiyi.web.constant;
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *
- * taiyi.web.constant
+ *         taiyi.web.constant
  *
- * 2016年8月30日
+ *         2016年8月30日
  */
 public class Internationalization {
 	public static final String NO_DATA = "no_data";
@@ -105,6 +105,7 @@ public class Internationalization {
 	public static final String SEVERE_SLEEPINESS = "severe_sleepiness";
 	public static final String OXYGEN_DISTRIBUTION = "oxygen_distribution";
 	public static final String OXYGEN_DESATURATION_DISTRIBUTION = "oxygen_desaturation_distribution";
-	
-
+	public static final String IMAGE_MIN = "image_min";
+	public static final String FREQUENCY_NO = "frequency_no";
+	public static final String FREQUENCY_PER_MIN = "frequency_per_min";
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="taiyi.web.dao.userActiveMapper" >
-  <resultMap id="BaseResultMap" type="taiyi.web.model.userActive" >
+<mapper namespace="taiyi.web.dao.UserActiveMapper" >
+  <resultMap id="BaseResultMap" type="taiyi.web.model.UserActive" >
     <id column="id" property="id" jdbcType="CHAR" />
     <result column="is_active" property="isActive" jdbcType="BIT" />
   </resultMap>
@@ -18,11 +18,11 @@
     delete from user_active
     where id = #{id,jdbcType=CHAR}
   </delete>
-  <insert id="insert" parameterType="taiyi.web.model.userActive" >
+  <insert id="insert" parameterType="taiyi.web.model.UserActive" >
     insert into user_active (id, is_active)
     values (#{id,jdbcType=CHAR}, #{isActive,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="taiyi.web.model.userActive" >
+  <insert id="insertSelective" parameterType="taiyi.web.model.UserActive" >
     insert into user_active
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -41,7 +41,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="taiyi.web.model.userActive" >
+  <update id="updateByPrimaryKeySelective" parameterType="taiyi.web.model.UserActive" >
     update user_active
     <set >
       <if test="isActive != null" >
@@ -50,7 +50,7 @@
     </set>
     where id = #{id,jdbcType=CHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="taiyi.web.model.userActive" >
+  <update id="updateByPrimaryKey" parameterType="taiyi.web.model.UserActive" >
     update user_active
     set is_active = #{isActive,jdbcType=BIT}
     where id = #{id,jdbcType=CHAR}

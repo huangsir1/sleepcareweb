@@ -26,13 +26,19 @@ import com.google.common.collect.Lists;
 import com.itextpdf.text.DocumentException;
 
 import taiyi.web.model.BreatheReport;
+import taiyi.web.model.DiseaseHistory;
+import taiyi.web.model.EssUser;
 import taiyi.web.model.Hostipal;
 import taiyi.web.model.SleepReport;
 import taiyi.web.model.SubReport;
 import taiyi.web.model.User;
 import taiyi.web.model.dto.BaseReport;
+import taiyi.web.model.dto.DiseaseHistoryDto;
 import taiyi.web.model.dto.ReportPreviewDto;
+import taiyi.web.model.dto.UserEssAndDHDto;
 import taiyi.web.service.BreatheReportService;
+import taiyi.web.service.DiseaseHistoryUserService;
+import taiyi.web.service.EssUserService;
 import taiyi.web.service.HostipalService;
 import taiyi.web.service.SleepReportService;
 import taiyi.web.service.SubReportService;
@@ -70,6 +76,11 @@ public class WebServiceImpl implements WebService {
 	private HostipalService hostipalService;
 	@Autowired
 	private SystemUserService systemUserService;
+	@Autowired
+	private EssUserService essUserService;
+	@Autowired
+	private DiseaseHistoryUserService diseaseHistoryUserService;
+	
 
 	public Map<String, Integer[]> getReportNumber(String reportId) {
 		Map<String, Integer[]> maps = new HashMap<String, Integer[]>();
@@ -574,6 +585,30 @@ public class WebServiceImpl implements WebService {
 				file.delete();
 			}
 		}
+	}
+
+	/* 
+	 * @see taiyi.web.service.WebService#selectUserEssAndDHByToken(java.lang.String)
+	 */
+	@Override
+	public List<UserEssAndDHDto> selectUserEssAndDHByToken(String token) {
+		List<User> userByToken = userService.selectActiveUserByToken(token);
+		List<UserEssAndDHDto> userEssAndDHDtos = Lists.newArrayListWithCapacity(3);
+		for (User user : userByToken) {
+			UserEssAndDHDto userEssAndDHDto = new UserEssAndDHDto();
+			BeanUtilsForAndroid.copy(user, userEssAndDHDto);
+			List<EssUser> essUsers = essUserService.selectByUserId(user.getId());
+			for(EssUser essUser : essUsers) {
+				essUser.setId(null);
+				essUser.setUserId(null);
+			}
+			userEssAndDHDto.setEss(essUsers);
+			DiseaseHistoryDto diseaseHistories =  diseaseHistoryUserService.selectByUserId(user.getId());
+			diseaseHistories.setUserId(null);
+			userEssAndDHDto.setDiseaseHistories(diseaseHistories);
+			userEssAndDHDtos.add(userEssAndDHDto);
+		}
+		return userEssAndDHDtos;
 	}
 
 	

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +29,12 @@ import taiyi.web.model.dto.ESSAndDisEaseHistoryDto;
 import taiyi.web.model.dto.EssDto;
 import taiyi.web.model.dto.Status;
 import taiyi.web.model.dto.Token;
+import taiyi.web.model.dto.UserEssAndDHDto;
 import taiyi.web.service.AccountService;
 import taiyi.web.service.DiseaseHistoryUserService;
 import taiyi.web.service.EssUserService;
 import taiyi.web.service.UserService;
+import taiyi.web.service.WebService;
 
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
@@ -51,26 +54,43 @@ public class UserAPIController extends APIExceptionHandlerController {
 	private EssUserService essUserService;
 	@Autowired
 	private AccountService accountService;
+	@Autowired
+	private WebService webService;
 	
 	@RequestMapping(value="/getUserByToken")
 	@ResponseBody
-	public List<User> getUserActiveUserByToken(HttpServletRequest request) {
+	public List<UserEssAndDHDto> getUserActiveUserByToken(HttpServletRequest request) {
 		String token = request.getHeader(Constant.TOKEN);
-		List<User> selectActiveUserByToken = userService.selectActiveUserByToken(token);
-		return selectActiveUserByToken;
+		List<UserEssAndDHDto> users = webService.selectUserEssAndDHByToken(token);
+		return users;
 	}
 	
 	@RequestMapping(value="/deleteUser/{userId}")
 	@ResponseBody
 	public Status unActiveUser(HttpServletRequest request,@PathVariable String userId) {
 		String token = request.getHeader(Constant.TOKEN);
-		userService.unActiveUser(token,userId);
-		return Status.getSuccess();
+		Status result = null;
+		if (userService.unActiveUser(token,userId)) {
+			result = Status.getSuccess();
+		} else {
+			result = Status.getFailed("删除失败");
+		}
+		return result;
 	}
 	
 	@RequestMapping(value="/register",consumes = "application/json")
 	@ResponseBody
-	public Status register(@RequestBody User user) {
+	public Status register(@RequestBody User user,HttpServletRequest request) {
+		String token = request.getHeader(Constant.TOKEN);
+		if (!StringUtils.isEmpty(token)) {
+			System.out.println(token);
+			Account account = accountService.selectByToken(token);
+			//TODO 失效注册失败
+			if (account != null) {
+				user.setAccountId(account.getId());
+				user.setPhone(account.getPhone());
+			}
+		}
 		try {
 //			if (false) {
 //				return Status.PARAM_ERROR;
@@ -98,6 +118,9 @@ public class UserAPIController extends APIExceptionHandlerController {
 	@RequestMapping(value="/update",consumes = "application/json")
 	@ResponseBody
 	public Status update(@RequestBody User user) {
+		if (StringUtils.isEmpty(user.getId())) {
+			return Status.getFailed("被修改用户的id不能为\""+user.getId()+"\"");
+		}
 		try {
 			user.setLastestDate(new Date());
 			userService.updateByPrimaryKeySelective(user);
@@ -106,7 +129,7 @@ public class UserAPIController extends APIExceptionHandlerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return Status.FAILED;
+		return Status.getFailed();
 	}
 	
 	@RequestMapping(value="/isUserRegister",consumes = "application/json")

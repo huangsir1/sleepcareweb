@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import taiyi.web.dao.UserMapper;
 import taiyi.web.dao.UserActiveMapper;
+import taiyi.web.dao.UserMapper;
 import taiyi.web.model.User;
-import taiyi.web.model.userActive;
+import taiyi.web.model.UserActive;
 import taiyi.web.model.dto.PageModel;
 import taiyi.web.service.UserService;
 
@@ -205,13 +205,14 @@ public class UserServiceImpl implements UserService {
 	 * @see taiyi.web.service.UserService#unActiveUser(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void unActiveUser(String token, String userId) {
+	public boolean unActiveUser(String token, String userId) {
 		List<User> users = userMapper.selectActiveUserByToken(token);
+		boolean flag = false;
 		for(User user : users) {
 			if (user.getId().equals(userId)) {
-				userActive userActive = userActiveMapper.selectByPrimaryKey(userId);
+				UserActive userActive = userActiveMapper.selectByPrimaryKey(userId);
 				if (userActive == null) {
-					userActive = new userActive();
+					userActive = new UserActive();
 					userActive.setId(userId);
 					userActive.setIsActive(false);
 					userActiveMapper.insert(userActive);
@@ -219,8 +220,10 @@ public class UserServiceImpl implements UserService {
 					userActive.setIsActive(false);
 					userActiveMapper.updateByPrimaryKeySelective(userActive);
 				}
+				flag = true;
 			} 
 		}
+		return flag;
 	}
 
 

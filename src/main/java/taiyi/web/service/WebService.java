@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import taiyi.web.model.SleepReport;
 import taiyi.web.model.dto.BaseReport;
 import taiyi.web.model.dto.ReportPreviewDto;
+import taiyi.web.model.dto.UserEssAndDHDto;
 
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
@@ -57,4 +58,6 @@ public interface WebService {
 	boolean isReportPdfFileExist(String reportId, Locale locale);
 
 	void deletePdf(String reportId);
+
+	List<UserEssAndDHDto> selectUserEssAndDHByToken(String token);
 }

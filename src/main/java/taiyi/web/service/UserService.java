@@ -89,5 +89,5 @@ public interface UserService {
 	 * @param token
 	 * @param userId
 	 */
-	void unActiveUser(String token, String userId);
+	boolean unActiveUser(String token, String userId);
 }

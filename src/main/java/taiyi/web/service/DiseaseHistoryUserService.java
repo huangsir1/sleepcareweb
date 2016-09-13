@@ -18,4 +18,6 @@ public interface DiseaseHistoryUserService {
 	int deleteByUserId(String userId);
 
 	int insertDHUs(Integer[] diseaseHistoryIds, String userId);
+
+	DiseaseHistoryDto selectByUserId(String id);
 }
