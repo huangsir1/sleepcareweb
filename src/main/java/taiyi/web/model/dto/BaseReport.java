@@ -135,6 +135,24 @@ public class BaseReport {
 
 	// 总低通气时长
 	private Integer totalHypoventilationTimeSeconds;
+	
+	private String appVersion;
+	
+	
+
+	/**
+	 * @return the appVersion
+	 */
+	public String getAppVersion() {
+		return appVersion;
+	}
+
+	/**
+	 * @param appVersion the appVersion to set
+	 */
+	public void setAppVersion(String appVersion) {
+		this.appVersion = appVersion;
+	}
 
 	public BaseReport() {
 
@@ -907,7 +925,7 @@ public class BaseReport {
 		return new SubReport(id, oxygenReductionIndex, longestApneaSeconds, longestApneaTime, maxOxygenReduceSeconds,
 				maxOxygenReduceTime, averagePulse, maxPulse, maxPulseTime, minPulse, minPulseTime,
 				longestOxygenReduceSeconds, longestOxygenReduceTime, bloodOxygenHazardIndex, macAddress, advice,
-				perfusionIndex,totalApneaTimeSeconds,totalHypoventilationTimeSeconds);
+				perfusionIndex,totalApneaTimeSeconds,totalHypoventilationTimeSeconds,appVersion);
 	}
 
 	/**

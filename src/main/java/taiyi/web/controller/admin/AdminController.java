@@ -146,7 +146,7 @@ public class AdminController extends ExceptionHandlerController {
 			diseaseHistoryUserService.deleteByUserId(userId);
 			essUesrService.deleteByUserId(userId);
 			userService.deleteByPrimaryKey(userId);
-			return Status.SUCCESSED;
+			return Status.getSuccess();
 		} catch (Exception e) {
 			return Status.CANNOT_DELETE_USER;
 		}
@@ -370,16 +370,16 @@ public class AdminController extends ExceptionHandlerController {
 			// TODO: handle exception
 		}
 		if (!StringUtils.isEmpty(user.getName())) {
-			user.setName(user.getName() + "%");
+			user.setName(user.getName().trim() + "%");
 		}
 		if (!StringUtils.isEmpty(user.getGender())) {
-			user.setGender(user.getGender() + "%");
+			user.setGender(user.getGender().trim() + "%");
 		}
 		if (!StringUtils.isEmpty(user.getPhone())) {
-			user.setPhone(user.getPhone() + "%");
+			user.setPhone(user.getPhone().trim() + "%");
 		}
 		if (!StringUtils.isEmpty(user.getAddress())) {
-			user.setAddress(user.getAddress() + "%");
+			user.setAddress(user.getAddress().trim() + "%");
 		}
 
 		Session session = SecurityUtils.getSubject().getSession();

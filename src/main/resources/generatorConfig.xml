@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration >
-<classPathEntry location="/Users/jason/Downloads/generator/generator/need/6.0.3.jar" />
-  <context id="DB2Tables" targetRuntime="MyBatis3">
+<classPathEntry location="/Users/jason/Downloads/generator/generator/need/mysql-connector-java-5.1.23-bin.jar" />
+  <context id="context1" >
     <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/web" userId="root" password="root" />
     <javaModelGenerator targetPackage="taiyi.web.model" targetProject="web" />
     <sqlMapGenerator targetPackage="taiyi.web.mapper" targetProject="web" />
     <javaClientGenerator targetPackage="taiyi.web.dao" targetProject="web" type="XMLMAPPER" />
      <!--对应数据库表 mysql可以加入主键自增 字段命名 忽略某字段等-->
-        <table tableName="user_active" domainObjectName="UserActive" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table tableName="sub_report" domainObjectName="SubReport" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
   
   </context>
   	
   
 </generatorConfiguration>
-
-
