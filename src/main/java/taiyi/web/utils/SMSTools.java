@@ -34,7 +34,7 @@ import taiyi.web.model.dto.SMSValidate;
  */
 public class SMSTools {
 	public static final String SMS_VALIDATE_URL = "https://webapi.sms.mob.com/sms/verify";
-	public static final String APP_KEY = "169eb0c6ab56c";
+	public static final String APP_KEY = "162a091330664";
 
 
 	public static SMSValidate checkSMS(String phone, String code) {

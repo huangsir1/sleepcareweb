@@ -3,21 +3,32 @@
  */
 package web;
 
-import java.util.Date;
-import java.util.UUID;
+import java.util.Random;
 
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *
- * web
+ *         web
  *
- * 2016年3月10日
+ *         2016年3月10日
  */
 public class Test2 {
-	
-		public static void main(String[] args) {
-			System.out.println(UUID.randomUUID().toString());
-			
+
+	public static void main(String... args) {
+		System.out.println(randomString(-229985452) + ' ' + randomString(-147909649));
+	}
+
+	public static String randomString(int seed) {
+		Random rand = new Random(seed);
+		
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0;; i++) {
+			int n = rand.nextInt(27);
+			if (n == 0)
+				break;
+			sb.append((char) ('`' + n));
 		}
+		return sb.toString();
+	}
 
 }

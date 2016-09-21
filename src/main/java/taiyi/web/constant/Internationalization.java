@@ -3,6 +3,8 @@
  */
 package taiyi.web.constant;
 
+import java.io.Serializable;
+
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *
@@ -10,7 +12,11 @@ package taiyi.web.constant;
  *
  *         2016年8月30日
  */
-public class Internationalization {
+public class Internationalization implements Serializable{
+	/**
+	 * 
+	 */
+	public static final long serialVersionUID = -6131681026105245463L;
 	public static final String NO_DATA = "no_data";
 	public static final String PR_TREND = "pr_trend";
 	public static final String SPO2_TREND = "spo2_trend";
@@ -108,4 +114,6 @@ public class Internationalization {
 	public static final String IMAGE_MIN = "image_min";
 	public static final String FREQUENCY_NO = "frequency_no";
 	public static final String FREQUENCY_PER_MIN = "frequency_per_min";
+	
+	
 }

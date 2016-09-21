@@ -24,6 +24,7 @@ public class ReportPreviewDto {
     @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date uploadDate;
     private String macAddress;;
+    private String version;
 	/**
 	 * @return the id
 	 */
@@ -95,6 +96,18 @@ public class ReportPreviewDto {
 	 */
 	public void setMacAddress(String macAddress) {
 		this.macAddress = macAddress;
+	}
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return version;
+	}
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
 	}
     
     

@@ -557,7 +557,9 @@ public class WebServiceImpl implements WebService {
 		for (SleepReport s : sleepReports) {
 			ReportPreviewDto reportPreviewDto = new ReportPreviewDto();
 			BeanUtilsForAndroid.copy(s, reportPreviewDto);
-			reportPreviewDto.setMacAddress(subReportService.selectByPrimaryKey(s.getId()).getMacAddress());
+			SubReport subReport = subReportService.selectByPrimaryKey(s.getId());
+			reportPreviewDto.setMacAddress(subReport.getMacAddress());
+			reportPreviewDto.setVersion(subReport.getAppVersion());
 			reportPreviewDtos.add(reportPreviewDto);
 		}
 

@@ -92,6 +92,7 @@ function add() {
 				<th field="endTime">结束时间</th> 
 				<th field="uploadDate">上传日期</th>
 				<th field="macAddress" >mac地址</th>
+				<th field="version" >版本</th>
 			</tr>
 		</thead>
 	</table>
