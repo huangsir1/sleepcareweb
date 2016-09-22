@@ -20,6 +20,12 @@ import taiyi.web.model.dto.Status;
  */
 @Controller
 public class APIExceptionHandlerController  {
+	/**
+	 * api接口异常统一处理
+	 * @param ex
+	 * @param request
+	 * @return
+	 */
 	@ExceptionHandler(Exception.class)  
 	@ResponseBody
     public Status operateExp(Exception ex,HttpServletRequest request){  

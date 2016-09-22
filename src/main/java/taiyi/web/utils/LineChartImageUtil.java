@@ -26,6 +26,15 @@ import org.jfree.data.xy.XYDataset;
 
 import taiyi.web.constant.Internationalization;
 
+/**
+ * 生成线性图工具类
+ * 
+ * @author <a href="mailto:jason19659@163.com">jason19659</a>
+ *
+ *         taiyi.web.utils
+ *
+ *         2016年9月22日
+ */
 public class LineChartImageUtil {
 
 	private static XYDataset createDataset(String[] riqi, String data[]) throws Exception {
@@ -39,10 +48,11 @@ public class LineChartImageUtil {
 			} catch (Exception e) {
 				parse = in.parse(riqi[i]);
 			}
-			timeSeries1.addOrUpdate(new Minute(parse,TimeZone.getTimeZone("Asia/Shanghai"),Locale.CHINA), Double.parseDouble(data[i]));
+			timeSeries1.addOrUpdate(new Minute(parse, TimeZone.getTimeZone("Asia/Shanghai"), Locale.CHINA),
+					Double.parseDouble(data[i]));
 		}
 		dataset.addSeries(timeSeries1);
-		return dataset; 
+		return dataset;
 	}
 
 	public static void create(String[] time, String[] data, String title, String xLabel, String yLabel,
@@ -51,7 +61,7 @@ public class LineChartImageUtil {
 		StandardChartTheme standardChartTheme = new StandardChartTheme("CN");
 		ChartFactory.setChartTheme(standardChartTheme);
 		JFreeChart chart = ChartFactory.createTimeSeriesChart(title, xLabel, yLabel, xyDataset, false, false, false);
-		
+
 		Font baseFont = new Font("微软雅黑", Font.PLAIN, 10);
 		Font baseBigFont = new Font("微软雅黑", Font.BOLD, 10);
 		XYPlot plot = chart.getXYPlot();
@@ -67,14 +77,14 @@ public class LineChartImageUtil {
 		rangeAxis.setLabelFont(baseBigFont);
 		rangeAxis.setTickLabelFont(baseBigFont);
 		rangeAxis.setAutoRange(true);
-		rangeAxis.setAutoRangeMinimumSize(5);  
-		
-		chart.setBackgroundPaint(Color.WHITE); 
+		rangeAxis.setAutoRangeMinimumSize(5);
+
+		chart.setBackgroundPaint(Color.WHITE);
 
 		plot.setBackgroundPaint(Color.white);
 		// 设置网格竖线颜色
 		plot.setDomainGridlinePaint(new Color(194, 53, 49));
-		// 设置网格横线颜色 
+		// 设置网格横线颜色
 		plot.setRangeGridlinePaint(Color.pink);
 		plot.setNoDataMessage("NO DATA 没有数据");
 		plot.setNoDataMessageFont(new Font("微软雅黑", Font.BOLD, 22));
@@ -87,23 +97,26 @@ public class LineChartImageUtil {
 	}
 
 	public static void generateMailvImage(String[] riqi, String[] mailv, String imagePathAndExt) throws Exception {
-		generateMailvImage(riqi, mailv, imagePathAndExt,Locale.CHINA);
+		generateMailvImage(riqi, mailv, imagePathAndExt, Locale.CHINA);
 	}
 
 	public static void generateXueyangImage(String[] riqi, String[] xueyang, String imagePathAndExt) throws Exception {
-		generateXueyangImage(riqi, xueyang, imagePathAndExt,Locale.CHINA);
-	}
-	
-	public static void generateMailvImage(String[] riqi, String[] mailv, String imagePathAndExt,Locale locale) throws Exception {
-		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
-		create(riqi, mailv, bundle.getString(Internationalization.PR_TREND), null, bundle.getString(Internationalization.FREQUENCY_PER_MIN), imagePathAndExt);
+		generateXueyangImage(riqi, xueyang, imagePathAndExt, Locale.CHINA);
 	}
 
-	public static void generateXueyangImage(String[] riqi, String[] xueyang, String imagePathAndExt,Locale locale) throws Exception {
+	public static void generateMailvImage(String[] riqi, String[] mailv, String imagePathAndExt, Locale locale)
+			throws Exception {
 		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
-		create(riqi, xueyang, bundle.getString(Internationalization.SPO2_TREND), null, bundle.getString(Internationalization.PERCENTAGE), imagePathAndExt);
+		create(riqi, mailv, bundle.getString(Internationalization.PR_TREND), null,
+				bundle.getString(Internationalization.FREQUENCY_PER_MIN), imagePathAndExt);
 	}
 
+	public static void generateXueyangImage(String[] riqi, String[] xueyang, String imagePathAndExt, Locale locale)
+			throws Exception {
+		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+		create(riqi, xueyang, bundle.getString(Internationalization.SPO2_TREND), null,
+				bundle.getString(Internationalization.PERCENTAGE), imagePathAndExt);
+	}
 
 	public static JFreeChart createTimeSeriesChart(JFreeChart timeSeriesChart) throws Exception {
 		ChartFrame frame = new ChartFrame("TestPieChart", timeSeriesChart);
@@ -113,8 +126,10 @@ public class LineChartImageUtil {
 	}
 
 	public static void main(String[] args) throws Exception {
-//		generateMailvImage(readAsMap.get("riqi"), readAsMap.get("mailv"),"/Users/jason/Desktop/test/mailv.png");
-//		generateXueyangImage(readAsMap.get("riqi"), readAsMap.get("xueyang"), "/Users/jason/Desktop/test/xueyang.png");
+		// generateMailvImage(readAsMap.get("riqi"),
+		// readAsMap.get("mailv"),"/Users/jason/Desktop/test/mailv.png");
+		// generateXueyangImage(readAsMap.get("riqi"), readAsMap.get("xueyang"),
+		// "/Users/jason/Desktop/test/xueyang.png");
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import taiyi.web.dao.DeviceMapper;
 import taiyi.web.model.Device;
@@ -20,6 +21,7 @@ import taiyi.web.service.DeviceService;
  * 2016年7月4日
  */
 @Service
+@Transactional
 public class DeviceServiceImpl implements DeviceService{
 	@Autowired
 	private DeviceMapper deviceMapper;

@@ -43,7 +43,11 @@ public class DoctorAPIController extends APIExceptionHandlerController{
 	@Autowired
 	private SystemUserService doctorService;
 
-	
+	/**
+	 * 注册医生和用户
+	 * @param userDoctorHospitalDto 医生和用户对象
+	 * @return
+	 */
 	@RequestMapping(value="user/registerUserWithDoctor",consumes = "application/json")
 	@ResponseBody
 	public Status register(@RequestBody UserDoctorHospitalDto userDoctorHospitalDto) {

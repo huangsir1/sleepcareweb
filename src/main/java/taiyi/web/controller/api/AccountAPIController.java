@@ -3,11 +3,8 @@
  */
 package taiyi.web.controller.api;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,6 +36,11 @@ public class AccountAPIController extends APIExceptionHandlerController {
 	@Autowired
 	private WebService webService;
 
+	/**
+	 * 检查token有效性
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/testToken")
 	@ResponseBody
 	public Status isTokenValidate(HttpServletRequest request) {

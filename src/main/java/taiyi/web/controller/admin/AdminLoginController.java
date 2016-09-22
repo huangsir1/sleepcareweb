@@ -27,6 +27,8 @@ import taiyi.web.service.SystemUserService;
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *
+ *         登录部分
+ *
  *         taiyi.web.controller.admin
  *
  *         2016年3月14日
@@ -69,6 +71,12 @@ public class AdminLoginController extends ExceptionHandlerController {
 		return "hospital/adminIndex";
 	}
 
+	/**
+	 * 登录
+	 * @param username 用户名
+	 * @param password 密码
+	 * @param request
+	 */
 	@RequestMapping("/login")
 	public String login(String username, String password, HttpServletRequest request) {
 
@@ -137,6 +145,11 @@ public class AdminLoginController extends ExceptionHandlerController {
 		return "forward:admin/login";
 	}
 
+	/**
+	 * 注销
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/logout")
 	public String logout(HttpServletRequest request) {
 		// session.removeAttribute("login");

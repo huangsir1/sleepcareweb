@@ -26,6 +26,8 @@ import com.alibaba.fastjson.JSON;
 import taiyi.web.model.dto.SMSValidate;
 
 /**
+ * 验证验证码工具类
+ * 
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *
  *         taiyi.web.utils
@@ -35,7 +37,6 @@ import taiyi.web.model.dto.SMSValidate;
 public class SMSTools {
 	public static final String SMS_VALIDATE_URL = "https://webapi.sms.mob.com/sms/verify";
 	public static final String APP_KEY = "162a091330664";
-
 
 	public static SMSValidate checkSMS(String phone, String code) {
 		SMSValidate parseObject = JSON.parseObject(requestData(phone, code), SMSValidate.class);

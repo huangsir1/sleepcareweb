@@ -2,57 +2,57 @@
  * 
  */
 package taiyi.web.utils;
-import java.io.Serializable;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.UUID;
+
 /**
+ * 密码加密工具类
+ * 
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *
- * taiyi.web.utils
+ *         taiyi.web.utils
  *
- * 2016年6月2日
+ *         2016年6月2日
  */
 
+public class EncryptUtils {
 
-public class EncryptUtils{
-	
 	public static void main(String[] args) {
 		System.err.println(encryptOriginalTaiirPassword("1234"));
 
-//		System.out.println(checkOriginalTaiirPassword("admin","CBD5516C394B4BAC0176A7BFFE1FCBBC:2F361F1B"));
-		
-	}
-	
-	
-	public final static boolean checkOriginalTaiirPassword(String originalPassword,String passwordInDB) {
-		return encryptOriginalTaiirPassword(originalPassword,passwordInDB.split(":")[1]).equals(passwordInDB);
-	}
-	
+		// System.out.println(checkOriginalTaiirPassword("admin","CBD5516C394B4BAC0176A7BFFE1FCBBC:2F361F1B"));
 
+	}
+
+	public final static boolean checkOriginalTaiirPassword(String originalPassword, String passwordInDB) {
+		return encryptOriginalTaiirPassword(originalPassword, passwordInDB.split(":")[1]).equals(passwordInDB);
+	}
 
 	public final static String encryptOriginalTaiirPassword(String originalPassword) {
 		return encryptMD5TaiirPassword(encryptMD5(originalPassword));
 	}
-	
+
 	public static String encryptOriginalTaiirPassword(String originalPassword, String salt) {
-		return encryptMD5TaiirPassword(encryptMD5(originalPassword),salt);
+		return encryptMD5TaiirPassword(encryptMD5(originalPassword), salt);
 	}
-	
-	public final static boolean checkMD5TaiirPassword(String originalMD5Password,String passwordInDB) {
-		return encryptMD5TaiirPassword(originalMD5Password,passwordInDB.split(":")[1]).equals(passwordInDB);
+
+	public final static boolean checkMD5TaiirPassword(String originalMD5Password, String passwordInDB) {
+		return encryptMD5TaiirPassword(originalMD5Password, passwordInDB.split(":")[1]).equals(passwordInDB);
 	}
-	public final static String encryptMD5TaiirPassword(String originalMD5Password,String salt) {
-		String encryptPassword = encryptMD5(encryptMD5(originalMD5Password+salt)+salt) + ":" + salt;
+
+	public final static String encryptMD5TaiirPassword(String originalMD5Password, String salt) {
+		String encryptPassword = encryptMD5(encryptMD5(originalMD5Password + salt) + salt) + ":" + salt;
 		return encryptPassword;
 	}
-	
+
 	public final static String encryptMD5TaiirPassword(String originalMD5Password) {
 		String salt = UUID.randomUUID().toString().split("-")[0].toUpperCase();
-		String encryptPassword = encryptMD5(encryptMD5(originalMD5Password+salt)+salt) + ":" + salt;
+		String encryptPassword = encryptMD5(encryptMD5(originalMD5Password + salt) + salt) + ":" + salt;
 		return encryptPassword;
 	}
+
 	/**
 	 * Encrypt string using MD5 algorithm
 	 */

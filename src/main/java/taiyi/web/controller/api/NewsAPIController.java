@@ -26,6 +26,10 @@ public class NewsAPIController extends APIExceptionHandlerController{
 	@Autowired
 	private NewsService newsService;
 	
+	/**
+	 * 新闻
+	 * @return
+	 */
 	@RequestMapping("/getAll")
 	@ResponseBody
 	public List<News>getAll() {

@@ -30,6 +30,11 @@ public class FeedBackController  extends APIExceptionHandlerController {
 	@Autowired
 	private AccountService accountService;
 	
+	/**
+	 * 反馈
+	 * @param feedback
+	 * @return
+	 */
 	@RequestMapping(value="upload", consumes = "application/json")
 	@ResponseBody
 	public Status upload(@RequestBody  FeedbackDto feedback) {

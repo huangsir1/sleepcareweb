@@ -64,6 +64,8 @@ import taiyi.web.utils.WebProperties;
 
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
+ * 
+ *         网页端管理员所使用的接口
  *
  *         taiyi.web.controller.admin
  *
@@ -89,15 +91,26 @@ public class AdminController extends ExceptionHandlerController {
 	private EssUserService essUesrService;
 	@Autowired
 	private SystemUserService systemUserService;
-	
+
 	@Autowired
 	private PermissionService permissionService;
-	
 
+	/**
+	 * 上传用户的接口
+	 * 
+	 * @param birth
+	 *            生日
+	 * @param user
+	 *            用户
+	 * @param qx
+	 *            病史id
+	 * @return 结果对象
+	 */
 	@RequiresPermissions(logical = Logical.OR, value = { "user:insert", "doctor:insert" })
 	@RequestMapping("/saveUser")
 	@ResponseBody
-	public Status saveUser(@DateTimeFormat(pattern = "yyyy-MM-dd") Date birth, User user,@RequestParam(required=false) Integer[] qx) {
+	public Status saveUser(@DateTimeFormat(pattern = "yyyy-MM-dd") Date birth, User user,
+			@RequestParam(required = false) Integer[] qx) {
 		user.setId(UUID.randomUUID().toString());
 		user.setBirthday(birth);
 		DiseaseHistoryDto diseaseHistoryDto = new DiseaseHistoryDto();
@@ -121,6 +134,15 @@ public class AdminController extends ExceptionHandlerController {
 		return Status.SUCCESSED;
 	}
 
+	/**
+	 * 获取所有用户，可分页
+	 * 
+	 * @param page
+	 *            页数
+	 * @param rows
+	 *            每页行数
+	 * @return 用户信息的json
+	 */
 	@RequiresPermissions("user:view")
 	@RequestMapping("/getAllUsers")
 	@ResponseBody
@@ -134,10 +156,14 @@ public class AdminController extends ExceptionHandlerController {
 		PageModel pageModel = new PageModel(pageinfo.getTotal(), users);
 		return pageModel.get();
 	}
-	
 
-	
-
+	/**
+	 * 删除用户
+	 * 
+	 * @param userId
+	 *            用户id
+	 * @return 结果
+	 */
 	@RequiresPermissions(value = { "user:delete", "doctor:delete" }, logical = Logical.OR)
 	@RequestMapping("/deleteUser")
 	@ResponseBody
@@ -153,22 +179,39 @@ public class AdminController extends ExceptionHandlerController {
 
 	}
 
+	/**
+	 * 
+	 * @param userId
+	 *            用户id
+	 * @param page
+	 *            页数
+	 * @param rows
+	 *            行数
+	 * @return 报告详细内容
+	 */
 	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
 	@RequestMapping("/getReportByUserId/{userId}")
 	@ResponseBody
-	public HashMap<String, Object> getReportByUserId(@PathVariable String userId,@RequestParam(required = false) Integer page,
-			@RequestParam(required = false) Integer rows) {
+	public HashMap<String, Object> getReportByUserId(@PathVariable String userId,
+			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer rows) {
 		if (page != null && rows != null) {
 			PageHelper.startPage(page, rows);
 		}
 		List<SleepReport> sleepReports = sleepReportService.selectByUserId(userId);
-		 List<ReportPreviewDto> reportPreviewDtos = webService.packagePerviewReportDto(sleepReports);
-		 PageInfo<SleepReport> pageInfo = new PageInfo<SleepReport>(sleepReports);
-		 PageModel pageModel = new PageModel(pageInfo.getTotal(), reportPreviewDtos);
-		 return pageModel.get();
-	} 
+		List<ReportPreviewDto> reportPreviewDtos = webService.packagePerviewReportDto(sleepReports);
+		PageInfo<SleepReport> pageInfo = new PageInfo<SleepReport>(sleepReports);
+		PageModel pageModel = new PageModel(pageInfo.getTotal(), reportPreviewDtos);
+		return pageModel.get();
+	}
 
-	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view","hostipal:view" })
+	/**
+	 * 根据id获取报告
+	 * 
+	 * @param id
+	 *            报告id
+	 * @param request
+	 */
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view", "hostipal:view" })
 	@RequestMapping("/showReport/{id}")
 	public String showReport(@PathVariable String id, HttpServletRequest request) {
 		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(id);
@@ -183,6 +226,14 @@ public class AdminController extends ExceptionHandlerController {
 		return "admin/report";
 	}
 
+	/**
+	 * 增加报告
+	 * 
+	 * @param id
+	 *            报告id
+	 * @param request
+	 * @return
+	 */
 	@RequiresPermissions("user:insert")
 	@RequestMapping("/addReport/{id}")
 	public String addReport(@PathVariable String id, HttpServletRequest request) {
@@ -191,7 +242,13 @@ public class AdminController extends ExceptionHandlerController {
 		return "admin/addReport";
 	}
 
-	@RequiresPermissions(logical = Logical.OR, value = { "user:delete"})//, "doctor:delete" })
+	/**
+	 * 删除报告
+	 * 
+	 * @param 报告id
+	 * @return
+	 */
+	@RequiresPermissions(logical = Logical.OR, value = { "user:delete" }) // ,
 	@RequestMapping("/deleteReport")
 	@ResponseBody
 	public Status deleteReport(String id) {
@@ -204,6 +261,9 @@ public class AdminController extends ExceptionHandlerController {
 
 	}
 
+	/**
+	 * 手动插入报告
+	 */
 	@RequiresPermissions("user:insert")
 	@RequestMapping("/postReport")
 	public String postReport(@RequestParam(required = false) MultipartFile dataText, BreatheReport breatheReport,
@@ -298,6 +358,12 @@ public class AdminController extends ExceptionHandlerController {
 		}
 	}
 
+	/**
+	 * 之前供前段获取数据的接口，现在已废弃
+	 * 
+	 * @param id
+	 * @return
+	 */
 	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
 	@RequestMapping("/getHyponeaData/{id}")
 	@ResponseBody
@@ -305,6 +371,16 @@ public class AdminController extends ExceptionHandlerController {
 		return webService.getReportNumber(id);
 	}
 
+	/**
+	 * 报告生成pdf
+	 * 
+	 * @param reportId
+	 *            报告id
+	 * @param request
+	 * @return 状态
+	 * @throws IOException
+	 * @throws DocumentException
+	 */
 	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
 	@RequestMapping("/generatePdf/{reportId}")
 	@ResponseBody
@@ -322,33 +398,75 @@ public class AdminController extends ExceptionHandlerController {
 			return new Status(Status.FAILED_CODE, "生成失败");
 		}
 	}
-	
-	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view","hospital:view" })
+
+	/**
+	 * 显示pdf
+	 * 
+	 * @param reportId
+	 *            报告id
+	 * @param language
+	 *            语言偏好
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws DocumentException
+	 */
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view", "hospital:view" })
 	@RequestMapping("/showPdf/{reportId}/{language}")
-	public void showPdf(@PathVariable String reportId,@PathVariable String language, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, DocumentException {
-		
+	public void showPdf(@PathVariable String reportId, @PathVariable String language, HttpServletRequest request,
+			HttpServletResponse response) throws IOException, DocumentException {
+
 		if (language == null) {
 			language = "zh";
 		}
 		Locale locale = new Locale(language);
-		webService.flushPdf(request, response, reportId,locale);
+		webService.flushPdf(request, response, reportId, locale);
 	}
-	
-	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view","hospital:view" })
+
+	/**
+	 * 显示pdf
+	 * 
+	 * @param reportId
+	 *            报告id
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws DocumentException
+	 */
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view", "hospital:view" })
 	@RequestMapping("/showPdf/{reportId}")
 	public void showPdf(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, DocumentException {
 		showPdf(reportId, null, request, response);
 	}
-	
+
+	/**
+	 * 下载数据文件
+	 * 
+	 * @param reportId
+	 *            报告id
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws DocumentException
+	 */
 	@RequiresPermissions(logical = Logical.OR, value = { "system:view" })
 	@RequestMapping("/showFile/{reportId}")
 	public void showFile(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, DocumentException {
 		webService.flushFile(request, response, reportId);
 	}
-	
+
+	/**
+	 * 删除文件
+	 * 
+	 * @param reportId
+	 *            报告id
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 * @throws DocumentException
+	 */
 	@RequiresPermissions(logical = Logical.OR, value = { "system:delete" })
 	@RequestMapping("/deleteFile/{reportId}")
 	@ResponseBody
@@ -357,7 +475,20 @@ public class AdminController extends ExceptionHandlerController {
 		webService.deletePdf(reportId);
 		return Status.getSuccess();
 	}
-	
+
+	/**
+	 * 搜索用户
+	 * 
+	 * @param user
+	 *            用户
+	 * @param birthdays
+	 *            生日
+	 * @param page
+	 *            页数
+	 * @param rows
+	 *            每页条数
+	 * @return
+	 */
 	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
 	@RequestMapping("searchUsers")
 	@ResponseBody
@@ -395,6 +526,16 @@ public class AdminController extends ExceptionHandlerController {
 
 	}
 
+	/**
+	 * 上传文件
+	 * 
+	 * @param file
+	 *            文件
+	 * @param id
+	 *            报告id
+	 * @param request
+	 * @return
+	 */
 	@RequiresPermissions("user:insert")
 	@RequestMapping("uploadFile")
 	public String uploadFile(MultipartFile file, String id, HttpServletRequest request) {
@@ -435,13 +576,23 @@ public class AdminController extends ExceptionHandlerController {
 	public String addUser() {
 		return "admin/addUser";
 	}
-	
-	
-//	@RequestMapping("login") 
-//	public String login() {
-//		return "adminLogin";
-//	} 
 
+	// @RequestMapping("login")
+	// public String login() {
+	// return "adminLogin";
+	// }
+
+	/**
+	 * 修改密码
+	 * 
+	 * @param original
+	 *            原密码
+	 * @param newp
+	 *            新密码
+	 * @param confirm
+	 *            确认新密码
+	 * @return
+	 */
 	@RequestMapping("changePassword")
 	@ResponseBody
 	public Status changePassword(String original, String newp, String confirm) {
@@ -465,52 +616,94 @@ public class AdminController extends ExceptionHandlerController {
 			return Status.PASSWORD_NOT_MATCH;
 		}
 	}
-	
-	
+
+	/**
+	 * 获取医院管理员帐户
+	 * 
+	 * @param hospitalId
+	 *            医院id
+	 * @return
+	 */
 	@RequestMapping("/getHospitalAdmin/{hospitalId}")
 	@RequiresPermissions("system:view")
 	@ResponseBody
 	public List<SystemUserRoleDto> getHospitalAdmin(@PathVariable int hospitalId) {
 		return systemUserService.selectWithRoleByHostipal(hospitalId);
 	}
-	
+
+	/**
+	 * 注册医院管理员
+	 * 
+	 * @param systemUser
+	 *            管理员信息
+	 * @param hospitalId
+	 *            医院id
+	 * @param systemRoles
+	 *            权限
+	 * @param password
+	 *            密码
+	 * @param confirm
+	 *            确认密码
+	 * @return
+	 */
 	@RequestMapping("/saveHospitalAdmin")
-	@RequiresPermissions("system:insert") 
+	@RequiresPermissions("system:insert")
 	@ResponseBody
-	public Status saveHospitalAdmin(SystemUser systemUser,int hospitalId,String[] systemRoles,String password,String confirm) {
+	public Status saveHospitalAdmin(SystemUser systemUser, int hospitalId, String[] systemRoles, String password,
+			String confirm) {
 		if (!password.equals(confirm)) {
 			return Status.PASSWORD_NOT_MATCH;
 		}
-		if(systemUserService.selectByUsername(systemUser.getUsername()) != null) {
+		if (systemUserService.selectByUsername(systemUser.getUsername()) != null) {
 			return Status.USER_EXIST;
 		}
 		systemUser.setHostipalId(hospitalId);
 		systemUser.setId(UUID.randomUUID().toString());
-		systemUserService.saveHospitalAdmin(systemUser,systemRoles,password);
+		systemUserService.saveHospitalAdmin(systemUser, systemRoles, password);
 		return Status.getSuccess();
 	}
-	
+
+	/**
+	 * 修改医院
+	 * 
+	 * @param systemUser
+	 *            管理员信息
+	 * @param systemRoles
+	 *            权限
+	 * @return
+	 */
 	@RequestMapping("/editHospitalAdmin")
-	@RequiresPermissions("system:update") 
+	@RequiresPermissions("system:update")
 	@ResponseBody
-	public Status editHospitalAdmin(SystemUser systemUser,String[] systemRoles) {
+	public Status editHospitalAdmin(SystemUser systemUser, String[] systemRoles) {
 		Set<String> roles = permissionService.selectRoleStringsByUserId(systemUser.getId());
 		if (roles.contains("admin")) {
 			return Status.getFailed("无法修改管理员信息！！");
 		}
-		if(systemUserService.selectByUsername(systemUser.getUsername()) != null) {
+		if (systemUserService.selectByUsername(systemUser.getUsername()) != null) {
 			if (!systemUserService.selectByPrimaryKey(systemUser.getId()).getName().equals(systemUser.getName())) {
 				return Status.getFailed("用户名已存在");
 			}
 		}
 		systemUserService.editHospitalAdmin(systemUser, systemRoles);
 		return Status.getSuccess();
-	} 
-	
+	}
+
+	/**
+	 * 修改密码
+	 * 
+	 * @param id
+	 *            管理员id
+	 * @param password
+	 *            密码
+	 * @param confirm
+	 *            确认密码
+	 * @return
+	 */
 	@RequestMapping("/updateHospitalAdminPassword")
-	@RequiresPermissions("system:update") 
+	@RequiresPermissions("system:update")
 	@ResponseBody
-	public Status updateHospitalAdminPassword(String id,String password,String confirm) {
+	public Status updateHospitalAdminPassword(String id, String password, String confirm) {
 		Set<String> roles = permissionService.selectRoleStringsByUserId(id);
 		if (roles.contains("admin")) {
 			return Status.getFailed("无法修改管理员信息！！");
@@ -523,11 +716,17 @@ public class AdminController extends ExceptionHandlerController {
 		systemUser.setPassword(EncryptUtils.encryptOriginalTaiirPassword(password));
 		systemUserService.updateByPrimaryKeySelective(systemUser);
 		return Status.getSuccess();
-	} 
-	
-	
+	}
+
+	/**
+	 * 删除医院管理员
+	 * 
+	 * @param id
+	 *            管理员id
+	 * @return
+	 */
 	@RequestMapping("/deleteHospitalAdmin")
-	@RequiresPermissions("system:delete") 
+	@RequiresPermissions("system:delete")
 	@ResponseBody
 	public Status deleteHospitalAdmin(String id) {
 		Set<String> roles = permissionService.selectRoleStringsByUserId(id);
@@ -536,7 +735,7 @@ public class AdminController extends ExceptionHandlerController {
 		}
 		return systemUserService.deleteSystemUser(id);
 	}
-	
+
 	// @RequestMapping("/generateFullPdf/{reportId}")
 	// @ResponseBody
 	// public Status generatePdf(@PathVariable String reportId,
@@ -554,6 +753,17 @@ public class AdminController extends ExceptionHandlerController {
 	// }
 	// }
 
+	/**
+	 * 输入时间换算成秒
+	 * 
+	 * @param hour
+	 *            小时
+	 * @param minute
+	 *            分钟
+	 * @param second
+	 *            秒
+	 * @return 总计秒数
+	 */
 	public int calculateSeconds(String hour, String minute, String second) {
 		return Integer.parseInt(hour) * 3600 + Integer.parseInt(minute) * 60 + Integer.parseInt(second);
 	}

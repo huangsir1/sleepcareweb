@@ -32,6 +32,15 @@ import taiyi.web.model.SleepReport;
 import taiyi.web.model.SubReport;
 import taiyi.web.model.User;
 
+/**
+ * 生成pdf的工具类
+ * 
+ * @author <a href="mailto:jason19659@163.com">jason19659</a>
+ *
+ *         taiyi.web.utils
+ *
+ *         2016年9月22日
+ */
 public class PDFUtils {
 
 	public final String CHINESE_FONT;
@@ -67,8 +76,8 @@ public class PDFUtils {
 	}
 
 	public void createPdf(String dest, String imagePathROSeconds, String imagePathROTimes, String imagePathROml,
-			String imagePathROxy, User user, SleepReport sleepReport, BreatheReport breatheReport,
-			SubReport subReport) throws Exception {
+			String imagePathROxy, User user, SleepReport sleepReport, BreatheReport breatheReport, SubReport subReport)
+			throws Exception {
 		createPdf(dest, imagePathROSeconds, imagePathROTimes, imagePathROml, imagePathROxy, user, sleepReport,
 				breatheReport, subReport, "");
 	}
@@ -88,19 +97,21 @@ public class PDFUtils {
 	 * @throws Exception
 	 */
 	public void createPdf(String dest, String imagePathROSeconds, String imagePathROTimes, String imagePathROml,
-			String imagePathROxy, User user, SleepReport sleepReport, BreatheReport breatheReport,
-			SubReport subReport, String header) throws Exception {
+			String imagePathROxy, User user, SleepReport sleepReport, BreatheReport breatheReport, SubReport subReport,
+			String header) throws Exception {
 		try {
 			Document document = new Document(PageSize.A4);
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(dest));
 			document.open();
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < 	resourceBundle.getString(Internationalization.SLEEP_APNEA_SYNDROME).length(); i++) {
+			for (int i = 0; i < resourceBundle.getString(Internationalization.SLEEP_APNEA_SYNDROME).length(); i++) {
 				sb.append(" ");
 			}
-			String result = "1. "+resourceBundle.getString(Internationalization.SLEEP_APNEA_SYNDROME)+"：" + getOSAHSResult(breatheReport, user) + "\n"
-					+ sb.toString() + "2. "+resourceBundle.getString(Internationalization.SLEEP_HYPOXEMIA)+"：" + getSleepHypoxiaResult(breatheReport);
-			
+			String result = "1. " + resourceBundle.getString(Internationalization.SLEEP_APNEA_SYNDROME) + "："
+					+ getOSAHSResult(breatheReport, user) + "\n" + sb.toString() + "2. "
+					+ resourceBundle.getString(Internationalization.SLEEP_HYPOXEMIA) + "："
+					+ getSleepHypoxiaResult(breatheReport);
+
 			Image image = Image.getInstance(imagePathROSeconds);
 			Image image2 = Image.getInstance(imagePathROTimes);
 			Image image3 = Image.getInstance(imagePathROml);
@@ -146,7 +157,9 @@ public class PDFUtils {
 			darwPulseRateAnalysisPart(writer, subReport);
 			drawSleepAnalysisPart(writer, sleepReport);
 			//
-			String advice = subReport.getAdvice() == null ? resourceBundle.getString(Internationalization.RESULT_REFERENCE_CLINICAL)+" " : subReport.getAdvice();
+			String advice = subReport.getAdvice() == null
+					? resourceBundle.getString(Internationalization.RESULT_REFERENCE_CLINICAL) + " "
+					: subReport.getAdvice();
 			drawAnalysisResultPart(writer, result, advice);
 
 			// Rectangle rectangle = drawAndSetRetangle(750, 600, writer);
@@ -184,11 +197,11 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add(resourceBundle.getString(Internationalization.RESULTS_OF_THE_ANALYSIS)+" \n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.CONCLUSION)+" : ");
+		paragraph.add(resourceBundle.getString(Internationalization.RESULTS_OF_THE_ANALYSIS) + " \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.CONCLUSION) + " : ");
 		addNormalText(paragraph, result);
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.SUGGESTION)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.SUGGESTION) + " : ");
 		addNormalText(paragraph, advice);
 		addDefaultSpace(paragraph);
 		ct.addElement(paragraph);
@@ -206,27 +219,27 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add(resourceBundle.getString(Internationalization.SLEEP_ANALYSIS)+" \n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.SLEEP_TIME)+" : ");
+		paragraph.add(resourceBundle.getString(Internationalization.SLEEP_ANALYSIS) + " \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.SLEEP_TIME) + " : ");
 		addNormalText(paragraph, secondsToHHmmss(sleepReport.getTotalSeconds()));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.DEEP_SLEEP_DURATION)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.DEEP_SLEEP_DURATION) + " : ");
 		addNormalText(paragraph, secondsToHHmmss(sleepReport.getDeepSleepSeconds()));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.THE_PROPORTION_OF_DEEP_SLEEP)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.THE_PROPORTION_OF_DEEP_SLEEP) + " : ");
 		addNormalText(paragraph,
 				decimalFormat.format((double) sleepReport.getDeepSleepSeconds() * 100 / sleepReport.getTotalSeconds())
 						+ "%");
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.LIGHT_SLEEP_DURATION)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.LIGHT_SLEEP_DURATION) + " : ");
 		addNormalText(paragraph, secondsToHHmmss(sleepReport.getLightSleepSeconds()));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.THE_PROPORTION_OF_LIGHT_SLEEP)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.THE_PROPORTION_OF_LIGHT_SLEEP) + " : ");
 		addNormalText(paragraph,
 				decimalFormat.format((double) sleepReport.getLightSleepSeconds() * 100 / sleepReport.getTotalSeconds())
 						+ "%");
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.SCORE_OF_SLEEP_QUALITY)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.SCORE_OF_SLEEP_QUALITY) + " : ");
 		addNormalText(paragraph, "" + sleepReport.getScore());
 		addDefaultSpace(paragraph);
 		ct.addElement(paragraph);
@@ -240,21 +253,28 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add(resourceBundle.getString(Internationalization.PR_ANALYSIS)+" \n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEAN_PR)+" : ");
-		addNormalText(paragraph, decimalFormat.format(pulse.getAveragePulse()) + " "+ resourceBundle.getString(Internationalization.FREQUENCY_PER_MIN));
+		paragraph.add(resourceBundle.getString(Internationalization.PR_ANALYSIS) + " \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEAN_PR) + " : ");
+		addNormalText(paragraph, decimalFormat.format(pulse.getAveragePulse()) + " "
+				+ resourceBundle.getString(Internationalization.FREQUENCY_PER_MIN));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MIN_PR)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MIN_PR) + " : ");
 		addNormalText(paragraph, decimalFormat.format(pulse.getMinPulse()));
 		if (pulse.getMinPulseTime() != null) {
-			addNormalText(paragraph, " "+resourceBundle.getString(Internationalization.FREQUENCY_PER_MIN)+", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(pulse.getMinPulseTime()));
+			addNormalText(paragraph,
+					" " + resourceBundle.getString(Internationalization.FREQUENCY_PER_MIN) + ", "
+							+ resourceBundle.getString(Internationalization.OCCUR) + " "
+							+ HHmmssFormat.format(pulse.getMinPulseTime()));
 		}
 
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MAX_PR)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MAX_PR) + " : ");
 		addNormalText(paragraph, decimalFormat.format(pulse.getMaxPulse()));
 		if (pulse.getMaxPulseTime() != null) {
-			addNormalText(paragraph, " "+resourceBundle.getString(Internationalization.FREQUENCY_PER_MIN)+", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(pulse.getMaxPulseTime()));
+			addNormalText(paragraph,
+					" " + resourceBundle.getString(Internationalization.FREQUENCY_PER_MIN) + ", "
+							+ resourceBundle.getString(Internationalization.OCCUR) + " "
+							+ HHmmssFormat.format(pulse.getMaxPulseTime()));
 		}
 		addDefaultSpace(paragraph);
 		// 脉率趋势图
@@ -271,32 +291,34 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add(resourceBundle.getString(Internationalization.SPO2_ANALYSIS)+" \n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEAN_SPO2)+": ");
+		paragraph.add(resourceBundle.getString(Internationalization.SPO2_ANALYSIS) + " \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEAN_SPO2) + ": ");
 		addNormalText(paragraph, decimalFormat.format(breatheReport.getAverageOxygenSaturation()) + "%");
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MIN_SPO2)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MIN_SPO2) + " : ");
 		addNormalText(paragraph, decimalFormat.format(breatheReport.getMinOxygenSaturation()) + "%");
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.T90_SPO2_90)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.T90_SPO2_90) + " : ");
 		addNormalText(paragraph, decimalFormat.format(breatheReport.getOxygenSaturationLessthanNinetyPercent()) + "%");
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.OXYGEN_DESATURATION)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.OXYGEN_DESATURATION) + " : ");
 		addNormalText(paragraph, decimalFormat.format(subReport.getOxygenReductionIndex()));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MAX_OXYGEN_DESATURATION)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MAX_OXYGEN_DESATURATION) + " : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getMaxOxygenReduceSeconds()));
 		if (subReport.getMaxOxygenReduceTime() != null) {
-			addNormalText(paragraph, ", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getMaxOxygenReduceTime()));
+			addNormalText(paragraph, ", " + resourceBundle.getString(Internationalization.OCCUR) + " "
+					+ HHmmssFormat.format(subReport.getMaxOxygenReduceTime()));
 		}
 		addNormalText(paragraph, "   ");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_OXYGEN_DESATURATION)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_OXYGEN_DESATURATION) + " : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getLongestOxygenReduceSeconds()));
 		if (subReport.getLongestOxygenReduceTime() != null) {
-			addNormalText(paragraph, ", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getLongestOxygenReduceTime()));
+			addNormalText(paragraph, ", " + resourceBundle.getString(Internationalization.OCCUR) + " "
+					+ HHmmssFormat.format(subReport.getLongestOxygenReduceTime()));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.ODRI)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.ODRI) + " : ");
 		addNormalText(paragraph, decimalFormat.format(subReport.getBloodOxygenHazardIndex()));
 		addDefaultSpace(paragraph);
 		/*
@@ -316,33 +338,37 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add(resourceBundle.getString(Internationalization.BREATHING_STATISTICS)+" \n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.RESPIRATORY_DISTURBANCE_INDEX)+" : ");
+		paragraph.add(resourceBundle.getString(Internationalization.BREATHING_STATISTICS) + " \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.RESPIRATORY_DISTURBANCE_INDEX) + " : ");
 		try {
 			addNormalText(paragraph, decimalFormat.format(breatheReport.getApneaHypopneaIndex()));
 		} catch (Exception e) {
 			addNormalText(paragraph, "0");
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.APNEAS)+" : ");
-		addNormalText(paragraph, breatheReport.getApneaTimes() + resourceBundle.getString(Internationalization.FREQUENCY_NO));
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.APNEAS) + " : ");
+		addNormalText(paragraph,
+				breatheReport.getApneaTimes() + resourceBundle.getString(Internationalization.FREQUENCY_NO));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_APNEA)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_APNEA) + " : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getLongestApneaSeconds()));
 		if (subReport.getLongestApneaTime() != null) {
-			addNormalText(paragraph, ", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(subReport.getLongestApneaTime()));
+			addNormalText(paragraph, ", " + resourceBundle.getString(Internationalization.OCCUR) + " "
+					+ HHmmssFormat.format(subReport.getLongestApneaTime()));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.TOTAL_DURATION_OF_APNEA_EVENTS)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.TOTAL_DURATION_OF_APNEA_EVENTS) + " : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getTotalApneaTimeSeconds()));
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.HYPOPNEAS)+" : ");
-		addNormalText(paragraph, breatheReport.getHypopneaTimes() + resourceBundle.getString(Internationalization.FREQUENCY_NO));
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.HYPOPNEAS) + " : ");
+		addNormalText(paragraph,
+				breatheReport.getHypopneaTimes() + resourceBundle.getString(Internationalization.FREQUENCY_NO));
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_HYPOPNEAS)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.LONGEST_HYPOPNEAS) + " : ");
 		addNormalText(paragraph, secondsToHHmmss(breatheReport.getMaxHyponeaSeconds()));
 		if (breatheReport.getHyponeaHappenDate() != null) {
-			addNormalText(paragraph, ", "+resourceBundle.getString(Internationalization.OCCUR)+" " + HHmmssFormat.format(breatheReport.getHyponeaHappenDate()));
+			addNormalText(paragraph, ", " + resourceBundle.getString(Internationalization.OCCUR) + " "
+					+ HHmmssFormat.format(breatheReport.getHyponeaHappenDate()));
 		}
 		addDefaultSpace(paragraph);
 		// addBoldText(paragraph, "氧减次数 : ");
@@ -359,11 +385,12 @@ public class PDFUtils {
 		// addNormalText(paragraph,
 		// breatheReport.getOxygenSaturationLessthanNinetyPercent() + "%");
 		// addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.TOTAL_DURATION_OF_HYPOPNEA_EVENTS)+" : ");
+		addBoldText(paragraph,
+				resourceBundle.getString(Internationalization.TOTAL_DURATION_OF_HYPOPNEA_EVENTS) + " : ");
 		addNormalText(paragraph, secondsToHHmmss(subReport.getTotalHypoventilationTimeSeconds()));
 		addDefaultSpace(paragraph);
 
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.SCORE_OF_RESPIRATORY_QUALITY)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.SCORE_OF_RESPIRATORY_QUALITY) + " : ");
 		addNormalText(paragraph, "" + breatheReport.getScore());
 		addDefaultSpace(paragraph);
 		// addBoldText(paragraph, "上传日期 : ");
@@ -386,57 +413,57 @@ public class PDFUtils {
 		paragraph.setLeading(12f);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add(resourceBundle.getString(Internationalization.SLEEP_REPORT)+" \n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.STARTING_TIME)+" : ");
+		paragraph.add(resourceBundle.getString(Internationalization.SLEEP_REPORT) + " \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.STARTING_TIME) + " : ");
 		try {
 			addNormalText(paragraph, simpleDateFormat.format(sleepReport.getStartTime()));
 		} catch (Exception e) {
 			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.END_TIME)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.END_TIME) + " : ");
 		try {
 			addNormalText(paragraph, simpleDateFormat.format(sleepReport.getEndTime()));
 		} catch (Exception e) {
-			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA)+"");
+			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA) + "");
 		}
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.LIGHT_SLEEP_DURATION)+": ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.LIGHT_SLEEP_DURATION) + ": ");
 		try {
 			addNormalText(paragraph, secondsToHHmmss(sleepReport.getLightSleepSeconds()));
 		} catch (Exception e) {
 			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.DEEP_SLEEP_DURATION)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.DEEP_SLEEP_DURATION) + " : ");
 		try {
 			addNormalText(paragraph, secondsToHHmmss(sleepReport.getDeepSleepSeconds()));
 		} catch (Exception e) {
 			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.WAKE_DURATION)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.WAKE_DURATION) + " : ");
 		try {
 			addNormalText(paragraph, secondsToHHmmss(sleepReport.getAwakeSeconds()));
 		} catch (Exception e) {
 			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA));
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.TOTAL)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.TOTAL) + " : ");
 		try {
 			addNormalText(paragraph, secondsToHHmmss(sleepReport.getTotalSeconds()));
 		} catch (Exception e) {
 			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA));
 		}
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.SCORE)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.SCORE) + " : ");
 		addNormalText(paragraph, "" + sleepReport.getScore());
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.UPLOAD_DATE)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.UPLOAD_DATE) + " : ");
 		try {
 			addNormalText(paragraph, yyyyMMDDFormat.format(sleepReport.getUploadDate()));
 		} catch (Exception e) {
-			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA)+"");
+			addNormalText(paragraph, resourceBundle.getString(Internationalization.NO_DATA) + "");
 		}
 
 		ct.addElement(paragraph);
@@ -450,14 +477,14 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add(resourceBundle.getString(Internationalization.USER_INFO)+" \n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.NAME)+": ");
+		paragraph.add(resourceBundle.getString(Internationalization.USER_INFO) + " \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.NAME) + ": ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 20);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.AGE)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.AGE) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 10);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.GENDER)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.GENDER) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 5);
 		addDefaultSpace(paragraph);
 		// addBoldText(paragraph, "生日 : ");
@@ -470,58 +497,58 @@ public class PDFUtils {
 		// addTextAndSpaceWithUnderLine(paragraph, "无数据", 40);
 		// }
 		// addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.HEIGHT)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.HEIGHT) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 12);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.WEIGHT)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.WEIGHT) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 20);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.PHONE)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.PHONE) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 30);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.ESS_SCORE)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.ESS_SCORE) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 25);
 		addDefaultSpace(paragraph);
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.BMI_INDEX)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.BMI_INDEX) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, "", 10);
 
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEDICAL_HISTORY)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEDICAL_HISTORY) + " : ");
 
 		addSpaceWithUnderLine(paragraph, 200);
 
 		addNormalText(paragraph, "\n");
 		// 监测日期、开始时间、结束时间、监测时长
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DATE)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DATE) + " : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDFormat.format(sleepReport.getStartTime()), 30);
 		} catch (Exception e) {
 			addTextAndSpaceWithUnderLine(paragraph, "", 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.STARTING_TIME)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.STARTING_TIME) + " : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDHHmmssFormat.format(sleepReport.getStartTime()), 30);
 		} catch (Exception e) {
 			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA), 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.END_TIME)+": ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.END_TIME) + ": ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDHHmmssFormat.format(sleepReport.getEndTime()), 30);
 		} catch (Exception e) {
-			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA)+"", 30);
+			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA) + "", 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DURATION)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DURATION) + " : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph,
 					secondsToHHmmss(
 							sleepReport.getEndTime().getTime() / 1000 - sleepReport.getStartTime().getTime() / 1000),
 					30);
 		} catch (Exception e) {
-			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA)+"", 30);
+			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA) + "", 30);
 		}
 		addDefaultSpace(paragraph);
 		ct.addElement(paragraph);
@@ -536,14 +563,16 @@ public class PDFUtils {
 		Paragraph paragraph = new Paragraph();
 		paragraph.setLeading(12f);
 		paragraph.setFont(fontSmallTitle);
-		paragraph.add(resourceBundle.getString(Internationalization.USER_INFO)+" \n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.NAME)+" : ");
+		paragraph.add(resourceBundle.getString(Internationalization.USER_INFO) + " \n");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.NAME) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, user.getName(), 20);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.AGE)+" : ");
-		addTextAndSpaceWithUnderLine(paragraph, getYear(user.getBirthday(), new Date()) +" "+ resourceBundle.getString(Internationalization.YEAR_OLD), 10);
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.AGE) + " : ");
+		addTextAndSpaceWithUnderLine(paragraph,
+				getYear(user.getBirthday(), new Date()) + " " + resourceBundle.getString(Internationalization.YEAR_OLD),
+				10);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.GENDER)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.GENDER) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(user.getGender(true)), 5);
 		addDefaultSpace(paragraph);
 		// addBoldText(paragraph, "生日 : ");
@@ -556,20 +585,21 @@ public class PDFUtils {
 		// addTextAndSpaceWithUnderLine(paragraph, "无数据", 40);
 		// }
 		// addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.HEIGHT)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.HEIGHT) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, user.getHeight() + "cm", 12);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.WEIGHT)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.WEIGHT) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, user.getWeight() + "kg", 20);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.PHONE)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.PHONE) + " : ");
 		addTextAndSpaceWithUnderLine(paragraph, user.getPhone(), 30);
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.ESS_SCORE)+" : ");
-		addTextAndSpaceWithUnderLine(paragraph, user.getEssRank() + "(" + resourceBundle.getString(user.getEssResult()) + ")", 25);
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.ESS_SCORE) + " : ");
+		addTextAndSpaceWithUnderLine(paragraph,
+				user.getEssRank() + "(" + resourceBundle.getString(user.getEssResult()) + ")", 25);
 		addDefaultSpace(paragraph);
 		addNormalText(paragraph, "\n");
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.BMI_INDEX)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.BMI_INDEX) + " : ");
 		try {
 			addTextAndSpaceWithUnderLine(
 					paragraph, decimalFormat.format(user.getWeight() * 10000 / user.getHeight() / user.getHeight())
@@ -580,7 +610,7 @@ public class PDFUtils {
 		}
 
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEDICAL_HISTORY)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MEDICAL_HISTORY) + " : ");
 		StringBuilder sb = new StringBuilder();
 		if (user.getDiseaseHistories().size() <= 5) {
 			for (DiseaseHistory dh : user.getDiseaseHistories()) {
@@ -590,7 +620,7 @@ public class PDFUtils {
 			for (int i = 0; i < 5; i++) {
 				sb.append(resourceBundle.getString(user.getDiseaseHistories().get(i).getName()) + "、");
 			}
-			sb.append(resourceBundle.getString(Internationalization.ETC)+"、");
+			sb.append(resourceBundle.getString(Internationalization.ETC) + "、");
 		}
 
 		try {
@@ -601,28 +631,28 @@ public class PDFUtils {
 
 		addNormalText(paragraph, "\n");
 		// 监测日期、开始时间、结束时间、监测时长
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DATE)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DATE) + " : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDFormat.format(sleepReport.getStartTime()), 30);
 		} catch (Exception e) {
 			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA), 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph,resourceBundle.getString(Internationalization.STARTING_TIME)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.STARTING_TIME) + " : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDHHmmssFormat.format(sleepReport.getStartTime()), 30);
 		} catch (Exception e) {
 			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA), 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.END_TIME)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.END_TIME) + " : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph, yyyyMMDDHHmmssFormat.format(sleepReport.getEndTime()), 30);
 		} catch (Exception e) {
-			addTextAndSpaceWithUnderLine(paragraph,resourceBundle.getString(Internationalization.NO_DATA)+"", 30);
+			addTextAndSpaceWithUnderLine(paragraph, resourceBundle.getString(Internationalization.NO_DATA) + "", 30);
 		}
 		addDefaultSpace(paragraph);
-		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DURATION)+" : ");
+		addBoldText(paragraph, resourceBundle.getString(Internationalization.MONITORING_DURATION) + " : ");
 		try {
 			addTextAndSpaceWithUnderLine(paragraph,
 					secondsToHHmmss(
@@ -747,7 +777,9 @@ public class PDFUtils {
 			long hour = seconds / 3600;
 			long minute = seconds % 3600 / 60;
 			long second = seconds % 60;
-			return timeFormat.format(hour) + resourceBundle.getString(Internationalization.HR) + timeFormat.format(minute) + resourceBundle.getString(Internationalization.MIN) + timeFormat.format(second) + resourceBundle.getString(Internationalization.SEC);
+			return timeFormat.format(hour) + resourceBundle.getString(Internationalization.HR)
+					+ timeFormat.format(minute) + resourceBundle.getString(Internationalization.MIN)
+					+ timeFormat.format(second) + resourceBundle.getString(Internationalization.SEC);
 		} catch (Exception e) {
 
 		}

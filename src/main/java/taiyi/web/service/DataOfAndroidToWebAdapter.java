@@ -15,5 +15,10 @@ import taiyi.web.model.dto.BaseReport;
  * 2016年7月8日
  */
 public interface DataOfAndroidToWebAdapter {
+	/**
+	 * 将原始数据文件解析成报告
+	 * @param file 数据文件
+	 * @return
+	 */
 	public BaseReport OriginalFileToBaseReport(File file);
 }

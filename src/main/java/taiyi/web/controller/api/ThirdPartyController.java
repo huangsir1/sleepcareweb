@@ -51,6 +51,14 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * 上传数据文件并生成报告
+	 * @param file 文件
+	 * @param macAddress mac地址
+	 * @param userId 用户id
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/report/fileOnly/upload")
 	@ResponseBody
 	public Status uploadReportOnlyFile(@RequestParam(value = "file") MultipartFile file,
@@ -60,7 +68,14 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 //		}
 		return uploadReportFile(file, macAddress, userId, request);
 	}
-
+	/**
+	 * 上传数据文件并生成报告
+	 * @param file 文件
+	 * @param macAddress mac地址
+	 * @param userId 用户id
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/third/report/file/upload")
 	@ResponseBody
 	public Status uploadReportFile(@RequestParam(value = "file") MultipartFile file,
@@ -123,6 +138,9 @@ public class ThirdPartyController extends APIExceptionHandlerController {
 
 	}
 
+	/**
+	 * 杜恩特殊文件上传
+	 */
 	@RequestMapping(value = "/third/reportForDawn/file/upload")
 	@ResponseBody
 	public Status uploadReportForDawnFile(@RequestParam(value = "file") MultipartFile file,

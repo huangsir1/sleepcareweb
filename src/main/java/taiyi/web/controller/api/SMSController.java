@@ -31,6 +31,11 @@ public class SMSController extends APIExceptionHandlerController{
 	@Autowired
 	private AccountService accountService;
 
+	/**
+	 * 短信验证
+	 * @param smsDto 短信对象
+	 * @return
+	 */
 	@RequestMapping(value = "/login", consumes = "application/json")
 	@ResponseBody
 	public SMSValidate loginOrRegister(@RequestBody SMSDto smsDto) {

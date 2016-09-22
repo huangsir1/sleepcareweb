@@ -57,6 +57,11 @@ public class UserAPIController extends APIExceptionHandlerController {
 	@Autowired
 	private WebService webService;
 	
+	/**
+	 * 根据token获取用户信息
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/getUserByToken")
 	@ResponseBody
 	public List<UserEssAndDHDto> getUserActiveUserByToken(HttpServletRequest request) {
@@ -65,6 +70,12 @@ public class UserAPIController extends APIExceptionHandlerController {
 		return users;
 	}
 	
+	/**
+	 * 
+	 * @param request
+	 * @param userId
+	 * @return
+	 */
 	@RequestMapping(value="/deleteUser/{userId}")
 	@ResponseBody
 	public Status unActiveUser(HttpServletRequest request,@PathVariable String userId) {
@@ -78,6 +89,13 @@ public class UserAPIController extends APIExceptionHandlerController {
 		return result;
 	}
 	
+	/**
+	 * 注册用户
+	 * 
+	 * @param user 用户
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/register",consumes = "application/json")
 	@ResponseBody
 	public Status register(@RequestBody User user,HttpServletRequest request) {
@@ -115,6 +133,11 @@ public class UserAPIController extends APIExceptionHandlerController {
 	}
 	
 	
+	/**
+	 * 更新用户
+	 * @param user 用户
+	 * @return
+	 */
 	@RequestMapping(value="/update",consumes = "application/json")
 	@ResponseBody
 	public Status update(@RequestBody User user) {
@@ -132,6 +155,11 @@ public class UserAPIController extends APIExceptionHandlerController {
 		return Status.getFailed();
 	}
 	
+	/**
+	 * 用户是否注册
+	 * @param user 用户
+	 * @return
+	 */
 	@RequestMapping(value="/isUserRegister",consumes = "application/json")
 	@ResponseBody
 	public Status isUserRegister(@RequestBody User user) {
@@ -141,6 +169,11 @@ public class UserAPIController extends APIExceptionHandlerController {
 		return Status.USER_UNREGISTER;
 	}
 	
+	/**
+	 * 上传疾病历史
+	 * @param diseaseHistoryIds 疾病史id
+	 * @return
+	 */
 	@RequestMapping(value="/uploadDiseaseHistory",consumes = "application/json")
 	@ResponseBody
 	public Status uploadDiseaseHistory(@RequestBody  DiseaseHistoryDto diseaseHistoryIds) {
@@ -149,7 +182,11 @@ public class UserAPIController extends APIExceptionHandlerController {
 		return Status.SUCCESSED;
 	}
 	
-	
+	/**
+	 * 上传ess信息
+	 * @param essDto
+	 * @return
+	 */
 	@RequestMapping(value="/uploadEss",consumes = "application/json")
 	@ResponseBody 
 	public Status uploadEss(@RequestBody EssDto essDto) {
@@ -157,6 +194,11 @@ public class UserAPIController extends APIExceptionHandlerController {
 		return Status.SUCCESSED;
 	}
 	
+	/**
+	 * 同时上传ess和疾病史
+	 * @param essAndDisEaseHistoryDto
+	 * @return
+	 */
 	@RequestMapping(value="/uploadEssAndDiseaseHistory",consumes = "application/json")
 	@ResponseBody 
 	public Status uploadEss(@RequestBody ESSAndDisEaseHistoryDto essAndDisEaseHistoryDto) {

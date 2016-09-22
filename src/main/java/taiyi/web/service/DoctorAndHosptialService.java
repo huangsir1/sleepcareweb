@@ -16,6 +16,13 @@ import taiyi.web.model.User;
  */
 public interface DoctorAndHosptialService {
 
+	/**
+	 * 注册医生，患者，和医院
+	 * @param user 患者
+	 * @param doctor 医生
+	 * @param hostipal 医院
+	 * @return
+	 */
 	boolean register(User user, SystemUser doctor, Hostipal hostipal);
 
 }

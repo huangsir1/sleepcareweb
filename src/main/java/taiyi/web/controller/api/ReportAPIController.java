@@ -106,6 +106,13 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		return Status.SUCCESSED;
 	}
 
+	/**
+	 * 上传所有报告字段
+	 * @param baseReport 报告类
+	 * @param request
+	 * @return 结果
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/baseReport/upload", consumes = "application/json")
 	@ResponseBody
 	public Status baseReport(@RequestBody BaseReport baseReport, HttpServletRequest request) throws Exception {
@@ -135,6 +142,13 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		return Status.SUCCESSED_UPLOAD_REPORT;
 	}
 
+	/**
+	 * 上传医生建议
+	 * @param subReport
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/advice/upload", consumes = "application/json")
 	@ResponseBody
 	public Status uploadReportAdvice(@RequestBody SubReport subReport, HttpServletRequest request) throws Exception {
@@ -154,6 +168,13 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		return Status.SUCCESSED_UPLOAD_REPORT;
 	}
 
+	/**
+	 * 上传报告数据文件
+	 * @param file 文件
+	 * @param reportId 报告id
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/report/file/upload")
 	@ResponseBody
 	public Status uploadReportFile(@RequestParam(value = "file") MultipartFile file, String reportId,
@@ -204,6 +225,13 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		webService.generatePdfByReportId(reportId, basePath, servletRailPath);
 	}
 
+	/**
+	 * 获取报告pdf
+	 * @param reportId 报告id
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@RequestMapping("/getPdf/{reportId}")
 	public void showPdf(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -229,6 +257,14 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		}
 	}
 	
+	/**
+	 * 获取报告pdf
+	 * @param reportId 报告id
+	 * @param language 语言
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@RequestMapping("/getPdfI18N/{reportId}/{language}")
 	public void showPdf(@PathVariable String reportId,@PathVariable String language ,HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -251,6 +287,14 @@ public class ReportAPIController extends APIExceptionHandlerController {
 		}
 	}
 
+	/**
+	 * 获取报告数据
+	 * @param reportId 报告id
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/report/get/{reportId}")
 	@ResponseBody
 	public Status getReport(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response)

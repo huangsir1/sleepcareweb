@@ -32,13 +32,15 @@ import taiyi.web.service.WebService;
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *
- * taiyi.web.controller.admin
+ *         医生相关
  *
- * 2016年6月3日
+ *         taiyi.web.controller.admin
+ *
+ *         2016年6月3日
  */
 @Controller
 @RequestMapping("/admin")
-public class DoctorController extends ExceptionHandlerController{
+public class DoctorController extends ExceptionHandlerController {
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -53,7 +55,13 @@ public class DoctorController extends ExceptionHandlerController{
 	private DiseaseHistoryUserService diseaseHistoryUserService;
 	@Autowired
 	private EssUserService essUesrService;
-	
+
+	/**
+	 * 获取该登录医生下的所有用户
+	 * @param page 页数
+	 * @param rows 行数
+	 * @return
+	 */
 	@RequiresPermissions("doctor:view")
 	@RequestMapping("/getDoctorUsers")
 	@ResponseBody
@@ -62,34 +70,35 @@ public class DoctorController extends ExceptionHandlerController{
 		if (page != null && rows != null) {
 			PageHelper.startPage(page, rows);
 		}
-		String username =  (String) SecurityUtils.getSubject().getPrincipal();
+		String username = (String) SecurityUtils.getSubject().getPrincipal();
 		List<User> users = userService.selectBySysUsername(username);
 		PageInfo<User> pageinfo = new PageInfo<User>(users);
 		PageModel pageModel = new PageModel(pageinfo.getTotal(), users);
 		return pageModel.get();
 	}
-	
-	
+
 	@RequiresPermissions("doctor:view")
 	@RequestMapping("showDoctorUser")
 	public String showUser() {
 		return "doctor/showUser";
 	}
+
 	@RequiresPermissions("doctor:view")
 	@RequestMapping("searchDoctorUser")
 	public String searchUser() {
 		return "doctor/searchUser";
 	}
-	@RequiresPermissions("user:insert")//doctor:insert")
+
+	@RequiresPermissions("user:insert") // doctor:insert")
 	@RequestMapping("addDoctorUser")
 	public String addUser() {
 		return "doctor/addUser";
 	}
-	
-	@RequiresPermissions(logical=Logical.OR, value={"doctor:update","hospital:update"})
+
+	@RequiresPermissions(logical = Logical.OR, value = { "doctor:update", "hospital:update" })
 	@RequestMapping("changePasswordUI")
 	public String changePassword() {
 		return "doctor/changePassword";
 	}
-	
+
 }

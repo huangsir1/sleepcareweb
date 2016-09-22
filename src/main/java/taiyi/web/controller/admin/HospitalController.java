@@ -49,9 +49,6 @@ import taiyi.web.service.WebService;
  */
 @Controller
 public class HospitalController extends APIExceptionHandlerController {
-	/*
-	
-	 */
 	@Autowired
 	private HostipalService hospitalService;
 	@Autowired
@@ -71,6 +68,12 @@ public class HospitalController extends APIExceptionHandlerController {
 		return "admin/showHospital";
 	}
 
+	/**
+	 * 获取所有医院
+	 * @param page 页数
+	 * @param rows 行数
+	 * @return
+	 */
 	@RequiresPermissions("system:view")
 	@RequestMapping("admin/getAllHospital")
 	@ResponseBody
@@ -85,6 +88,11 @@ public class HospitalController extends APIExceptionHandlerController {
 		return pageModel.get();
 	}
 
+	/**
+	 * 增加医院
+	 * @param hospital 医院
+	 * @return 结果
+	 */
 	@RequiresPermissions("system:insert")
 	@RequestMapping("admin/saveHospital")
 	@ResponseBody
@@ -95,6 +103,11 @@ public class HospitalController extends APIExceptionHandlerController {
 		return Status.SUCCESSED;
 	}
 	
+	/**
+	 * 修改医院
+	 * @param hospital 医院
+	 * @return 结果
+	 */
 	@RequiresPermissions("system:update")
 	@RequestMapping("admin/editHospital")
 	@ResponseBody
@@ -103,6 +116,11 @@ public class HospitalController extends APIExceptionHandlerController {
 		return Status.SUCCESSED;
 	}
 
+	/**
+	 * 删除医院
+	 * @param hospitalId 医院id
+	 * @return
+	 */
 	@RequiresPermissions("system:delete")
 	@RequestMapping("/admin/deleteHospital")
 	@ResponseBody
@@ -121,6 +139,14 @@ public class HospitalController extends APIExceptionHandlerController {
 
 	}
 	
+	/**
+	 * 获取该医院下该用户的报告
+	 * @param page 页数
+	 * @param rows 行数
+	 * @param hospitalId 医院id
+	 * @param userId 用户id
+	 * @return
+	 */
 	@RequiresPermissions("system:view")
 	@RequestMapping("/admin/getReportByHospitalAndUser/{hospitalId}/{userId}")
 	@ResponseBody
@@ -136,6 +162,13 @@ public class HospitalController extends APIExceptionHandlerController {
 		return pageModel.get();
 	}
 	
+	/**
+	 * 获取该医院下的所有注册用户
+	 * @param page 页数
+	 * @param rows 行数
+	 * @param hospitalId 医院id
+	 * @return
+	 */
 	@RequiresPermissions("system:view")
 	@RequestMapping("/admin/getUserByHospital/{hospitalId}")
 	@ResponseBody
@@ -150,6 +183,12 @@ public class HospitalController extends APIExceptionHandlerController {
 		return pageModel.get();
 	}
 
+	/**
+	 * 获取登录用户所属医院下的所有用户
+	 * @param page 页数
+	 * @param rows 行数
+	 * @return
+	 */
 	@RequiresPermissions("hospital:view")
 	@RequestMapping("/admin/getHospitalUsers")
 	@ResponseBody
@@ -167,6 +206,11 @@ public class HospitalController extends APIExceptionHandlerController {
 		return pageModel.get();
 	}
 
+	/**
+	 * 获取登录用户所属医院下指定用户的报告列表
+	 * @param userId 用户id
+	 * @return
+	 */
 	@RequiresPermissions("hospital:view")
 	@RequestMapping("/admin/getHospitalReport/{userId}")
 	@ResponseBody
@@ -177,6 +221,14 @@ public class HospitalController extends APIExceptionHandlerController {
 		return packagePerviewReportDto;
 	}
 
+	/**
+	 * 搜索该医院下用户
+	 * @param user
+	 * @param birthdays
+	 * @param page
+	 * @param rows
+	 * @return
+	 */
 	@RequiresPermissions("hospital:view")
 	@RequestMapping("/admin/searchHospitalUsers")
 	@ResponseBody
@@ -209,6 +261,11 @@ public class HospitalController extends APIExceptionHandlerController {
 
 	}
 
+	/**
+	 * 获取该医院下设备
+	 * @param hospitalId 医院id
+	 * @return
+	 */
 	@RequiresPermissions("system:view")
 	@RequestMapping("/admin/getDeviceByHostapilId/{hospitalId}")
 	@ResponseBody
@@ -216,6 +273,11 @@ public class HospitalController extends APIExceptionHandlerController {
 		return deviceService.selectByHostipalId(hospitalId);
 	}
 
+	/**
+	 * 删除设备
+	 * @param macAddress macAddress
+	 * @return
+	 */
 	@RequiresPermissions("system:delete")
 	@RequestMapping("/admin/deleteDevice")
 	@ResponseBody
@@ -224,6 +286,11 @@ public class HospitalController extends APIExceptionHandlerController {
 		return Status.SUCCESSED;
 	}
 
+	/**
+	 * 增加设备
+	 * @param device 设备
+	 * @return
+	 */
 	@RequiresPermissions("system:insert")
 	@RequestMapping("/admin/addDevice")
 	@ResponseBody

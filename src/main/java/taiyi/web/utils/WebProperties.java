@@ -12,6 +12,8 @@ import java.util.Properties;
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *
+ *         读取配置字段的工具类
+ *
  *         taiyi.web.utils
  *
  *         2016年4月27日
@@ -31,23 +33,22 @@ public class WebProperties {
 			return null;
 		}
 	}
-	
-	
+
 	public static String getReportFileName(String userId, String reportId) {
 		String fileName = WebProperties.getFilePath() + File.separator + userId + File.separator + reportId
 				+ File.separator + "source.txt";
 		return fileName;
 	}
-	
+
 	public static String getReportPdfName(String userId, String reportId) {
 		String fileName = WebProperties.getFilePath() + File.separator + userId + File.separator + reportId
 				+ File.separator + "report.pdf";
 		return fileName;
 	}
-	
-	public static String getReportPdfName(String userId, String reportId,Locale locale) {
+
+	public static String getReportPdfName(String userId, String reportId, Locale locale) {
 		String fileName = WebProperties.getFilePath() + File.separator + userId + File.separator + reportId
-				+ File.separator + "report_"+locale.getLanguage()+".pdf";
+				+ File.separator + "report_" + locale.getLanguage() + ".pdf";
 		return fileName;
 	}
 

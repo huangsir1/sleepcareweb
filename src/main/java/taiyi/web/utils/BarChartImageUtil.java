@@ -36,6 +36,8 @@ import org.jfree.ui.TextAnchor;
 import taiyi.web.constant.Internationalization;
 
 /**
+ * 柱状图工具类
+ * 
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *
  *         test
@@ -43,14 +45,6 @@ import taiyi.web.constant.Internationalization;
  *         2016年3月23日
  */
 public class BarChartImageUtil {
-	public static void main(String[] args) throws IOException {
-		 generateSecondsOfReducedOxygenImage(new Integer[] { 9, 9, 9,
-		 9, 9, 9},"分","/Users/jason/Desktop/bar2.png");
-		 generateTimesOfReducedOxygenImage(new
-		 Integer[]{0,0,0,0,0,0},"/Users/jason/Desktop/bar1.png");
-//		generateLineChartImage(new Integer[] { 600, 220, 5130, 1231, 123, 11 }, "次数", "氧减总次数", "百分比", "次数",
-//				"/Users/jason/Desktop/bar3.png");
-	}
 
 	public static void generateBarChartToImage(Integer[] yValue, String xRowKey, String title, String xLabel,
 			String yLabel, String imagePathNameAndExt) throws IOException {
@@ -107,12 +101,12 @@ public class BarChartImageUtil {
 		rangeAxis.setAutoRange(true);
 		boolean isZero = true;
 		for (int i = 0; i < yValue.length; i++) {
-			if (yValue[i] != 0 ) {
+			if (yValue[i] != 0) {
 				isZero = false;
 			}
 		}
 		if (isZero) {
-			rangeAxis.setRange(0,100);
+			rangeAxis.setRange(0, 100);
 		}
 		plot.setRangeAxis(rangeAxis);
 		FileOutputStream fos = null;
@@ -148,7 +142,7 @@ public class BarChartImageUtil {
 		rangeAxis.setUpperMargin(0.20);
 		rangeAxis.setLabelAngle(Math.PI / 2.0);
 		rangeAxis.setAutoRange(true);
-		
+
 		CategoryAxis categoryaxis = plot.getDomainAxis();
 		categoryaxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 		categoryaxis.setMaximumCategoryLabelWidthRatio(5.0f);
@@ -179,28 +173,32 @@ public class BarChartImageUtil {
 
 	public static void generateTimesOfReducedOxygenImage(Integer[] yValue, String imagePathNameAndExt)
 			throws IOException {
-		generateTimesOfReducedOxygenImage(yValue, imagePathNameAndExt,Locale.CHINA);
+		generateTimesOfReducedOxygenImage(yValue, imagePathNameAndExt, Locale.CHINA);
 	}
 
 	public static void generateSecondsOfReducedOxygenImage(Integer[] yValue, String xLabel, String imagePathNameAndExt)
 			throws IOException {
-		generateSecondsOfReducedOxygenImage(yValue, xLabel, imagePathNameAndExt,Locale.CHINA);
-	}
-	
-	public static void generateTimesOfReducedOxygenImage(Integer[] yValue, String imagePathNameAndExt,Locale locale)
-			throws IOException {
-		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
-		generateBarChartToImage(yValue, bundle.getString(Internationalization.FREQUENCY), bundle.getString(Internationalization.OXYGEN_DISTRIBUTION), bundle.getString(Internationalization.PERCENTAGE), bundle.getString(Internationalization.FREQUENCY), imagePathNameAndExt);
+		generateSecondsOfReducedOxygenImage(yValue, xLabel, imagePathNameAndExt, Locale.CHINA);
 	}
 
-	public static void generateSecondsOfReducedOxygenImage(Integer[] yValue, String xLabel, String imagePathNameAndExt,Locale locale)
+	public static void generateTimesOfReducedOxygenImage(Integer[] yValue, String imagePathNameAndExt, Locale locale)
 			throws IOException {
 		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
-		generateBarChartToImage(yValue, bundle.getString(Internationalization.FREQUENCY), bundle.getString(Internationalization.OXYGEN_DESATURATION_DISTRIBUTION), bundle.getString(Internationalization.PERCENTAGE), bundle.getString(Internationalization.IMAGE_MIN), imagePathNameAndExt);
+		generateBarChartToImage(yValue, bundle.getString(Internationalization.FREQUENCY),
+				bundle.getString(Internationalization.OXYGEN_DISTRIBUTION),
+				bundle.getString(Internationalization.PERCENTAGE), bundle.getString(Internationalization.FREQUENCY),
+				imagePathNameAndExt);
 	}
-	
-	
-	
+
+	public static void generateSecondsOfReducedOxygenImage(Integer[] yValue, String xLabel, String imagePathNameAndExt,
+			Locale locale) throws IOException {
+		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+		generateBarChartToImage(yValue, bundle.getString(Internationalization.FREQUENCY),
+				bundle.getString(Internationalization.OXYGEN_DESATURATION_DISTRIBUTION),
+				bundle.getString(Internationalization.PERCENTAGE), bundle.getString(Internationalization.IMAGE_MIN),
+				imagePathNameAndExt);
+	}
+
 }
 
 class CustomTickUnit extends NumberTickUnit {
