@@ -8,11 +8,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +32,6 @@ import com.google.common.collect.Lists;
 import com.itextpdf.text.DocumentException;
 
 import taiyi.web.model.BreatheReport;
-import taiyi.web.model.DiseaseHistory;
 import taiyi.web.model.EssUser;
 import taiyi.web.model.Hostipal;
 import taiyi.web.model.SleepReport;
@@ -34,6 +39,7 @@ import taiyi.web.model.SubReport;
 import taiyi.web.model.User;
 import taiyi.web.model.dto.BaseReport;
 import taiyi.web.model.dto.DiseaseHistoryDto;
+import taiyi.web.model.dto.ImageModel;
 import taiyi.web.model.dto.ReportPreviewDto;
 import taiyi.web.model.dto.UserEssAndDHDto;
 import taiyi.web.service.BreatheReportService;
@@ -105,6 +111,52 @@ public class WebServiceImpl implements WebService {
 		maps.put("seconds", seconds);
 		return maps;
 	}
+	
+	public Set<ImageModel> getReportData(String reportId,double percent) {
+		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(reportId);
+		User user = userService.selectWithDH(sleepReport.getUserId());
+		Map<String, String[]> readAsMap = new HashMap<String, String[]>();
+		try {
+			readAsMap = FileOperateUtils.readAsMap(WebProperties.getReportFileName(sleepReport.getUserId(), reportId));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			filtration(readAsMap);
+			readAsMap = doXueyang(readAsMap);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			readAsMap.put("riqi", new String[0]);
+			readAsMap.put("mailv", new String[0]);
+			readAsMap.put("xueyang", new String[0]);
+		}
+		DateFormat in = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+		TreeSet<ImageModel> sets = new TreeSet<ImageModel>();
+		for (int i = 0; i < readAsMap.get("riqi").length; i = (int) (i + (1.0/percent))) {
+			System.out.println(percent);
+			System.out.println((1.0/percent));
+			System.out.println(readAsMap.get("riqi").length);
+			System.out.println(i);
+			String riqi = readAsMap.get("riqi")[i];
+			String mailv = readAsMap.get("mailv")[i];
+			String xueyang = readAsMap.get("xueyang")[i];
+			Date parse = null;
+			try {
+				parse = new Date(Long.parseLong(riqi));
+			} catch (Exception e) {
+				try {
+					parse = in.parse(riqi);
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+			ImageModel imageModel = new ImageModel(parse, Integer.parseInt(xueyang), Integer.parseInt(mailv));
+			sets.add(imageModel);
+		}
+		return sets;
+		
+	}
+	
 
 	@Deprecated
 	public String generatePdfByReportId_oldVersion(String reportId, String basePath, String servletRailPath)

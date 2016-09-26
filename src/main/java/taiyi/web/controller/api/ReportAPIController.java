@@ -133,7 +133,7 @@ public class ReportAPIController extends APIExceptionHandlerController {
 			webService.updateReport(baseReport);
 			return Status.SUCCESSED_RECOVER_REPORT;
 		}
-		logger.warn("baseReport   " + JSON.toJSON(baseReport));
+		logger.warn("upload report by user" +baseReport.getUserId() +  "  details :  " + JSON.toJSON(baseReport));
 		webService.insertReport(baseReport);
 		if (webService.isReportAllReady(baseReport.getId())) {
 			new GenerateReportThread(webService, baseReport.getId(), basePath, servletRailPath, new Locale(language)).start();

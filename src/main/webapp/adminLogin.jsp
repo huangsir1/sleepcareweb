@@ -168,7 +168,7 @@ body {
 			style="text-align: right; float: inherit; right: 0px; left: 0px;">钛铱睡眠监测系统</h1>
 		<form class="form"
 			action="${basePath}login"
-			align="center">
+			align="center" method="post">
 			<div class="div-username">
 				<i class="icon-user"></i> <input class="user" name="username"
 					required="required" type="text" placeholder="请输入用户名">

@@ -5,15 +5,18 @@ package taiyi.web.service;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import taiyi.web.model.SleepReport;
 import taiyi.web.model.dto.BaseReport;
+import taiyi.web.model.dto.ImageModel;
 import taiyi.web.model.dto.ReportPreviewDto;
 import taiyi.web.model.dto.UserEssAndDHDto;
 
@@ -164,4 +167,6 @@ public interface WebService {
 	 * @return
 	 */
 	List<UserEssAndDHDto> selectUserEssAndDHByToken(String token);
+	
+	public Set<ImageModel> getReportData(String reportId,double percent);
 }

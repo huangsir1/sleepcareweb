@@ -10,6 +10,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -46,6 +47,7 @@ import taiyi.web.service.WebService;
 @Controller
 @RequestMapping("/api/user" )
 public class UserAPIController extends APIExceptionHandlerController {
+	Logger logger = Logger.getLogger(getClass());
 	@Autowired
 	private UserService userService;
 	@Autowired 
@@ -82,6 +84,7 @@ public class UserAPIController extends APIExceptionHandlerController {
 		String token = request.getHeader(Constant.TOKEN);
 		Status result = null;
 		if (userService.unActiveUser(token,userId)) {
+			logger.warn("删除了用户"  + userId);
 			result = Status.getSuccess();
 		} else {
 			result = Status.getFailed("删除失败");
@@ -125,6 +128,7 @@ public class UserAPIController extends APIExceptionHandlerController {
 			}
 			userService.insert(user);
 			Status status = new Status(Status.SUCCESSED_CODE,user.getId()); 
+			logger.info("注册用户" + JSON.toJSONString(user) );
 			return status;
 		} catch (Exception e) {
 			e.printStackTrace();

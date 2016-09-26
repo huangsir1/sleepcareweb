@@ -5,13 +5,16 @@ package taiyi.web.controller.admin;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,22 +37,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.itextpdf.text.DocumentException;
 
 import taiyi.web.controller.ExceptionHandlerController;
 import taiyi.web.model.BreatheReport;
+import taiyi.web.model.DiseaseHistory;
 import taiyi.web.model.SleepReport;
 import taiyi.web.model.SubReport;
 import taiyi.web.model.SystemUser;
 import taiyi.web.model.User;
+import taiyi.web.model.dto.BaseReport;
+import taiyi.web.model.dto.BaseReportDto;
 import taiyi.web.model.dto.DiseaseHistoryDto;
+import taiyi.web.model.dto.ImageModel;
 import taiyi.web.model.dto.PageModel;
 import taiyi.web.model.dto.ReportPreviewDto;
 import taiyi.web.model.dto.Status;
 import taiyi.web.model.dto.SystemUserRoleDto;
+import taiyi.web.model.dto.Values;
 import taiyi.web.service.BreatheReportService;
 import taiyi.web.service.DiseaseHistoryUserService;
 import taiyi.web.service.EssUserService;
@@ -172,6 +179,7 @@ public class AdminController extends ExceptionHandlerController {
 			diseaseHistoryUserService.deleteByUserId(userId);
 			essUesrService.deleteByUserId(userId);
 			userService.deleteByPrimaryKey(userId);
+			logger.warn("删除用户" + userId);
 			return Status.getSuccess();
 		} catch (Exception e) {
 			return Status.CANNOT_DELETE_USER;
@@ -210,17 +218,24 @@ public class AdminController extends ExceptionHandlerController {
 	 * @param id
 	 *            报告id
 	 * @param request
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
 	 */
 	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view", "hostipal:view" })
 	@RequestMapping("/showReport/{id}")
-	public String showReport(@PathVariable String id, HttpServletRequest request) {
-		SleepReport sleepReport = sleepReportService.selectByPrimaryKey(id);
-		BreatheReport breatheReport = breatheReportService.selectByPrimaryKey(id);
-		String fileName = WebProperties.getReportFileName(sleepReport.getUserId(), sleepReport.getId());
-
-		User user = userService.selectWithDH(sleepReport.getUserId());
-		request.setAttribute("breatheReport", breatheReport);
-		request.setAttribute("sleepReport", sleepReport);
+	public String showReport(@PathVariable String id, HttpServletRequest request) throws IllegalAccessException, InvocationTargetException {
+		BaseReport baseReport = webService.selectById(id);
+		BaseReportDto baseReportDto = new BaseReportDto();
+		baseReportDto.copy(baseReport);
+		 
+		String fileName = WebProperties.getReportFileName(baseReport.getUserId(), baseReport.getId());
+		User user = userService.selectWithDH(baseReport.getUserId());
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", Locale.CHINA);
+		for (DiseaseHistory d: user.getDiseaseHistories()) {
+			d.setName(resourceBundle.getString(d.getName()));
+		}
+		
+		request.setAttribute("baseReport", baseReportDto);
 		request.setAttribute("user", user);
 		request.setAttribute("file", new File(fileName).exists());
 		return "admin/report";
@@ -228,7 +243,7 @@ public class AdminController extends ExceptionHandlerController {
 
 	/**
 	 * 增加报告
-	 * 
+	 *
 	 * @param id
 	 *            报告id
 	 * @param request
@@ -369,6 +384,43 @@ public class AdminController extends ExceptionHandlerController {
 	@ResponseBody
 	public Map<String, Integer[]> getData(@PathVariable String id) {
 		return webService.getReportNumber(id);
+	}
+	
+	
+	/**
+	 * 之前供前段获取数据的接口，现在已废弃
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view" })
+	@RequestMapping("/getHyponeaDataNew/{id}")
+	@ResponseBody
+	public HashMap<String, List<Values>> getFirstAndSecondImageData(@PathVariable String id) {
+		BreatheReport breatheReport = breatheReportService.selectByPrimaryKey(id);
+		List<Values> yangjian = new ArrayList<Values>(6);
+		yangjian.add(new Values("0-50%",breatheReport.getOxygenSaturationLessthanFiftyPercentHyponea() / 60));
+		yangjian.add(new Values("50-59%",breatheReport.getOxygenSaturationFiftyToFiftyNinePercentHyponea() / 60));
+		yangjian.add(new Values("60-69%",breatheReport.getOxygenSaturationSixtyToSixtyNinePercentHyponea() / 60));
+		yangjian.add(new Values("70-79%",breatheReport.getOxygenSaturationSeventyToSeventyNinePercentHyponea() / 60));
+		yangjian.add(new Values("80-89%",breatheReport.getOxygenSaturationEightyToEightyNinePercentHyponea() / 60));
+		yangjian.add(new Values("90-100%",breatheReport.getOxygenSaturationNinetyToHundredPercentHyponea() / 60));
+		
+		
+		List<Values> xueyang = new ArrayList<Values>(6);
+	
+		xueyang.add(new Values("0-50%",breatheReport.getOxygenSaturationLessthanFiftyPercentTimes()));
+		xueyang.add(new Values("50-59%",breatheReport.getOxygenSaturationFiftyToFiftyNinePercentTimes()));
+		xueyang.add(new Values("60-69%",breatheReport.getOxygenSaturationSixtyToSixtyNinePercentTimes()));
+		xueyang.add(new Values("70-79%",breatheReport.getOxygenSaturationSeventyToSeventyNinePercentTimes()));
+		xueyang.add(new Values("80-89%",breatheReport.getOxygenSaturationEightyToEightyNinePercentTimes()));
+		xueyang.add(new Values("90-100%",breatheReport.getOxygenSaturationNinetyToHundredPercentTimes()));
+		
+		HashMap<String, List<Values>> hashMap = new HashMap<String,List<Values>>();
+		hashMap.put("yangjian", yangjian);
+		hashMap.put("xueyang", xueyang);
+		
+		return hashMap;
 	}
 
 	/**
@@ -767,4 +819,12 @@ public class AdminController extends ExceptionHandlerController {
 	public int calculateSeconds(String hour, String minute, String second) {
 		return Integer.parseInt(hour) * 3600 + Integer.parseInt(minute) * 60 + Integer.parseInt(second);
 	}
+	
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view","hostipal:view" })
+	@RequestMapping("/getReportData/{id}")
+	@ResponseBody
+	public Set<ImageModel> getReportData(@PathVariable String id, double percent) {
+		return webService.getReportData(id,percent);
+	}
+
 }

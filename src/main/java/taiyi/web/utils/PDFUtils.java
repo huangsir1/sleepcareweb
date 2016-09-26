@@ -772,11 +772,25 @@ public class PDFUtils {
 		return setRectangle(startY, endY, writer);
 	}
 
-	public String secondsToHHmmss(long seconds) {
+	public String secondsToHHmmss(Long seconds) {
 		try {
 			long hour = seconds / 3600;
 			long minute = seconds % 3600 / 60;
 			long second = seconds % 60;
+			return timeFormat.format(hour) + resourceBundle.getString(Internationalization.HR)
+					+ timeFormat.format(minute) + resourceBundle.getString(Internationalization.MIN)
+					+ timeFormat.format(second) + resourceBundle.getString(Internationalization.SEC);
+		} catch (Exception e) {
+
+		}
+		return resourceBundle.getString(Internationalization.NO_DATA);
+	}
+	
+	public String secondsToHHmmss(Integer seconds) {
+		try {
+			int hour = seconds / 3600;
+			int minute = seconds % 3600 / 60;
+			int second = seconds % 60;
 			return timeFormat.format(hour) + resourceBundle.getString(Internationalization.HR)
 					+ timeFormat.format(minute) + resourceBundle.getString(Internationalization.MIN)
 					+ timeFormat.format(second) + resourceBundle.getString(Internationalization.SEC);
