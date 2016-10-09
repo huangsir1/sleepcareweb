@@ -3,13 +3,20 @@
  */
 package taiyi.web.controller.admin;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -26,10 +33,13 @@ import com.github.pagehelper.PageInfo;
 
 import taiyi.web.controller.api.APIExceptionHandlerController;
 import taiyi.web.model.Device;
+import taiyi.web.model.DiseaseHistory;
 import taiyi.web.model.Hostipal;
 import taiyi.web.model.SleepReport;
 import taiyi.web.model.SystemUser;
 import taiyi.web.model.User;
+import taiyi.web.model.dto.BaseReport;
+import taiyi.web.model.dto.BaseReportDto;
 import taiyi.web.model.dto.PageModel;
 import taiyi.web.model.dto.ReportPreviewDto;
 import taiyi.web.model.dto.Status;
@@ -39,6 +49,7 @@ import taiyi.web.service.SleepReportService;
 import taiyi.web.service.SystemUserService;
 import taiyi.web.service.UserService;
 import taiyi.web.service.WebService;
+import taiyi.web.utils.WebProperties;
 
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
@@ -61,6 +72,26 @@ public class HospitalController extends APIExceptionHandlerController {
 	private WebService webService;
 	@Autowired
 	private SleepReportService sleepReportService;
+	
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view", "hostipal:view" })
+	@RequestMapping("hostipal/showReport/{id}")
+	public String showReport(@PathVariable String id, HttpServletRequest request) throws IllegalAccessException, InvocationTargetException {
+		BaseReport baseReport = webService.selectById(id);
+		BaseReportDto baseReportDto = new BaseReportDto();
+		baseReportDto.copy(baseReport);
+		 
+		String fileName = WebProperties.getReportFileName(baseReport.getUserId(), baseReport.getId());
+		User user = userService.selectWithDH(baseReport.getUserId());
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", Locale.CHINA);
+		for (DiseaseHistory d: user.getDiseaseHistories()) {
+			d.setName(resourceBundle.getString(d.getName()));
+		}
+		
+		request.setAttribute("baseReport", baseReportDto);
+		request.setAttribute("user", user);
+		request.setAttribute("file", new File(fileName).exists());
+		return "hospital/report"; 
+	}
 
 	@RequiresPermissions("system:view")
 	@RequestMapping("admin/hospital")

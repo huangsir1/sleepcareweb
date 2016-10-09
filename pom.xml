@@ -264,7 +264,6 @@
 	</dependencies>
 	<build>
 		<finalName>web</finalName>
-
 		<plugins>
 
 			<plugin>
@@ -328,5 +327,6 @@
 	</build>
 	<properties>
 		<inv>inv</inv>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 </project>

@@ -1,6 +1,7 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -16,7 +17,8 @@
 	type="text/css" />-->
 <link rel="stylesheet" type="text/css" href="${basePath}css/easyui.css" />
 <link rel="stylesheet" type="text/css" href="${basePath}css/icon.css" />
-<script language="JavaScript" type="text/javascript" src="${basePath}js/util.js"></script> 
+<script language="JavaScript" type="text/javascript"
+	src="${basePath}js/util.js"></script>
 <style>
 * {
 	font-size: 12px;
@@ -311,7 +313,18 @@ a:hover {
 		<div id="tabs" class="easyui-tabs" fit="true" border="false">
 			<div title="欢迎使用" style="padding: 20px; overflow: hidden;" id="home">
 
-				<h1>欢迎 ${trueName }</h1>
+				<h1>
+					欢迎 ${trueName }.
+					<shiro:hasRole name="admin">
+						<a href="${basePath}admin"><font color="blue">[进入管理员页面]</font>, </a>
+					</shiro:hasRole>
+					<shiro:hasRole name="hospital">
+						<a href="${basePath}hospital"><font color="blue">[进入医院页面]</font>,</a>
+					</shiro:hasRole>
+					<shiro:hasRole name="doctor">
+						<a href="${basePath}doctor"><font color="blue">[进入医生页面]</font>.</a>
+					</shiro:hasRole> 
+				</h1>
 
 			</div>
 		</div>

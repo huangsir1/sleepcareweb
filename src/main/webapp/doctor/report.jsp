@@ -5,6 +5,7 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	pageContext.setAttribute("basePath", basePath);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -13,18 +14,209 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>${user.name}的报告</title>
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/jquery.min.js" charset="utf-8"></script>
-<link href="<%=basePath%>css/internet.css" rel="stylesheet"
+	src="${basePath}js/jquery.min.js" charset="utf-8"></script>
+<link href="${basePath}css/internet.css" rel="stylesheet"
 	type="text/css" />
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/echarts.common.min.js"></script>
+	src="${basePath}js/g2.js"></script>
+<!-- 引入插件的 css 样式 -->
+<link rel="stylesheet" type="text/css"
+	href="https://os.alipayobjects.com/rmsportal/UBXCMkzNVlaZYNs.css" />
+<!-- 引入插件脚本 -->
+<script
+	src="https://as.alipayobjects.com/g/datavis/g-plugin-range/0.0.9/index.js"></script>
+
+
 <script language="JavaScript" type="text/javascript"
-	src="<%=basePath%>js/util.js"></script>
+	src="${basePath}js/util.js"></script>
 <script>
+	$.getJSON('${basePath}admin/getHyponeaDataNew/${baseReport.id}', function(data) {
+		var Stat = G2.Stat;
+		var chart = new G2.Chart({
+			id : 'chart1',
+			width : 440,
+			height : 175,
+			plotCfg : {
+				margin : [ 20, 60, 80, 60 ]
+			}
+		});
+		var Frame = G2.Frame;
+		var frame = new Frame(data.yangjian);
+		frame = Frame.sort(frame, 'name');
+		chart.source(frame, {
+			'value' : {
+				alias : '氧减总时间'
+			}
+		});
+		chart.axis('name', {
+			title : null
+		});
+		chart.axis('value', {
+			title : null,
+			formatter : function(dimValue) {
+				return dimValue + '分';
+			}
+		});
+		chart.interval().position('name*value').color('#e50000');
+		chart.render();
 
+		var Stat2 = G2.Stat;
+		var chart2 = new G2.Chart({
+			id : 'chart2',
+			width : 440,
+			height : 175,
+			plotCfg : {
+				margin : [ 20, 60, 80, 70 ]
+			}
+		});
+		var Frame2 = G2.Frame;
+		var frame2 = new Frame(data.xueyang);
+		frame2 = Frame.sort(frame2, 'name');
+		chart2.source(frame2, {
+			'value' : {
+				alias : '氧减总次数'
+			}
+		});
+		chart2.axis('name', {
+			title : null
+		});
+		chart2.axis('value', {
+			title : null,
+			formatter : function(dimValue) {
+				return dimValue + '次';
+			}
+		});
+		chart2.interval().position('name*value').color('#e50000');
+		chart2.render();
 
-	$(function() {
+	});
+	var flowChart;
+	var rainChart;
+	var range;
+	$
+			.getJSON(
+					'${basePath}admin/getReportData/${baseReport.id}?percent=0.05', 
+					function(data) {
+						$('<div><br /><br /><br />数据量: <input onclick=\"getDate(0.05)\" type=\"radio\" name=\"percent\" checked >5% <input onclick=\"getDate(0.1)\" type=\"radio\" name=\"percent\" >10% <input onclick=\"getDate(0.2)\" type=\"radio\" name=\"percent\" >20% <input type=\"radio\" onclick=\"getDate(0.3)\"  name=\"percent\" >30% <input type=\"radio\" onclick=\"getDate(0.4)\"  name=\"percent\" >40% <input type=\"radio\" onclick=\"getDate(0.5)\"  name=\"percent\" >50% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.6)\"  >60% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.7)\"  >70% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.8)\"  >80% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.9)\"  >90% <input type=\"radio\" name=\"percent\" onclick=\"getDate(1)\" >100% </div><h4 style="text-align: center; margin-bottom: 5px;">脉率趋势图</h4>  ').appendTo('#chart3');
+						flowChart = new G2.Chart({
+							id : 'chart3',
+							width : 800,
+							height : 250
+						});
+						flowChart.source(data, {
+							time : {
+								type : 'time',
+								mask : 'HH:MM:ss',
+								nice : true
+							},
+							frequency : {
+								alias : '次 / 分钟',
+							}
+						});
+						flowChart.axis('time', {
+							title : null,
+							labelOffset : 35
+						});
+						flowChart.axis('frequency', {
+							title : null
+						});
+						flowChart.axis('frequency', { 
+							title : {
+								fontSize : '12',
+								textAlign : 'center',
+								fill : '#999',
+								fontWeight : 'bold'
+							}
+						});
+						flowChart.tooltip(true, {
+							  map: {
+							    name: 'PR', // 设置 name 对应的数据源字段或者设置为一个常量
+							    value: 'frequency' // 设置 value 对应的数据源字段
+							  }, // 用于重新设置 tooltip 的显示内容
+						});
+						flowChart.line().position('time*frequency').color(
+								'#B03A5B').size(2);
+						$('<h4 style="text-align: center; margin-bottom: 5px;">血氧趋势图</h4> ').appendTo('#chart3');
+						//flowChart.guide().text([ 'max', 'max' ], '氧减趋势图');
+						rainChart = new G2.Chart({
+							id : 'chart3',
+							width : 800,
+							height : 250,
+							plotCfg : {
+								margin : [ 5, 80, 75 ]
+							}
+						});
+						
+						rainChart.source(data, {
+							time : {
+								type : 'time',
+								mask : 'HH:MM:ss',
+								nice : true
+							},
+							percent : {
+								alias : '百分比'
+							}
+						});
+						rainChart.axis('time', {
+							title : null,
+						});
+						rainChart.axis('percent', { 
+							title : {
+								fontSize : '12',
+								textAlign : 'center',
+								fill : '#999',
+								fontWeight : 'bold'
+							}
+						});
+						rainChart.tooltip(true, {
+							  map: {  
+							    name: 'SpO2', // 设置 name 对应的数据源字段或者设置为一个常量
+							    value: 'percent' // 设置 value 对应的数据源字段
+							  }, // 用于重新设置 tooltip 的显示内容
+						});
+						//rainChart.coord().reflect('y');
+						rainChart.line().position('time*percent').color(
+								'#293c55').size(2);
+						//rainChart.guide().text([ 'max', 'min' ], '血氧趋势图');
+						$('<div id="range"></div>').appendTo('#chart3');
+						range = new G2.Plugin.range({
+							id : 'range', //DOM id
+							width : 800,
+							height : 26,
+							dim : 'time',
+						});
+
+						range.source(data);
+						range.link([ flowChart, rainChart ]);
+						range.render();
+					});
+</script>
+<script>
+	function getDate(percent) {
+		$.getJSON('${basePath}admin/getReportData/${baseReport.id}?percent=' + percent,
+				function(data) {
+					flowChart.changeData(data)
+					rainChart.changeData(data)
+					flowChart.repaint()
+					rainChart.repaint()
+
+					range.clear()
+					range = new G2.Plugin.range({
+						id : 'range', //DOM id
+						width : 800,
+						height : 26,
+						dim : 'time',
+					});
+
+					range.source(data);
+					range.link([ flowChart, rainChart ]);
+					range.render();
+				});
+
+	}
+	/*$(function() {
 		// 基于准备好的dom，初始化echarts实例
+		//第一张图
 		var myChart = echarts.init(document.getElementById('chart1'));
 		var baseOption = {
 			tooltip : {
@@ -70,6 +262,7 @@
 		myChart.setOption(baseOption);
 
 		// 基于准备好的dom，初始化echarts实例
+		//第二张图
 		var myChart2 = echarts.init(document.getElementById('chart2'));
 
 		// 指定图表的配置项和数据
@@ -116,8 +309,15 @@
 		myChart2.setOption(baseOption2);
 		myChart.showLoading();
 		myChart2.showLoading();
+
+		
+		
+		init3();
+		init4();
 	});
-	$.get('../getHyponeaData/${sleepReport.id}').done(
+
+	
+	$.getJSON('../getHyponeaData/${baseReport.id}').done(
 			function(data) {
 				var myChart1 = echarts.getInstanceByDom(document
 						.getElementById('chart1'))
@@ -136,60 +336,216 @@
 						data : data.seconds
 					} ]
 				});
+			});
+
+	$.getJSON('../getReportData/${baseReport.id}').done(
+			function(data) {
+				
+				// 填入数据
+				var dates = data.riqi;
+				var dateString = [ dates.length ];
+				for (var i = 0; i < dates.length; i++) {
+					dateString[i] = getFormatDateByLong(parseInt(dates[i]),
+							"hh:mm:ss");
+				}
+				console.info(dates.length)
+				
+				
+				var myChart3 = echarts.getInstanceByDom(document
+						.getElementById('chart3'));
+				myChart3.setOption({
+					xAxis : {
+						data : dateString
+					},
+					series : [ {
+						
+						data : data.xueyang
+					} ]
+				});
+				
+				
+				var myChart4 = echarts.getInstanceByDom(document
+						.getElementById('chart4'));
+				
+				myChart4.setOption({
+					xAxis : {
+						data : dateString
+					},
+					series : [ {
+						data : data.mailv
+					} ]
+				});  
+				
+				console.info(data)
+				
 
 			});
+	
+	function init3() {
+		//第三张图
+		var myChart3 = echarts.init(document.getElementById('chart3'));
+		myChart3option = {
+			tooltip : {
+				trigger : 'axis',
+				position : function(pt) {
+					return [ pt[0], '10%' ];
+				}
+			},
+			title : {
+				text : '血氧趋势图',
+				left : 'center'
+			},
+			legend : {
+				top : 'bottom',
+				data : [ '％' ]
+			},
+			xAxis : {
+				type : 'category',
+				boundaryGap : false,
+			},
+			yAxis : {
+				type : 'value',
+				boundaryGap : [ 0, '100%' ]
+			},
+			dataZoom : [
+					{
+						type : 'inside',
+						start : 0,
+						end : 10
+					},
+					{
+						start : 0,
+						end : 10,
+						handleIcon : 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+						handleSize : '80%',
+						handleStyle : {
+							color : '#fff',
+							shadowBlur : 3,
+							shadowColor : 'rgba(0, 0, 0, 0.6)',
+							shadowOffsetX : 2,
+							shadowOffsetY : 2
+						}
+					} ],
+			series : [ {
+				name : '％',
+				type : 'line',
+				smooth : true,
+				symbol : 'none',
+				sampling : 'average',
+			} ]
+		};
+		myChart3.setOption(myChart3option);
+	}
+	
+	function init4() {
+		//第三张图
+		var myChart4 = echarts.init(document.getElementById('chart4'));
+		myChart4option = {
+			tooltip : {
+				trigger : 'axis',
+				position : function(pt) {
+					return [ pt[0], '10%' ];
+				}
+			},
+			title : {
+				text : '脉率趋势图',
+				left : 'center'
+			},
+			legend : {
+				top : 'bottom',
+				data : [ '次/分' ]  
+			},
+			xAxis : {
+				type : 'category',
+				boundaryGap : false,
+			},
+			yAxis : {
+				type : 'value',
+				boundaryGap : [ 0, '100%' ]
+			},
+			dataZoom : [
+					{
+						type : 'inside',
+						start : 0,
+						end : 10
+					},
+					{
+						start : 0,
+						end : 10,
+						handleIcon : 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+						handleSize : '80%',
+						handleStyle : {
+							color : '#fff',
+							shadowBlur : 3,
+							shadowColor : 'rgba(0, 0, 0, 0.6)',
+							shadowOffsetX : 2,
+							shadowOffsetY : 2
+						}
+					} ],
+			series : [ {
+				name : '次/分',
+				type : 'line',
+				smooth : true,
+				symbol : 'none',
+				sampling : 'average',
+			} ]
+		};
+		myChart4.setOption(myChart4option);
+	}*/
 </script>
 <script>
 	function printit() {
-		//var bdhtml = window.document.body.innerHTML;//获取当前页的html代码    
-		//var sprnstr = "<!--begin-->";//设置打印开始区域    
-		//var eprnstr = "<!--end-->";//设置打印结束区域    
-		////var prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr)); //从开始代码向后取html    
-		//var prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));//从结束代码向前取html    
-		//	window.document.body.innerHTML = prnhtml;
-		//var myChart1 = echarts.getInstanceByDom(document.getElementById('chart1'))
-		//myChart1.setOption(baseOption);
-		//	var myChart2 = echarts.getInstanceByDom(document.getElementById('chart2'))
-		//myChart2.resize();
 
 		document.getElementById("print").style.display = "none";
 		window.print();
 		document.getElementById('print').style.display = "";
-		//window.document.body.innerHTML = bdhtml;
 	}
 
 	function generatePdf() {
-		$.get('../generatePdf/${sleepReport.id}').done(function(data) {
+		$.getJSON('../generatePdf/${baseReport.id}').done(function(data) {
+			console.info(data.code)
 			if (data.code == 2000) {
-				window.location.href = "../showPdf/${sleepReport.id}";
+				window.location.href = "../showPdf/${baseReport.id}";
 			}
 		});
 	}
 
 	function showpdf() {
-		//$.get('../showPdf/${sleepReport.id}').done(function(data) {
-			//if (data.code == 2000) {
-				window.location.href = "../showPdf/${sleepReport.id}";
-		//	}
-	//	});
+		window.location.href = "${basePath}admin/showPdf/${baseReport.id}";
 	}
+	function showpdfZH() {
+		window.location.href = "${basePath}admin/showPdf/${baseReport.id}/zh";
+	}
+	function showpdfEN() {
+		window.location.href = "${basePath}admin/showPdf/${baseReport.id}/en";
+	}
+
 	function generateFullPdf() {
-		$.get('../generatePdf/${sleepReport.id}').done(function(data) {
+		$.get('../generatePdf/${baseReport.id}').done(function(data) {
 			if (data.code == 2000) {
 				window.open(data.message);
 			}
 		});
 	}
-	
-	function save(){
-		 var d=$("#form").serialize();
-	     $.post("<%=basePath%>admin/generateFullPdf/${sleepReport.id}", 
-	    		d, 
-	    	function (result) { 
-	    		 if (result.code == 2000) {
-					window.location.href = result.message;  
-				}
-	    	 }, "json" ); 	
+
+	function save() {
+		var d = $("#form").serialize();
+		$.post("${basePath}admin/generateFullPdf/${baseReport.id}", d,
+				function(result) {
+					if (result.code == 2000) {
+						window.location.href = result.message;
+					}
+				}, "json");
+	}
+
+	function deletepdf() {
+		$.getJSON('../deleteFile/${baseReport.id}').done(function(data) {
+			console.info(data)
+			console.info(data.code)
+			if (data.code == 2000) {
+				alert("删除成功")
+			}
+		});
 	}
 </script>
 <style type="text/css">
@@ -198,7 +554,7 @@
 	color: #5c8bc7
 }
 -->
-</style>  
+</style>
 <style type="text/css">
 table {
 	font-family: verdana, arial, sans-serif;
@@ -231,17 +587,18 @@ td {
 </head>
 
 <body>
-	<button id="print" onclick="generatePdf()">重新生成pdf</button><button id="print" onclick="showpdf()">查看pdf</button><button id="print" onclick="history.go(-1)">返回</button>
+	<button id="print" onclick="showpdfZH()">查看pdf</button>
+	<button id="print" onclick="history.go(-1)">返回</button>
 	<!--begin-->
 	<div id="container">
 		<div class="searcbar"
 			style="font-size: 18px; font-family: monospace; height: 25px;">睡眠呼吸监测报告</div>
 
 		<div class="topbar"
-			style="font-size: 12px; font-family: initial; text-align: inherit; height: 80px; width: 800px">
+			style="font-size: 12px; font-family: initial; text-align: inherit; height: 120px; width: 800px">
 			<div class="titlebar">
-				<h1>个人资料</h1> 
-			</div>  
+				<h1>用户信息</h1>
+			</div>
 			姓名:${user.name}&nbsp;&nbsp;&nbsp;性别:${user.gender}&nbsp;&nbsp;&nbsp;生日:
 			<fmt:formatDate value="${user.birthday}" pattern="yyyy-MM-dd" />
 			&nbsp;&nbsp;&nbsp;体重:${user.weight}kg<br />
@@ -251,170 +608,107 @@ td {
 				pattern="##.##" minFractionDigits="2"></fmt:formatNumber>
 			&nbsp;&nbsp;&nbsp;&nbsp;电话:${user.phone}<br /> 疾病史:
 			<c:forEach items="${user. diseaseHistories}" var="d">	${d.name}</c:forEach>
-			&nbsp;&nbsp;&nbsp;&nbsp;住址:${user.address}
+			&nbsp;&nbsp;&nbsp;&nbsp;住址:${user.address} <br /> 开始时间:
+			<fmt:formatDate value="${baseReport.startTime}"
+				pattern="yyyy-MM-dd HH:mm:ss" />
+			, 结束时间：
+			<fmt:formatDate value="${baseReport.endTime}"
+				pattern="yyyy-MM-dd HH:mm:ss" />
+			,监测时长:${baseReport.monitoringDurationString }
+		</div>
+
+		<div class="column" style="width: 800px;">
+			<div class="titlebar">
+				<h1>呼吸统计</h1>
+			</div>
+			<div class="content-inner">
+				呼吸紊乱指数 : ${baseReport.apneaHypopneaIndex} 呼吸暂停次数 :
+				${baseReport.apneaTimes}次 最长呼吸暂停 :
+				${baseReport.longestApneaSecondsString}, 发生于
+				<fmt:formatDate value="${baseReport.longestApneaTime}"
+					pattern="HH:mm:ss" />
+				呼吸暂停总时长 : ${baseReport.totalApneaTimeSecondsString} <br /> 低通气次数 :
+				${baseReport.hypopneaTimes}次 最长低通气 :
+				${baseReport.maxHyponeaSecondsString }, 发生于
+				<fmt:formatDate value="${baseReport.hyponeaHappenDate}"
+					pattern="HH:mm:ss" />
+				低通气总时长 : ${baseReport.totalHypoventilationTimeSecondsString } 呼吸质量评分
+				: ${baseReport.brathe_score}
+			</div>
 		</div>
 
 		<div id="contentarea">
-			<div class="column" style="width: 800px;">
-				<div class="titlebar">
-					<h1>睡眠报告</h1>
+			<div class="column" style="width: 800px; height: 925px;">
+				<div class="titlebar"> 
+					<h1>血氧饱和度分析</h1> 
 				</div>
 				<div class="content-inner">
-					开始时间:
-					<fmt:formatDate value="${sleepReport.startTime}"
-						pattern="yyyy-MM-dd HH:mm:ss" />
-					, 结束时间：
-					<fmt:formatDate value="${sleepReport.endTime}"
-						pattern="yyyy-MM-dd HH:mm:ss" />
-					, <br />潜睡时长:
-					<fmt:formatNumber type="number"
-						value="${(sleepReport.lightSleepSeconds - sleepReport.lightSleepSeconds % 3600 )/ 3600}"
-						maxFractionDigits="0" />
-					小时
-					<fmt:formatNumber type="number"
-						value="${(sleepReport.lightSleepSeconds % 3600- sleepReport.lightSleepSeconds %3600 % 60 )/ 60}"
-						maxFractionDigits="0" />
-					分 ${sleepReport.lightSleepSeconds % 60}秒 , <br />深睡时长:
-					<fmt:formatNumber type="number"
-						value="${(sleepReport.deepSleepSeconds - sleepReport.deepSleepSeconds % 3600 )/ 3600}"
-						maxFractionDigits="0" />
-					小时
-					<fmt:formatNumber type="number"
-						value="${(sleepReport.deepSleepSeconds % 3600- sleepReport.deepSleepSeconds %3600 % 60 )/ 60}"
-						maxFractionDigits="0" />
-					分 ${sleepReport.deepSleepSeconds % 60}秒 , <br />清醒时长:
-					<fmt:formatNumber type="number"
-						value="${(sleepReport.awakeSeconds - sleepReport.awakeSeconds % 3600 )/ 3600}"
-						maxFractionDigits="0" />
-					小时
-					<fmt:formatNumber type="number"
-						value="${(sleepReport.awakeSeconds % 3600- sleepReport.awakeSeconds %3600 % 60 )/ 60}"
-						maxFractionDigits="0" />
-					分 ${sleepReport.awakeSeconds % 60}秒 , <br />总计:
-					<fmt:formatNumber type="number"
-						value="${(sleepReport.totalSeconds - sleepReport.totalSeconds % 3600 )/ 3600}"
-						maxFractionDigits="0" />
-					小时
-					<fmt:formatNumber type="number"
-						value="${(sleepReport.totalSeconds % 3600- sleepReport.totalSeconds %3600 % 60 )/ 60}"
-						maxFractionDigits="0" />
-					分 ${sleepReport.totalSeconds % 60}秒 , 评分：${sleepReport.score},
-					上传日期:
-					<fmt:formatDate value="${sleepReport.uploadDate}"
-						pattern="yyyy-MM-dd" />
+					平均血氧饱和度: ${baseReport.averageOxygenSaturation}% 最低血氧饱和度 :
+					${baseReport.minOxygenSaturation}% 血氧饱和度低于90% :
+					${baseReport.oxygenSaturationLessthanNinetyPercent}% 氧减指数 :
+					${baseReport.oxygenReductionIndex} 最大氧降 :
+					${baseReport.maxOxygenReduceSecondsString}, 发生于
+					<fmt:formatDate value="${baseReport.maxOxygenReduceTime}"
+						pattern="HH:mm:ss" />
+					<br /> 最长氧降 时长 : ${baseReport.longestOxygenReduceSecondsString},
+					发生于
+					<fmt:formatDate value="${baseReport.longestOxygenReduceTime}"
+						pattern="HH:mm:ss" />
+					氧减危害指数 : ${baseReport.bloodOxygenHazardIndex}
 				</div>
-			</div>
-			<div class="column" style="width: 800px;">
-				<div class="titlebar">
-					<h1>呼吸报告</h1>
-				</div>
-				<div class="content-inner">
-					呼吸暂停低通气指数:${breatheReport.apneaHypopneaIndex},
-					呼吸暂停次数:${breatheReport.apneaTimes},
-					低通气次数:${breatheReport.hypopneaTimes},
-					氧减次数:${breatheReport.reducedOxygenTimes}, odi:${breatheReport.odi},
-					醒时:
-					<fmt:formatNumber type="number"
-						value="${(breatheReport.awakeSeconds - breatheReport.awakeSeconds % 60 )/ 60}"
-						maxFractionDigits="0" />
-					分 ${breatheReport.awakeSeconds % 60}秒, <br />血氧饱和度低于90%占比:${breatheReport.oxygenSaturationLessthanNinetyPercent}%,
-					评分:${breatheReport.score}， 上传日期:
-					<fmt:formatDate value="${breatheReport.uploadDate}"
-						pattern="yyyy-MM-dd" />
-				</div>
-			</div>
 
-			<%-- <div class="column">
-					<div class="titlebar">
-						<h1>血氧饱和度</h1>
-					</div>
-					<div class="content-inner">
-						<table>
-							<tr>
-								<th>血氧分布</th>
-								<th>90%-100%</th>
-								<th>80%-89%</th>
-								<th>70%-79%</th>
-								<th>60%-69%</th>
-								<th>50%-59%</th>
-								<th>0%-50%</th>
-							</tr>
-							<tr>
-								<th>总时间</th>
-								<td><fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationNinetyToHundredPercentHyponea - breatheReport.oxygenSaturationNinetyToHundredPercentHyponea % 3600 )/ 3600}"
-										maxFractionDigits="0" /> 小时 <fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationNinetyToHundredPercentHyponea % 3600- breatheReport.oxygenSaturationNinetyToHundredPercentHyponea %3600 % 60 )/ 60}"
-										maxFractionDigits="0" /> 分
-									${breatheReport.oxygenSaturationNinetyToHundredPercentHyponea % 60}秒</td>
-								<td><fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationEightyToEightyNinePercentHyponea - breatheReport.oxygenSaturationEightyToEightyNinePercentHyponea % 3600 )/ 3600}"
-										maxFractionDigits="0" /> 小时 <fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationEightyToEightyNinePercentHyponea % 3600- breatheReport.oxygenSaturationEightyToEightyNinePercentHyponea %3600 % 60 )/ 60}"
-										maxFractionDigits="0" /> 分
-									${breatheReport.oxygenSaturationEightyToEightyNinePercentHyponea % 60}秒</td>
-								<td><fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationSeventyToSeventyNinePercentHyponea - breatheReport.oxygenSaturationSeventyToSeventyNinePercentHyponea % 3600 )/ 3600}"
-										maxFractionDigits="0" /> 小时 <fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationSeventyToSeventyNinePercentHyponea % 3600- breatheReport.oxygenSaturationSeventyToSeventyNinePercentHyponea %3600 % 60 )/ 60}"
-										maxFractionDigits="0" /> 分
-									${breatheReport.oxygenSaturationSeventyToSeventyNinePercentHyponea % 60}秒</td>
-								<td><fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationSixtyToSixtyNinePercentHyponea - breatheReport.oxygenSaturationSixtyToSixtyNinePercentHyponea % 3600 )/ 3600}"
-										maxFractionDigits="0" /> 小时 <fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationSixtyToSixtyNinePercentHyponea % 3600- breatheReport.oxygenSaturationSixtyToSixtyNinePercentHyponea %3600 % 60 )/ 60}"
-										maxFractionDigits="0" /> 分
-									${breatheReport.oxygenSaturationSixtyToSixtyNinePercentHyponea % 60}秒</td>
-								<td><fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationFiftyToFiftyNinePercentHyponea - breatheReport.oxygenSaturationFiftyToFiftyNinePercentHyponea % 3600 )/ 3600}"
-										maxFractionDigits="0" /> 小时 <fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationFiftyToFiftyNinePercentHyponea % 3600- breatheReport.oxygenSaturationFiftyToFiftyNinePercentHyponea %3600 % 60 )/ 60}"
-										maxFractionDigits="0" /> 分
-									${breatheReport.oxygenSaturationFiftyToFiftyNinePercentHyponea % 60}秒</td>
-								<td><fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationLessthanFiftyPercentHyponea - breatheReport.oxygenSaturationLessthanFiftyPercentHyponea % 3600 )/ 3600}"
-										maxFractionDigits="0" /> 小时 <fmt:formatNumber type="number"
-										value="${(breatheReport.oxygenSaturationLessthanFiftyPercentHyponea % 3600- breatheReport.oxygenSaturationLessthanFiftyPercentHyponea %3600 % 60 )/ 60}"
-										maxFractionDigits="0" /> 分
-									${breatheReport.oxygenSaturationLessthanFiftyPercentHyponea % 60}秒</td>
-							</tr>
-							<tr>
-								<th>氧减总次数</th>
-								<td>${breatheReport.oxygenSaturationNinetyToHundredPercentTimes}</td>
-								<td>${breatheReport.oxygenSaturationEightyToEightyNinePercentTimes}</td>
-								<td>${breatheReport.oxygenSaturationSeventyToSeventyNinePercentTimes}</td>
-								<td>${breatheReport.oxygenSaturationSixtyToSixtyNinePercentTimes}</td>
-								<td>${breatheReport.oxygenSaturationFiftyToFiftyNinePercentTimes}</td>
-								<td>${breatheReport.oxygenSaturationLessthanFiftyPercentTimes}</td>
-							</tr>
-						</table>
-					</div>    
-				</div>--%>
-			<div class="column" style="height: 200px; width: 800px;">
-				<div class="titlebar">
-					<h1>血氧饱和度-氧减总次数</h1>
-				</div>
+
+
 				<div class="content-inner" id="chart1"
-					style="width: 390px; height: 175px; float: left"></div>
+					style="width: 390px; height: 175px; float: left">
+					<h4 style="text-align: center; margin-bottom: 5px;">氧减分布图</h4>
+				</div>
 				<div class="content-inner" id="chart2"
-					style="width: 390px; height: 175px; float: left"></div>
+					style="width: 390px; height: 175px; float: left">
+					<h4 style="text-align: center; margin-bottom: 5px;">血氧分布图</h4>
+				</div>
+				<div class="content-inner" id="chart3"
+					style="width: 800px; height: 500px; float: left"></div>
+			</div>
+			<div class="column" style="width: 800px; height: 75px">
+				<div class="titlebar">
+					<h1>脉率分析</h1>
+				</div>
+				<div class="content-inner">
+					平均脉率 : ${baseReport.averagePulse} 次/分钟 最低脉率 :
+					${baseReport.minPulse} 次/分钟, 发生于
+					<fmt:formatDate value="${baseReport.minPulseTime}"
+						pattern="HH:mm:ss" />
+					最高脉率 : ${baseReport.maxPulse} 次/分钟, 发生于
+					<fmt:formatDate value="${baseReport.maxPulseTime}"
+						pattern="HH:mm:ss" />
+				</div>
 			</div>
 			<div class="column" style="width: 800px;">
 				<div class="titlebar">
-					<h1>其他信息</h1>
+					<h1>睡眠分析</h1>
 				</div>
 				<div class="content-inner">
-					<form id="form">
-						最大呼吸暂停：<input type="text" name="maxhuxizanting" /> 最大呼吸时间：<input
-							type="text" name="maxhuxizantingDate" /> 最大氧减次数：<input
-							type="text" name="maxYangjiangtimes" /> 最大氧减少时间：<input
-							type="text" name="maxYangjiangDate" /> 血氧危害指数:<input type="text"
-							name="xueyangweihaizhishu" /> 结论:<input type="text"
-							name="result"
-							value=" 1. 睡眠呼吸暂停低通气综合症：无/轻度/中度/重度 \n 2. 睡眠低氧血症：无/轻度/中度/重度" />
-						建议:<input type="text" name="advice" value="结果请结合临床。" />
-					</form>
-					<button value="生成" onclick="save()" onsubmit="return false">生成</button>
+					睡眠时间 : ${baseReport.totalSecondsString} 深睡时长 :
+					${baseReport.deepSleepSecondsString} 深睡眠占比 :
+					<fmt:formatNumber
+						value="${baseReport.deepSleepSeconds * 100 / baseReport.totalSeconds}"
+						maxFractionDigits="2" />
+					% 浅睡时长 : ${baseReport.lightSleepSecondsString} 浅睡眠占比 :
+					<fmt:formatNumber
+						value="${baseReport.lightSleepSeconds * 100 / baseReport.totalSeconds}"
+						maxFractionDigits="2" />
+					% <br /> 睡眠质量评分 : ${baseReport.sleep_score}
+				</div>
+			</div>
+			<div class="column" style="width: 800px;">
+				<div class="titlebar">
+					<h1>分析结果</h1>
+				</div>
+				<div class="content-inner">
+					结论 : 1. 睡眠呼吸暂停低通气综合症：${baseReport.sleepResult }<br />
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.
+					睡眠低氧血症：${baseReport.spO2Result }<br /> 建议 : 结果请结合临床。
 				</div>
 			</div>
 		</div>

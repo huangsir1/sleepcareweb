@@ -820,7 +820,7 @@ public class AdminController extends ExceptionHandlerController {
 		return Integer.parseInt(hour) * 3600 + Integer.parseInt(minute) * 60 + Integer.parseInt(second);
 	}
 	
-	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view","hostipal:view" })
+	@RequiresPermissions(logical = Logical.OR, value = { "user:view", "doctor:view","hospital:view" })
 	@RequestMapping("/getReportData/{id}")
 	@ResponseBody
 	public Set<ImageModel> getReportData(@PathVariable String id, double percent) {

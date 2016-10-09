@@ -91,12 +91,13 @@
 
 	});
 	var flowChart;
-	var rainChart ;
+	var rainChart;
 	var range;
-	$.getJSON('../getReportData/${baseReport.id}?percent=0.05',
+	$
+			.getJSON(
+					'../getReportData/${baseReport.id}?percent=0.05', 
 					function(data) {
-						$('<div><br /><br /><br />数据量: <input onclick=\"getDate(0.05)\" type=\"radio\" name=\"percent\" checked >5% <input onclick=\"getDate(0.1)\" type=\"radio\" name=\"percent\" >10% <input onclick=\"getDate(0.2)\" type=\"radio\" name=\"percent\" >20% <input type=\"radio\" onclick=\"getDate(0.3)\"  name=\"percent\" >30% <input type=\"radio\" onclick=\"getDate(0.4)\"  name=\"percent\" >40% <input type=\"radio\" onclick=\"getDate(0.5)\"  name=\"percent\" >50% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.6)\"  >60% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.7)\"  >70% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.8)\"  >80% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.9)\"  >90% <input type=\"radio\" name=\"percent\" onclick=\"getDate(1)\" >100% </div>')
-								.appendTo('#chart3');
+						$('<div><br /><br /><br />数据量: <input onclick=\"getDate(0.05)\" type=\"radio\" name=\"percent\" checked >5% <input onclick=\"getDate(0.1)\" type=\"radio\" name=\"percent\" >10% <input onclick=\"getDate(0.2)\" type=\"radio\" name=\"percent\" >20% <input type=\"radio\" onclick=\"getDate(0.3)\"  name=\"percent\" >30% <input type=\"radio\" onclick=\"getDate(0.4)\"  name=\"percent\" >40% <input type=\"radio\" onclick=\"getDate(0.5)\"  name=\"percent\" >50% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.6)\"  >60% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.7)\"  >70% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.8)\"  >80% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.9)\"  >90% <input type=\"radio\" name=\"percent\" onclick=\"getDate(1)\" >100% </div><h4 style="text-align: center; margin-bottom: 5px;">脉率趋势图</h4>  ').appendTo('#chart3');
 						flowChart = new G2.Chart({
 							id : 'chart3',
 							width : 800,
@@ -107,6 +108,9 @@
 								type : 'time',
 								mask : 'HH:MM:ss',
 								nice : true
+							},
+							frequency : {
+								alias : '次 / 分钟',
 							}
 						});
 						flowChart.axis('time', {
@@ -116,9 +120,24 @@
 						flowChart.axis('frequency', {
 							title : null
 						});
+						flowChart.axis('frequency', { 
+							title : {
+								fontSize : '12',
+								textAlign : 'center',
+								fill : '#999',
+								fontWeight : 'bold'
+							}
+						});
+						flowChart.tooltip(true, {
+							  map: {
+							    name: 'PR', // 设置 name 对应的数据源字段或者设置为一个常量
+							    value: 'frequency' // 设置 value 对应的数据源字段
+							  }, // 用于重新设置 tooltip 的显示内容
+						});
 						flowChart.line().position('time*frequency').color(
 								'#B03A5B').size(2);
-						flowChart.guide().text([ 'max', 'max' ], '氧减趋势图');
+						$('<h4 style="text-align: center; margin-bottom: 5px;">血氧趋势图</h4> ').appendTo('#chart3');
+						//flowChart.guide().text([ 'max', 'max' ], '氧减趋势图');
 						rainChart = new G2.Chart({
 							id : 'chart3',
 							width : 800,
@@ -127,23 +146,38 @@
 								margin : [ 5, 80, 75 ]
 							}
 						});
+						
 						rainChart.source(data, {
 							time : {
 								type : 'time',
 								mask : 'HH:MM:ss',
 								nice : true
+							},
+							percent : {
+								alias : '百分比'
 							}
 						});
 						rainChart.axis('time', {
 							title : null,
 						});
-						rainChart.axis('percent', {
-							title : null
+						rainChart.axis('percent', { 
+							title : {
+								fontSize : '12',
+								textAlign : 'center',
+								fill : '#999',
+								fontWeight : 'bold'
+							}
+						});
+						rainChart.tooltip(true, {
+							  map: {  
+							    name: 'SpO2', // 设置 name 对应的数据源字段或者设置为一个常量
+							    value: 'percent' // 设置 value 对应的数据源字段
+							  }, // 用于重新设置 tooltip 的显示内容
 						});
 						//rainChart.coord().reflect('y');
 						rainChart.line().position('time*percent').color(
 								'#293c55').size(2);
-						rainChart.guide().text([ 'max', 'min' ], '血氧趋势图');
+						//rainChart.guide().text([ 'max', 'min' ], '血氧趋势图');
 						$('<div id="range"></div>').appendTo('#chart3');
 						range = new G2.Plugin.range({
 							id : 'range', //DOM id
@@ -165,13 +199,13 @@
 					rainChart.changeData(data)
 					flowChart.repaint()
 					rainChart.repaint()
-					
+
 					range.clear()
 					range = new G2.Plugin.range({
 						id : 'range', //DOM id
 						width : 800,
 						height : 26,
-						dim : 'time', 
+						dim : 'time',
 					});
 
 					range.source(data);
@@ -623,9 +657,9 @@ td {
 		</div>
 
 		<div id="contentarea">
-			<div class="column" style="width: 800px; height: 850px;">
-				<div class="titlebar">
-					<h1>血氧饱和度分析</h1>
+			<div class="column" style="width: 800px; height: 925px;">
+				<div class="titlebar"> 
+					<h1>血氧饱和度分析</h1> 
 				</div>
 				<div class="content-inner">
 					平均血氧饱和度: ${baseReport.averageOxygenSaturation}% 最低血氧饱和度 :

@@ -35,7 +35,7 @@
 	function jump() {
 		var row = $('#dg').datagrid('getSelected');
 	if (row){
-		window.location.href="<%=basePath%>admin/showPdf/" + row.id; 
+		window.location.href="<%=basePath%>hostipal/showReport/" + row.id; 
 	}
 
 	}
@@ -43,7 +43,7 @@
 		$('#dg').datagrid({
 			url: '<%=basePath%>admin/getHospitalReport/'+ getQueryString("id"),
 			onDblClickRow: function (rowIndex, rowData) {
-				window.location.href="<%=basePath%>admin/showPdf/" + rowData.id; 
+				window.location.href="<%=basePath%>hostipal/showReport/" + rowData.id;  
 			}
 		});
 	});

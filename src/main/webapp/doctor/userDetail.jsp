@@ -32,10 +32,12 @@
 <script language="JavaScript" type="text/javascript"
 	src="<%=basePath%>js/util.js"></script>
 <script type="text/javascript">
+	var url = 
 	function jump() {
 		var row = $('#dg').datagrid('getSelected');
 	if (row){
-		window.location.href="<%=basePath%>admin/showPdf/" + row.id; 
+		 window.location.href = "<%=basePath%>dmin/doctor/showReport/" + row.id; 
+		
 	}
 
 	}
@@ -43,7 +45,7 @@
 		$('#dg').datagrid({
 			url: '<%=basePath%>admin/getReportByUserId/'+ getQueryString("id"),
 			onDblClickRow: function (rowIndex, rowData) {
-				window.location.href="<%=basePath%>admin/showPdf/" + rowData.id; 
+				window.location.href="<%=basePath%>admin/doctor/showReport/" + rowData.id; 
 			}
 		});
 	});
