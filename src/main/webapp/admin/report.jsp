@@ -91,7 +91,8 @@
 
 	});
 	var flowChart;
-	var rainChart 
+	var rainChart ;
+	var range;
 	$.getJSON('../getReportData/${baseReport.id}?percent=0.05',
 					function(data) {
 						$('<div><br /><br /><br />数据量: <input onclick=\"getDate(0.05)\" type=\"radio\" name=\"percent\" checked >5% <input onclick=\"getDate(0.1)\" type=\"radio\" name=\"percent\" >10% <input onclick=\"getDate(0.2)\" type=\"radio\" name=\"percent\" >20% <input type=\"radio\" onclick=\"getDate(0.3)\"  name=\"percent\" >30% <input type=\"radio\" onclick=\"getDate(0.4)\"  name=\"percent\" >40% <input type=\"radio\" onclick=\"getDate(0.5)\"  name=\"percent\" >50% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.6)\"  >60% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.7)\"  >70% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.8)\"  >80% <input type=\"radio\" name=\"percent\" onclick=\"getDate(0.9)\"  >90% <input type=\"radio\" name=\"percent\" onclick=\"getDate(1)\" >100% </div>')
@@ -144,7 +145,7 @@
 								'#293c55').size(2);
 						rainChart.guide().text([ 'max', 'min' ], '血氧趋势图');
 						$('<div id="range"></div>').appendTo('#chart3');
-						var range = new G2.Plugin.range({
+						range = new G2.Plugin.range({
 							id : 'range', //DOM id
 							width : 800,
 							height : 26,
@@ -164,6 +165,18 @@
 					rainChart.changeData(data)
 					flowChart.repaint()
 					rainChart.repaint()
+					
+					range.clear()
+					range = new G2.Plugin.range({
+						id : 'range', //DOM id
+						width : 800,
+						height : 26,
+						dim : 'time', 
+					});
+
+					range.source(data);
+					range.link([ flowChart, rainChart ]);
+					range.render();
 				});
 
 	}
