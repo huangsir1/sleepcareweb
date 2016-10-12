@@ -268,8 +268,11 @@ public class AdminController extends ExceptionHandlerController {
 	@ResponseBody
 	public Status deleteReport(String id) {
 		try {
+			if (id == null) {
+				return Status.FAILED;
+			}
 			webService.deleteReport(id);
-			return Status.SUCCESSED;
+			return Status.getSuccess();
 		} catch (Exception e) {
 			return Status.CANNOT_DELETE_USER;
 		}

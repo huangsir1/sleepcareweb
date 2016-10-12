@@ -5,9 +5,6 @@ package taiyi.web.model.dto;
 
 import java.util.Arrays;
 
-import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *

@@ -7,9 +7,6 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
-import org.apache.shiro.crypto.hash.Sha384Hash;
-
-import com.alibaba.fastjson.JSON;
 
 import taiyi.web.utils.EncryptUtils;
 

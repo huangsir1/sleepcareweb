@@ -8,12 +8,6 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 
-import com.alibaba.fastjson.JSON;
-
-import taiyi.web.constant.Internationalization;
-import taiyi.web.model.BreatheReport;
-import taiyi.web.model.User;
-
 /**
  * @author <a href="mailto:jason19659@163.com">jason19659</a>
  *
