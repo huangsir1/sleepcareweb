@@ -20,6 +20,7 @@ public class ExceptionHandlerController {
 	@ExceptionHandler(AuthorizationException.class)
 	public String unauthenticatedException(Exception ex) {
 		ex.printStackTrace();
+		
 		return "redirect:/err";
 	}
 	
