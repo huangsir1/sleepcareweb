@@ -11,7 +11,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>钛铱Taiir睡眠检测系统 管理员登陆</title>
+<title>钛铱Taiir睡眠监测系统 管理员登陆</title>
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="this is my page">
 <script>

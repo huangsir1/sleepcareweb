@@ -26,7 +26,7 @@ public class WebProperties {
 
 			props.load(in);
 			String value = props.getProperty(key);
-			// System.out.println("key:" + key + " " + "value:" + value);
+//			 System.out.println("key:" + key + " " + "value:" + value);
 			in.close();
 			return value;
 		} catch (Exception e) {

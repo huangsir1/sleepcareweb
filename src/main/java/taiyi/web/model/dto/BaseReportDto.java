@@ -51,7 +51,7 @@ public class BaseReportDto extends BaseReport {
 		ConvertUtils.register(new org.apache.commons.beanutils.converters.DateConverter(null), java.util.Date.class);
 		try {
 			BeanUtils.copyProperties(this, baseReport);
-		} catch (IllegalAccessException | InvocationTargetException e1) {
+		} catch (IllegalAccessException|InvocationTargetException e1) {
 			e1.printStackTrace();
 		}
 
